@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using RegistroTecnico.Components;
+using RegistroTecnico.DAL;
 
 namespace RegistroTecnico
 {
@@ -12,6 +14,18 @@ namespace RegistroTecnico
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
+            // Obtencion del connection string
+            var ConStr = builder.Configuration.GetConnectionString("ConStr");
+
+            // Inyeccion del ConStr
+            builder.Services.AddDbContext<Contexto>(o => o.UseSqlite(ConStr));
+
+
+
+
+
+
+            // De aqui pa'rriba
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
