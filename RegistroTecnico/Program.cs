@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using RegistroTecnico.Components;
 using RegistroTecnico.DAL;
+using RegistroTecnico.Services;
 
 namespace RegistroTecnico
 {
@@ -20,7 +21,8 @@ namespace RegistroTecnico
             // Inyeccion del ConStr
             builder.Services.AddDbContext<Contexto>(o => o.UseSqlite(ConStr));
 
-
+            // Inyeccion del servicio
+            builder.Services.AddScoped<TecnicoServices>();
 
 
 
