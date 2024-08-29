@@ -1,0 +1,12 @@
+﻿﻿@page "/Tecnicos/Modify/{TecnicoId:int}"
+
+@inject TecnicoServices tecnicoService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+@code {
+	[Parameter]
+	public int TecnicoId { get; set; }
+	public Tecnico tecnicos { get; set; } = new Tecnico();
+	public string Mensaje { get; set; }
+}
