@@ -1,0 +1,64 @@
+﻿@page "/Tecnicos/Index"
+@page "/Tecnicos"
+@inject TecnicoServices tecnicoServices
+@inject NavigationManager navigationManager
+@inject IJSRuntime jsRuntTime
+@rendermode InteractiveServer
+
+<PageTitle>Tecnicos</PageTitle>
+<div class="container">
+    <div class="shadow-lg">
+        @*Header*@
+        <div class="card-header text-center">
+            <h3><strong>Registro de Tecnicos</strong></h3>
+            <div class="text-end">
+                <button type="button" class="btn btn-primary" @onclick="PantallaCrear"> Crear</button>
+            </div>
+        </div>
+        @*Body*@
+        <div class="card-body">
+            <table class="table table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Sueldo Hora</th>
+                        <th>Visualizar</th>
+                        <th>Modificar</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var tecnico in ListaTecnico)
+                    {
+                        <tr>
+                            <td>@tecnico.tecnicoId</td>
+                            <td>@tecnico.nombre</td>
+                            <td>@tecnico.sueldoHora</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @*Footer*@
+        <div class="card-footer">
+            <p><strong>Cantidad total de Tecnicos: </strong>@ListaTecnico.Count()</p>
+        </div>
+    </div>
+</div>
+
+
+
+@code {
+    public List<Tecnico> ListaTecnico { get; set; } = new List<Tecnico>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaTecnico = await tecnicoServices.Listar(c => c.tecnicoId > 0);
+    }
+
+    public void PantallaCrear()
+    {
+        navigationManager.NavigateTo("/Tecnicos/Create");
+    }
+}
