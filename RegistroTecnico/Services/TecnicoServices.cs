@@ -54,12 +54,18 @@ namespace RegistroTecnico.Services
                 .FirstOrDefaultAsync(t => t.tecnicoId == id);
         }
 
-        public List<Tecnico> Listar(Expression<Func<Tecnico, bool>> criterio)
+        public async Task<List<Tecnico>> Listar(Expression<Func<Tecnico, bool>> criterio)
         {
-            return contexto.Tecnicos
+            return await contexto.Tecnicos
                 .Where(criterio)
-                .ToList();
+                .ToListAsync();
         }
 
-    }
+		public async Task<bool> ExisteTecnico(int TecnicoID, string? Nombre)
+		{
+			return await contexto.Tecnicos
+				.AnyAsync(e => e.tecnicoId != TecnicoID
+				&& e.nombre.ToLower().Equals(Nombre.ToLower()));
+		}
+	}
 }
