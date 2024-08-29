@@ -6,7 +6,7 @@ namespace RegistroTecnico.Models
     {
         [Key]
         public int tecnicoId { get; set; }
-        private string? nombre { get; set; }
-        private double sueldoHora { get; set; }
+        public string? nombre { get; set; }
+        public double sueldoHora { get; set; }
     }
 }
