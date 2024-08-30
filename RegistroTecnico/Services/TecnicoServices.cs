@@ -14,6 +14,8 @@ namespace RegistroTecnico.Services
             this.contexto = contexto;
         }
 
+        // Este metodo se utilizara en a la hora de modificar o insertar un empleado
+        // ambas pantallas presentaran un boton tipo guardar
         public async Task<bool> Guardar(Tecnico tecnico)
         {
             if(!await Existe(tecnico.tecnicoId))
@@ -22,28 +24,29 @@ namespace RegistroTecnico.Services
                 return await Modificar(tecnico);
         }
 
-        private async Task<bool> Existe(int id)
+        public async Task<bool> Existe(int id)
         {
             return await contexto.Tecnicos
                 .AnyAsync<Tecnico>(t => t.tecnicoId == id);
         }
 
-        private async Task<bool> Insertar(Tecnico tecnico)
+        public async Task<bool> Insertar(Tecnico tecnico)
         {
             contexto.Tecnicos.Add(tecnico);
             return await contexto.SaveChangesAsync() > 0;
         }
 
-        private async Task<bool> Modificar(Tecnico tecnico)
+        public async Task<bool> Modificar(Tecnico tecnico)
         {
             contexto.Update(tecnico);
             return await contexto.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> Eliminar(int id)
+        public async Task<bool> Eliminar(Tecnico tecnico)
         {
             return await contexto.Tecnicos
-                .Where(t => t.tecnicoId == id)
+                .Where(t => t.tecnicoId == tecnico.tecnicoId)
+                .AsNoTracking()
                 .ExecuteDeleteAsync() > 0;
         }
 
@@ -57,15 +60,8 @@ namespace RegistroTecnico.Services
         public async Task<List<Tecnico>> Listar(Expression<Func<Tecnico, bool>> criterio)
         {
             return await contexto.Tecnicos
-                .Where(criterio)
+                .Where(criterio)   
                 .ToListAsync();
         }
-
-		public async Task<bool> ExisteTecnico(int TecnicoID, string? Nombre)
-		{
-			return await contexto.Tecnicos
-				.AnyAsync(e => e.tecnicoId != TecnicoID
-				&& e.nombre.ToLower().Equals(Nombre.ToLower()));
-		}
 	}
 }
