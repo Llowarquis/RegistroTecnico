@@ -5,12 +5,11 @@
 @inject IJSRuntime jsRuntTime
 @rendermode InteractiveServer
 
-<PageTitle>Tecnicos</PageTitle>
 <div class="container">
-    <div class="shadow-lg">
+     <div class="shadow-lg">
         @*Header*@
         <div class="card-header text-center">
-            <h3><strong>Registro de Tecnicos</strong></h3>
+            <h3><strong>Consulta de T&eacute;cnicos</strong></h3>
             <div class="text-end">
                 <button type="button" class="btn btn-primary" @onclick="PantallaCrear"> Crear</button>
             </div>
@@ -35,6 +34,22 @@
                             <td>@tecnico.tecnicoId</td>
                             <td>@tecnico.nombre</td>
                             <td>@tecnico.sueldoHora</td>
+                            @*Visualizacion*@
+                            <td>
+                                <button type="button" class="btn btn-outline-dark btn-outline-light bi bi-eye" style="background-color: #8a33ff"
+                                        @onclick="()=> PantallaVisualizar(tecnico.tecnicoId)"></button>
+                            </td>
+
+                            @*Modificar*@
+                            <td>
+                                <button type="button" class="btn btn-outline-dark btn-outline-light bi bi-pencil" style="background-color: #ffc300"
+                                        @onclick="()=> PantallaModificar(tecnico.tecnicoId)"></button>
+                            </td>
+
+                            @*Eliminar*@
+                            <td>
+                                <button type="button" class="btn btn-outline-dark btn-outline-light bi bi-trash" style="background-color: #ff3333"
+                                @onclick="()=> PantallaEliminar(tecnico.tecnicoId)"></button></td>
                         </tr>
                     }
                 </tbody>
@@ -60,5 +75,20 @@
     public void PantallaCrear()
     {
         navigationManager.NavigateTo("/Tecnicos/Create");
+    }
+
+    public void PantallaVisualizar(int id)
+    {
+        navigationManager.NavigateTo($"/Tecnicos/View/{id}");
+    }
+
+    public void PantallaModificar(int id)
+    {
+        navigationManager.NavigateTo($"/Tecnicos/Modify/{id}");
+    }
+
+    public void PantallaEliminar(int id)
+    {
+        navigationManager.NavigateTo($"/Tecnicos/Delete/{id}");
     }
 }
