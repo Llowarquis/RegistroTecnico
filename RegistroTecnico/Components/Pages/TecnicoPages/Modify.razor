@@ -1,12 +1,81 @@
-﻿﻿@page "/Tecnicos/Modify/{TecnicoId:int}"
+﻿@page "/Tecnicos/Modify/{tecnicoId:int}"
 
 @inject TecnicoServices tecnicoService
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
+
+<div class="container">
+    <div class="shadow">
+        @*Header*@
+        <div class="card-header">
+            <h3>Modificar T&eacutecnico</h3>
+        </div>
+
+        @*Body*@
+        <div class="card-body">
+            <div>
+                <label>Nombre:</label>
+                <input type="text" @bind-value="@tecnico.nombre">
+            </div>
+            <div class="pt-2">
+                <label>Sueldo Hora:</label>
+                <input type="text" @bind-value="@tecnico.sueldoHora">
+            </div>
+        </div>
+
+        @*Footer*@
+        <div class="card-footer">
+            <button type="button" class="btn btn-primary" @onclick="Volver">Volver</button>
+            <button type="submit" class="btn btn-success" @onclick="Guardar">Guardar</button>
+        </div>
+    </div>
+</div>
+
+
 @code {
-	[Parameter]
-	public int TecnicoId { get; set; }
-	public Tecnico tecnicos { get; set; } = new Tecnico();
-	public string Mensaje { get; set; }
+    [Inject]
+    private IJSRuntime JSRuntime { get; set; }
+    [Parameter]
+    public int tecnicoId { get; set; }
+    public Tecnico tecnico = new Tecnico();
+    public string Mensaje { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        tecnico = await tecnicoService.Buscar(tecnicoId);
+    }
+
+    public async Task Guardar()
+    {
+        if (await Validar())
+        {
+            await JSRuntime.InvokeVoidAsync("alert", "Ya existe un tecnico con ese nombre...");
+            return;
+        }
+
+        var modificar = await tecnicoService.Modificar(tecnico);
+
+        if (modificar)
+        {
+            await JSRuntime.InvokeVoidAsync("alert", "El Tecnico se ha modificado correctamente!");
+            navigationManager.NavigateTo("/Tecnicos/Index");
+        }
+        else
+        {
+            await JSRuntime.InvokeVoidAsync("alert", "Ha ocurrido un error al modificar el Tecnico...");
+            navigationManager.NavigateTo("/Tecnicos/Index");
+        }
+
+    }
+
+    private async Task<bool> Validar()
+    {
+        return await tecnicoService.Existe(tecnico.tecnicoId);
+    }
+
+    public void Volver()
+    {
+        navigationManager.NavigateTo("/Tecnicos/Index");
+    }
 }
