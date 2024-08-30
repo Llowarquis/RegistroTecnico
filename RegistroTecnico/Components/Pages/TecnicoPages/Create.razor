@@ -20,13 +20,13 @@
                 <div class="row">
                     @*Id*@
                     <div class="col-1">
-                        <label class="form-label"><strong>ID del tecnico</strong></label>
+                        <label class="form-label"><strong>ID</strong></label>
                         <InputNumber class="form-control" @bind-Value="tecnico.tecnicoId" readonly></InputNumber>
                     </div>
                     @*Nombre*@
                     <div class="col-3 ms-5">
                         <label class="form-label"><strong>Nombre</strong></label>
-                        <InputText class="form-control" @bind-Value="tecnico.nombre"></InputText>
+                        <InputText class="form-control" @bind-Value="tecnico.nombre" DisplayName="Nombre"></InputText>
                         <ValidationMessage For="(()=> tecnico.nombre)" />
                     </div>
                     @*Sueldo Hora*@
@@ -40,7 +40,7 @@
             @*Footer*@
             <div class="card-footer text-center">
                 <button type="button" class="btn btn-primary" @onclick="Volver">Volver</button>
-                <button type="submit" class="btn btn-success">Guardar</button>
+                <button type="submit" class="btn btn-success">Agregar</button>
             </div>
         </div>
     </div>
@@ -75,7 +75,7 @@
 
 	private async Task<bool> Validar()
 	{
-		var existe = await tecnicoServices.ExisteTecnico(tecnico.tecnicoId, tecnico.nombre);
+		var existe = await tecnicoServices.Existe(tecnico.tecnicoId);
 		return existe;
 	}
 
