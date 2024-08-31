@@ -5,12 +5,25 @@
 @inject IJSRuntime jsRuntTime
 @rendermode InteractiveServer
 
+<PageTitle>Index</PageTitle>
 <div class="container">
      <div class="shadow-lg">
         @*Header*@
         <div class="card-header text-center">
-            <h3><strong>Consulta de T&eacute;cnicos</strong></h3>
-            <div class="text-end">
+            <div>
+                <h3><strong>Consulta de T&eacute;cnicos</strong></h3>
+            </div>
+            @*Barra de busqueda con Btn de Buscar*@
+            <div class="mx-auto" style="width: 500px">
+                <label><strong>B&uacute;squeda por ID</strong></label>
+                <div class="input-group">
+                    <input type="number" @bind="id" class="form-control" placeholder="Buscar"/>
+                    <button @onclick="Buscar" class="btn btn-success bi bi-search" type="button">Buscar</button>
+                </div>
+            </div>
+            <br />
+            @*Btn Crear*@
+            <div>
                 <button type="button" class="btn btn-primary" @onclick="PantallaCrear"> Crear</button>
             </div>
         </div>
@@ -63,14 +76,23 @@
     </div>
 </div>
 
-
-
 @code {
+    public Tecnico tecnico { get; set; } = new Tecnico();
     public List<Tecnico> ListaTecnico { get; set; } = new List<Tecnico>();
+    public int id { get; set; } = 0;
 
     protected override async Task OnInitializedAsync()
     {
         ListaTecnico = await tecnicoServices.Listar(c => c.tecnicoId > 0);
+    }
+
+    public async void Buscar()
+    {
+        if (id < 1 || !await tecnicoServices.Existe(id))
+        {
+            return;
+        }
+        navigationManager.NavigateTo($"/Tecnicos/View/{id}");
     }
 
     public void PantallaCrear()
