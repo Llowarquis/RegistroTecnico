@@ -39,7 +39,9 @@ namespace RegistroTecnico.Services
         public async Task<bool> Modificar(Tecnico tecnico)
         {
             contexto.Update(tecnico);
-            return await contexto.SaveChangesAsync() > 0;
+            var modificado = await contexto.SaveChangesAsync() > 0;
+            contexto.Entry(tecnico).State = EntityState.Modified;
+            return modificado;
         }
 
         public async Task<bool> Eliminar(Tecnico tecnico)
@@ -60,8 +62,15 @@ namespace RegistroTecnico.Services
         public async Task<List<Tecnico>> Listar(Expression<Func<Tecnico, bool>> criterio)
         {
             return await contexto.Tecnicos
+                .AsNoTracking()
                 .Where(criterio)   
                 .ToListAsync();
+        }
+
+        public async Task<bool> ExisteNombre(int id, string? name)
+        {
+            return await contexto.Tecnicos
+                .AnyAsync<Tecnico>(t =>t.nombre.ToLower() == name.ToLower() && t.tecnicoId == id);
         }
 	}
 }
