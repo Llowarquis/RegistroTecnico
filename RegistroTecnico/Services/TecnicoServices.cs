@@ -67,10 +67,10 @@ namespace RegistroTecnico.Services
                 .ToListAsync();
         }
 
-        public async Task<bool> ExisteNombre(int id, string? name)
+        public async Task<bool> ExisteNombre(string? name)
         {
             return await contexto.Tecnicos
-                .AnyAsync<Tecnico>(t =>t.nombre.ToLower() == name.ToLower() && t.tecnicoId == id);
+                .AnyAsync<Tecnico>(t =>t.nombre.ToLower() == name.ToLower());
         }
 	}
 }

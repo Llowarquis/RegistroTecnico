@@ -4,20 +4,21 @@
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
+<PageTitle>Delete</PageTitle>
 <div class="container">
 	<div class="shadow">
 		@*Header*@
 		<div class="card-header">
-			<h3>Eliminar Tecnico</h3>
+			<h3><strong>Eliminar T&eacute;cnico</strong></h3>
 		</div>
 
 		@*Body*@
 		<div class="card-body">
-			<h4>¿Est&aacute; seguro que desea Eliminar este T&eacute;cnico?</h4>
+			<h4><strong>¿Est&aacute; seguro que desea Eliminar este T&eacute;cnico?</strong></h4>
 			<ul>
 				<li><strong>ID: </strong>@tecnico.tecnicoId</li>
 				<li><strong>Nombre: </strong>@tecnico.nombre</li>
-				<li><strong>Sueldo Hora: RD$</strong>@tecnico.sueldoHora</li>
+				<li><strong>Sueldo Hora: RD$ </strong>@tecnico.sueldoHora</li>
 			</ul>
 		</div>
 
@@ -55,7 +56,7 @@
 		navigationManager.NavigateTo("/Tecnicos/Index");
 	}
 
-	public async Task Volver()
+	public void Volver()
 	{
 		navigationManager.NavigateTo("/Tecnicos/Index");
 	}

@@ -4,33 +4,37 @@
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
-
-<div class="container">
-    <div class="shadow">
-        @*Header*@
-        <div class="card-header">
-            <h3>Modificar T&eacutecnico</h3>
-        </div>
-
-        @*Body*@
-        <div class="card-body">
-            <div>
-                <label>Nombre:</label>
-                <input type="text" @bind-value="@tecnico.nombre">
+<PageTitle>Modify</PageTitle>
+<EditForm Model="tecnico" OnValidSubmit="Guardar">
+    <div class="container">
+        <div class="shadow">
+            @*Header*@
+            <div class="card-header text-center">
+                <h3><strong>Modificar T&eacutecnico</strong></h3>
             </div>
-            <div class="pt-2">
-                <label>Sueldo Hora:</label>
-                <input type="text" @bind-value="@tecnico.sueldoHora">
-            </div>
-        </div>
 
-        @*Footer*@
-        <div class="card-footer">
-            <button type="button" class="btn btn-primary" @onclick="Volver">Volver</button>
-            <button type="submit" class="btn btn-success" @onclick="Guardar">Guardar</button>
+            @*Body*@
+            <div class="card-body">
+                <div>
+                    <label><strong>Nombre:</strong></label>
+                    <InputText class="form-control" style="width: 200px;" @bind-Value="@tecnico.nombre"></InputText>
+                    <ValidationMessage For="(()=> tecnico.nombre)" />
+                </div>
+                <div class="pt-2">
+                    <label><strong>Sueldo Hora:</strong></label>
+                    <InputNumber class="form-control" style="width: 200px;" @bind-Value="@tecnico.sueldoHora"></InputNumber>
+                    <ValidationMessage For="(()=> tecnico.sueldoHora)" />
+                </div>
+            </div>
+
+            @*Footer*@
+            <div class="card-footer">
+                <button type="button" class="btn btn-primary" @onclick="Volver">Volver</button>
+                <button type="submit" class="btn btn-success" @onclick="Guardar">Guardar</button>
+            </div>
         </div>
     </div>
-</div>
+</EditForm>
 
 
 @code {
