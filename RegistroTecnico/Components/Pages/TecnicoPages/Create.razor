@@ -6,7 +6,7 @@
 
 
 <PageTitle>Create</PageTitle>
-<EditForm Model="tecnico" OnValidSubmit="Guardar">
+<EditForm Model="tecnico" OnValidSubmit="Agregar">
     <DataAnnotationsValidator />
     @*Formulario*@
     <div class="container">
@@ -23,12 +23,14 @@
                         <label class="form-label"><strong>ID</strong></label>
                         <InputNumber class="form-control" @bind-Value="tecnico.tecnicoId" readonly></InputNumber>
                     </div>
+
                     @*Nombre*@
                     <div class="col-3 ms-5">
                         <label class="form-label"><strong>Nombre</strong></label>
                         <InputText class="form-control" @bind-Value="tecnico.nombre" DisplayName="Nombre"></InputText>
                         <ValidationMessage For="(()=> tecnico.nombre)" />
                     </div>
+
                     @*Sueldo Hora*@
                     <div class="col-3 ms-5">
                         <label class="form-label"><strong>Sueldo Hora</strong></label>
@@ -40,7 +42,7 @@
             @*Footer*@
             <div class="card-footer text-center">
                 <button type="button" class="btn btn-primary" @onclick="Volver">Volver</button>
-                <button type="submit" class="btn btn-success">Agregar</button>
+                <button type="submit" class="btn btn-success"@onclick="Agregar">Agregar</button>
             </div>
         </div>
     </div>
@@ -50,7 +52,7 @@
     public Tecnico tecnico { get; set; } = new Tecnico();
     public string Mensaje { get; set; } = string.Empty;
 
-    public async Task Guardar()
+    public async Task Agregar()
     {
         if(await Validar())
         {

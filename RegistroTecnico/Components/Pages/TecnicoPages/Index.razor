@@ -33,7 +33,7 @@
                         <tr>
                             <td>@tecnico.tecnicoId</td>
                             <td>@tecnico.nombre</td>
-                            <td>@tecnico.sueldoHora</td>
+                            <td>RD$ @tecnico.sueldoHora</td>
                             @*Visualizacion*@
                             <td>
                                 <button type="button" class="btn btn-outline-dark btn-outline-light bi bi-eye" style="background-color: #8a33ff"
@@ -49,7 +49,8 @@
                             @*Eliminar*@
                             <td>
                                 <button type="button" class="btn btn-outline-dark btn-outline-light bi bi-trash" style="background-color: #ff3333"
-                                @onclick="()=> PantallaEliminar(tecnico.tecnicoId)"></button></td>
+                                @onclick="()=> PantallaEliminar(tecnico.tecnicoId)"></button>
+                            </td>
                         </tr>
                     }
                 </tbody>

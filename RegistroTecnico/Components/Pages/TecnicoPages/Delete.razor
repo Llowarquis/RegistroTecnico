@@ -17,7 +17,7 @@
 			<ul>
 				<li><strong>ID: </strong>@tecnico.tecnicoId</li>
 				<li><strong>Nombre: </strong>@tecnico.nombre</li>
-				<li><strong>Sueldo Hora: </strong>@tecnico.sueldoHora</li>
+				<li><strong>Sueldo Hora: RD$</strong>@tecnico.sueldoHora</li>
 			</ul>
 		</div>
 
@@ -47,7 +47,7 @@
 		var eliminado = await tecnicoService.Eliminar(tecnico);
 
 		if (eliminado)
-			await JSRuntime.InvokeVoidAsync("alert", "Se ha eliminado el Tecnico correctamente!");
+			await JSRuntime.InvokeVoidAsync("alert","Se ha eliminado el Tecnico correctamente!");
 		else
 			await JSRuntime.InvokeVoidAsync("alert", "Ha ocurrido un error al eliminar el Tecnico...");
 

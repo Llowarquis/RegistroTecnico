@@ -39,7 +39,6 @@
     [Parameter]
     public int tecnicoId { get; set; }
     public Tecnico tecnico = new Tecnico();
-    public string Mensaje { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -54,11 +53,11 @@
             return;
         }
 
-        var modificar = await tecnicoService.Modificar(tecnico);
+        var modificado = await tecnicoService.Modificar(tecnico);
 
-        if (modificar)
+        if (modificado)
         {
-            await JSRuntime.InvokeVoidAsync("alert", "El Tecnico se ha modificado correctamente!");
+            await JSRuntime.InvokeVoidAsync("alert","El Tecnico se ha modificado correctamente!");
             navigationManager.NavigateTo("/Tecnicos/Index");
         }
         else
@@ -71,7 +70,7 @@
 
     private async Task<bool> Validar()
     {
-        return await tecnicoService.Existe(tecnico.tecnicoId);
+        return await tecnicoService.ExisteNombre(tecnico.tecnicoId, tecnico?.nombre);
     }
 
     public void Volver()
