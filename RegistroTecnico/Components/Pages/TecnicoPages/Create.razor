@@ -3,8 +3,6 @@
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
-
-
 <PageTitle>Create</PageTitle>
 <EditForm Model="tecnico" OnValidSubmit="Agregar">
     <DataAnnotationsValidator />
@@ -49,14 +47,17 @@
 </EditForm>
 
 @code {
+    [Inject]
+    private IJSRuntime JSRuntime { get; set; }
     public Tecnico tecnico { get; set; } = new Tecnico();
     public string Mensaje { get; set; } = string.Empty;
+
 
     public async Task Agregar()
     {
         if(await Validar())
         {
-            Mensaje = "Ya existe un Tecnico con ese nombre";
+            await JSRuntime.InvokeVoidAsync("alert", "Ya existe un tecnico con ese nombre...");
             return;
         }
 
@@ -64,12 +65,12 @@
 
         if (crear)
         {  
-            Mensaje = "El Tecnico se ha creado correctamente!";
+            await JSRuntime.InvokeVoidAsync("alert", "El Tecnico se creo correctamente!");
             navigationManager.NavigateTo("/Tecnicos/Index");
         }
         else
         {
-            Mensaje = "Ha ocurrido un error al crear el Tecnico...";
+            await JSRuntime.InvokeVoidAsync("alert", "Ha ocurrido un error al crear el tecnico...");
             navigationManager.NavigateTo("/Tecnicos/Index");
         }
         
@@ -77,7 +78,7 @@
 
 	private async Task<bool> Validar()
 	{
-		var existe = await tecnicoServices.Existe(tecnico.tecnicoId);
+		var existe = await tecnicoServices.ExisteNombre(tecnico?.nombre);
 		return existe;
 	}
 
