@@ -74,7 +74,7 @@
 
     private async Task<bool> Validar()
     {
-        return await tecnicoService.ExisteNombre(tecnico.tecnicoId, tecnico?.nombre);
+        return await tecnicoService.ExisteNombre(tecnico?.nombre);
     }
 
     public void Volver()
