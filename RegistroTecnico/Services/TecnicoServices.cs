@@ -73,4 +73,4 @@ namespace RegistroTecnico.Services
                 .AnyAsync<Tecnico>(t =>t.nombre.ToLower() == name.ToLower());
         }
 	}
-}
+} 
