@@ -2,7 +2,6 @@
 @page "/Tecnicos"
 @inject TecnicoServices tecnicoServices
 @inject NavigationManager navigationManager
-@inject IJSRuntime jsRuntTime
 @rendermode InteractiveServer
 
 <PageTitle>Index</PageTitle>
@@ -89,9 +88,7 @@
     public async void Buscar()
     {
         if (id < 1 || !await tecnicoServices.Existe(id))
-        {
             return;
-        }
         navigationManager.NavigateTo($"/Tecnicos/View/{id}");
     }
 
