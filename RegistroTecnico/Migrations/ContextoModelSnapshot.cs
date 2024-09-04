@@ -6,33 +6,32 @@ using RegistroTecnico.DAL;
 
 #nullable disable
 
-namespace RegistroTecnico.Migrations
+namespace RegistroTecnico.Migrations;
+
+[DbContext(typeof(Contexto))]
+partial class ContextoModelSnapshot : ModelSnapshot
 {
-    [DbContext(typeof(Contexto))]
-    partial class ContextoModelSnapshot : ModelSnapshot
+    protected override void BuildModel(ModelBuilder modelBuilder)
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
-        {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
+        modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
-            modelBuilder.Entity("RegistroTecnico.Models.Tecnico", b =>
-                {
-                    b.Property<int>("tecnicoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+        modelBuilder.Entity("RegistroTecnico.Models.Tecnico", b =>
+            {
+                b.Property<int>("tecnicoId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("INTEGER");
 
-                    b.Property<string>("nombre")
-                        .HasColumnType("TEXT");
+                b.Property<string>("nombre")
+                    .HasColumnType("TEXT");
 
-                    b.Property<double>("sueldoHora")
-                        .HasColumnType("REAL");
+                b.Property<double>("sueldoHora")
+                    .HasColumnType("REAL");
 
-                    b.HasKey("tecnicoId");
+                b.HasKey("tecnicoId");
 
-                    b.ToTable("Tecnicos");
-                });
+                b.ToTable("Tecnicos");
+            });
 #pragma warning restore 612, 618
-        }
     }
 }

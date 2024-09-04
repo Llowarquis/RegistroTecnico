@@ -3,6 +3,7 @@
 namespace RegistroTecnico.Models;
 public class Tecnicos
 {
+    // prueba
     [Key]
     public int TecnicoId { get; set; }
     
