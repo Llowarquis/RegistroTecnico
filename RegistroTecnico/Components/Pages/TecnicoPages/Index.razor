@@ -77,6 +77,8 @@
 </div>
 
 @code {
+    [Inject] 
+    public IJSRuntime jsRuntime { get; set; }
     public Tecnicos tecnico { get; set; } = new Tecnicos();
     public List<Tecnicos> ListaTecnico { get; set; } = new List<Tecnicos>();
     public int id { get; set; } = 0;
@@ -86,11 +88,15 @@
         ListaTecnico = tecnicoServices.Listar(c => c.TecnicoId > 0);
     }
 
-    public async void Buscar()
+    public async Task Buscar()
     {
-        if (id < 1 || !await tecnicoServices.Existe(id))
+        if (await tecnicoServices.Buscar(id) != null)
+            navigationManager.NavigateTo($"/Tecnicos/View/{id}");
+        else
+        {
+            await jsRuntime.InvokeVoidAsync("alert", "Este ID no existe...");
             return;
-        navigationManager.NavigateTo($"/Tecnicos/View/{id}");
+        } 
     }
 
     public void PantallaCrear()
