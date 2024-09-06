@@ -24,19 +24,19 @@ public class TecnicoServices
             return await Modificar(tecnico);
     }
 
-    public async Task<bool> Existe(int id)
+    private async Task<bool> Existe(int id)
     {
         return await _contexto.Tecnicos
             .AnyAsync<Tecnicos>(t => t.TecnicoId == id);
     }
 
-    public async Task<bool> Insertar(Tecnicos tecnico)
+    private async Task<bool> Insertar(Tecnicos tecnico)
     {
         _contexto.Tecnicos.Add(tecnico);
         return await _contexto.SaveChangesAsync() > 0;
     }
 
-    public async Task<bool> Modificar(Tecnicos tecnico)
+    private async Task<bool> Modificar(Tecnicos tecnico)
     {
         _contexto.Update(tecnico);
         var modificado = await _contexto.SaveChangesAsync() > 0;
