@@ -16,9 +16,9 @@
 		<div class="card-body">
 			<h4><strong>¿Est&aacute; seguro que desea Eliminar este T&eacute;cnico?</strong></h4>
 			<ul>
-				<li><strong>ID: </strong>@tecnico.tecnicoId</li>
-				<li><strong>Nombre: </strong>@tecnico.nombre</li>
-				<li><strong>Sueldo Hora: RD$ </strong>@tecnico.sueldoHora</li>
+				<li><strong>ID: </strong>@tecnico.TecnicoId</li>
+				<li><strong>Nombre: </strong>@tecnico.Nombres</li>
+				<li><strong>Sueldo Hora: RD$ </strong>@tecnico.SueldoHora</li>
 			</ul>
 		</div>
 
@@ -35,7 +35,7 @@
 	private IJSRuntime JSRuntime { get; set; }
 	[Parameter]
 	public int TecnicoId { get; set; }
-	public Tecnico tecnico { get; set; } = new Tecnico();
+	public Tecnicos tecnico { get; set; } = new Tecnicos();
 	public string mensaje { get; set; } = string.Empty;
 
 	protected override async Task OnInitializedAsync()
@@ -45,7 +45,7 @@
 
 	public async Task Eliminar()
 	{
-		var eliminado = await tecnicoService.Eliminar(tecnico);
+		var eliminado = await tecnicoService.Eliminar(tecnico.TecnicoId);
 
 		if (eliminado)
 			await JSRuntime.InvokeVoidAsync("alert","Se ha eliminado el Tecnico correctamente!");

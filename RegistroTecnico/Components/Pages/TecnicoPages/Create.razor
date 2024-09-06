@@ -19,21 +19,21 @@
                     @*Id*@
                     <div class="col-1">
                         <label class="form-label"><strong>ID</strong></label>
-                        <InputNumber class="form-control" @bind-Value="tecnico.tecnicoId" readonly></InputNumber>
+                        <InputNumber class="form-control" @bind-Value="tecnico.TecnicoId" readonly></InputNumber>
                     </div>
 
                     @*Nombre*@
                     <div class="col-3 ms-5">
                         <label class="form-label"><strong>Nombre</strong></label>
-                        <InputText placeholder="Nombre" class="form-control" @bind-Value="tecnico.nombre" DisplayName="Nombre"></InputText>
-                        <ValidationMessage For="(()=> tecnico.nombre)" />
+                        <InputText placeholder="Nombre" class="form-control" @bind-Value="tecnico.Nombres" DisplayName="Nombre"></InputText>
+                        <ValidationMessage For="(()=> tecnico.Nombres)" />
                     </div>
 
                     @*Sueldo Hora*@
                     <div class="col-3 ms-5">
                         <label class="form-label"><strong>Sueldo Hora</strong></label>
-                        <InputNumber class="form-control" @bind-Value="tecnico.sueldoHora"></InputNumber>
-                        <ValidationMessage For="(()=> tecnico.sueldoHora)" />
+                        <InputNumber class="form-control" @bind-Value="tecnico.SueldoHora"></InputNumber>
+                        <ValidationMessage For="(()=> tecnico.SueldoHora)" />
                     </div>
                 </div>
             </div>
@@ -49,7 +49,7 @@
 @code {
     [Inject]
     private IJSRuntime JSRuntime { get; set; }
-    public Tecnico tecnico { get; set; } = new Tecnico();
+    public Tecnicos tecnico { get; set; } = new Tecnicos();
     public string Mensaje { get; set; } = string.Empty;
 
 
@@ -78,7 +78,7 @@
 
 	private async Task<bool> Validar()
 	{
-		var existe = await tecnicoServices.ExisteNombre(tecnico?.nombre);
+		var existe = await tecnicoServices.ExisteNombre(tecnico?.Nombres);
 		return existe;
 	}
 

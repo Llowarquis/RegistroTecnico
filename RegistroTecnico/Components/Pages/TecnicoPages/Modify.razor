@@ -17,13 +17,13 @@
             <div class="card-body">
                 <div>
                     <label><strong>Nombre:</strong></label>
-                    <InputText class="form-control" style="width: 200px;" @bind-Value="@tecnico.nombre"></InputText>
-                    <ValidationMessage For="(()=> tecnico.nombre)" />
+                    <InputText class="form-control" style="width: 200px;" @bind-Value="@tecnico.Nombres"></InputText>
+                    <ValidationMessage For="(()=> tecnico.Nombres)" />
                 </div>
                 <div class="pt-2">
                     <label><strong>Sueldo Hora:</strong></label>
-                    <InputNumber class="form-control" style="width: 200px;" @bind-Value="@tecnico.sueldoHora"></InputNumber>
-                    <ValidationMessage For="(()=> tecnico.sueldoHora)" />
+                    <InputNumber class="form-control" style="width: 200px;" @bind-Value="@tecnico.SueldoHora"></InputNumber>
+                    <ValidationMessage For="(()=> tecnico.SueldoHora)" />
                 </div>
             </div>
 
@@ -42,7 +42,7 @@
     private IJSRuntime JSRuntime { get; set; }
     [Parameter]
     public int tecnicoId { get; set; }
-    public Tecnico tecnico = new Tecnico();
+    public Tecnicos tecnico = new Tecnicos();
 
     protected override async Task OnInitializedAsync()
     {
@@ -74,7 +74,7 @@
 
     private async Task<bool> Validar()
     {
-        return await tecnicoService.ExisteNombre(tecnico?.nombre);
+        return await tecnicoService.ExisteNombre(tecnico?.Nombres);
     }
 
     public void Volver()

@@ -8,21 +8,23 @@
      <div class="shadow-lg">
         @*Header*@
         <div class="card-header text-center">
+            @*Titulo*@
             <div>
                 <h3><strong>Consulta de T&eacute;cnicos</strong></h3>
             </div>
-            @*Barra de busqueda con Btn de Buscar*@
-            <div class="mx-auto" style="width: 500px">
-                <label><strong>B&uacute;squeda por ID</strong></label>
-                <div class="input-group">
-                    <input type="number" placeholder="Buscar" class="form-control" @bind="id" />
-                    <button @onclick="Buscar" class="btn btn-success bi bi-search" type="button">  Buscar</button>
+            <div class="row">
+                @*Barra de busqueda con Btn de Buscar*@
+                <div class="mx-auto col-5" style="width: 500px">
+                    <label><strong>B&uacute;squeda por ID</strong></label>
+                    <div class="input-group col-4">
+                        <input type="number" placeholder="Buscar" class="form-control" @bind="id" />
+                        <button @onclick="Buscar" class="btn btn-success bi bi-search border-4" type="button">  Buscar</button>
+                        @*Btn Crear*@
+                        <div class="col-3">
+                            <button  type="button" class="btn btn-primary bi bi-person-plus-fill border-bottom"  @onclick="PantallaCrear">   Crear</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <br />
-            @*Btn Crear*@
-            <div>
-                <button type="button" class="btn btn-primary bi bi-person-plus-fill" @onclick="PantallaCrear">   Crear</button>
             </div>
         </div>
         @*Body*@
@@ -42,25 +44,25 @@
                     @foreach (var tecnico in ListaTecnico)
                     {
                         <tr>
-                            <td>@tecnico.tecnicoId</td>
-                            <td>@tecnico.nombre</td>
-                            <td>RD$ @tecnico.sueldoHora</td>
+                            <td>@tecnico.TecnicoId</td>
+                            <td>@tecnico.Nombres</td>
+                            <td>RD$ @tecnico.SueldoHora</td>
                             @*Visualizacion*@
                             <td>
                                 <button type="button" class="btn btn-outline-dark btn-outline-light bi bi-eye-fill" style="background-color: #8a33ff"
-                                        @onclick="()=> PantallaVisualizar(tecnico.tecnicoId)"></button>
+                                        @onclick="()=> PantallaVisualizar(tecnico.TecnicoId)"></button>
                             </td>
 
                             @*Modificar*@
                             <td>
                                 <button type="button" class="btn btn-outline-dark btn-outline-light bi bi-pencil-fill" style="background-color: #ffc300"
-                                        @onclick="()=> PantallaModificar(tecnico.tecnicoId)"></button>
+                                        @onclick="()=> PantallaModificar(tecnico.TecnicoId)"></button>
                             </td>
 
                             @*Eliminar*@
                             <td>
                                 <button type="button" class="btn btn-outline-dark btn-outline-light bi bi-trash3-fill" style="background-color: #ff3333"
-                                @onclick="()=> PantallaEliminar(tecnico.tecnicoId)"></button>
+                                @onclick="()=> PantallaEliminar(tecnico.TecnicoId)"></button>
                             </td>
                         </tr>
                     }
@@ -75,13 +77,13 @@
 </div>
 
 @code {
-    public Tecnico tecnico { get; set; } = new Tecnico();
-    public List<Tecnico> ListaTecnico { get; set; } = new List<Tecnico>();
+    public Tecnicos tecnico { get; set; } = new Tecnicos();
+    public List<Tecnicos> ListaTecnico { get; set; } = new List<Tecnicos>();
     public int id { get; set; } = 0;
 
     protected override async Task OnInitializedAsync()
     {
-        ListaTecnico = await tecnicoServices.Listar(c => c.tecnicoId > 0);
+        ListaTecnico = tecnicoServices.Listar(c => c.TecnicoId > 0);
     }
 
     public async void Buscar()

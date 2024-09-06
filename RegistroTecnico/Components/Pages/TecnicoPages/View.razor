@@ -12,9 +12,9 @@
 		</div>
 		<div class="card-body">
 			<ul>
-				<li><strong>ID: </strong> @tecnico.tecnicoId</li>
-				<li><strong>Nombre: </strong> @tecnico.nombre</li>
-				<li><strong>Sueldo Hora: RD$ </strong> @tecnico.sueldoHora</li>
+				<li><strong>ID: </strong> @tecnico.TecnicoId</li>
+				<li><strong>Nombre: </strong> @tecnico.Nombres</li>
+				<li><strong>Sueldo Hora: RD$ </strong> @tecnico.SueldoHora</li>
 			</ul>
 		</div>
 		<div class="card-footer">
@@ -26,7 +26,7 @@
 @code {
 	[Parameter]
 	public int tecnicoId { get; set; }
-	public Tecnico tecnico { get; set; } = new Tecnico();
+	public Tecnicos tecnico { get; set; } = new Tecnicos();
 
 	protected override async Task OnInitializedAsync()
 	{
