@@ -8,10 +8,10 @@ namespace RegistroTecnico.Services;
 
 public class TecnicoServices
 {
-    private readonly Contexto contexto;
+    private readonly Contexto _contexto;
     public TecnicoServices(Contexto contexto)
     {
-        this.contexto = contexto;
+        _contexto = contexto;
     }
 
     // Este metodo se utilizara en a la hora de modificar o insertar un empleado
@@ -26,27 +26,27 @@ public class TecnicoServices
 
     public async Task<bool> Existe(int id)
     {
-        return await contexto.Tecnicos
+        return await _contexto.Tecnicos
             .AnyAsync<Tecnicos>(t => t.TecnicoId == id);
     }
 
     public async Task<bool> Insertar(Tecnicos tecnico)
     {
-        contexto.Tecnicos.Add(tecnico);
-        return await contexto.SaveChangesAsync() > 0;
+        _contexto.Tecnicos.Add(tecnico);
+        return await _contexto.SaveChangesAsync() > 0;
     }
 
     public async Task<bool> Modificar(Tecnicos tecnico)
     {
-        contexto.Update(tecnico);
-        var modificado = await contexto.SaveChangesAsync() > 0;
-        contexto.Entry(tecnico).State = EntityState.Modified;
+        _contexto.Update(tecnico);
+        var modificado = await _contexto.SaveChangesAsync() > 0;
+        _contexto.Entry(tecnico).State = EntityState.Modified;
         return modificado;
     }
 
     public async Task<bool> Eliminar(int id)
     {
-        return await contexto.Tecnicos
+        return await _contexto.Tecnicos
             .Where(t => t.TecnicoId == id)
             .AsNoTracking()
             .ExecuteDeleteAsync() > 0;
@@ -54,22 +54,22 @@ public class TecnicoServices
 
     public async Task<Tecnicos?> Buscar(int id)
     {
-        return await contexto.Tecnicos
+        return await _contexto.Tecnicos
             .AsNoTracking()
             .FirstOrDefaultAsync(t => t.TecnicoId == id);
     }
 
-    public async Task<List<Tecnicos>> Listar(Expression<Func<Tecnicos, bool>> criterio)
+    public List<Tecnicos> Listar(Expression<Func<Tecnicos, bool>> criterio)
     {
-        return await contexto.Tecnicos
+        return _contexto.Tecnicos
             .AsNoTracking()
             .Where(criterio)   
-            .ToListAsync();
+            .ToList();
     }
 
     public async Task<bool> ExisteNombre(string? name)
     {
-        return await contexto?.Tecnicos
+        return await _contexto?.Tecnicos
             .AnyAsync<Tecnicos>(t => t.Nombres.ToLower() == name.ToLower());
     }
 }
