@@ -9,38 +9,40 @@
     @*Formulario*@
     <div class="container">
         <div class="shadow-lg">
-            @*Header*@
-            <div class="card-header text-center">
-                <h3><strong>Crear nuevo Tecnico</strong></h3>
-            </div>
-            @*Body*@
-            <div class="card-body">
-                <div class="row">
-                    @*Id*@
-                    <div class="col-1">
-                        <label class="form-label"><strong>ID</strong></label>
-                        <InputNumber class="form-control" @bind-Value="tecnico.TecnicoId" readonly></InputNumber>
-                    </div>
+            <div class="card">
+                @*Header*@
+                <div class="card-header text-center">
+                    <h3><strong>Crear nuevo Tecnico</strong></h3>
+                </div>
+                @*Body*@
+                <div class="card-body">
+                    <div class="row">
+                        @*Id*@
+                        <div class="col-1">
+                            <label class="form-label"><strong>ID</strong></label>
+                            <InputNumber class="form-control" @bind-Value="tecnico.TecnicoId" readonly></InputNumber>
+                        </div>
 
-                    @*Nombre*@
-                    <div class="col-3 ms-5">
-                        <label class="form-label"><strong>Nombre</strong></label>
-                        <InputText placeholder="Nombre" class="form-control" @bind-Value="tecnico.Nombres" DisplayName="Nombre"></InputText>
-                        <ValidationMessage For="(()=> tecnico.Nombres)" />
-                    </div>
+                        @*Nombre*@
+                        <div class="col-3 ms-5">
+                            <label class="form-label"><strong>Nombre</strong></label>
+                            <InputText placeholder="Nombre" class="form-control" @bind-Value="tecnico.Nombres" DisplayName="Nombre"></InputText>
+                            <ValidationMessage For="(()=> tecnico.Nombres)" />
+                        </div>
 
-                    @*Sueldo Hora*@
-                    <div class="col-3 ms-5">
-                        <label class="form-label"><strong>Sueldo Hora</strong></label>
-                        <InputNumber class="form-control" @bind-Value="tecnico.SueldoHora"></InputNumber>
-                        <ValidationMessage For="(()=> tecnico.SueldoHora)" />
+                        @*Sueldo Hora*@
+                        <div class="col-3 ms-5">
+                            <label class="form-label"><strong>Sueldo Hora</strong></label>
+                            <InputNumber class="form-control" @bind-Value="tecnico.SueldoHora"></InputNumber>
+                            <ValidationMessage For="(()=> tecnico.SueldoHora)" />
+                        </div>
                     </div>
                 </div>
-            </div>
-            @*Footer*@
-            <div class="card-footer text-center">
-                <button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver"> Volver   </button>
-                <button type="submit" class="btn btn-success bi bi-floppy-fill" @onclick="Agregar">   Agregar    </button>
+                @*Footer*@
+                <div class="card-footer text-center">
+                    <button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver"> Volver   </button>
+                    <button type="submit" class="btn btn-success bi bi-floppy-fill" @onclick="Agregar">   Agregar    </button>
+                </div>
             </div>
         </div>
     </div>

@@ -6,19 +6,21 @@
 
 <PageTitle>View</PageTitle>
 <div class="container">
-	<div class="shadow">
-		<div class="card-header">
-			<h3><strong>Visualizaci&oacute;n del T&eacute;cnico actual</strong></h3>
-		</div>
-		<div class="card-body">
-			<ul>
-				<li><strong>ID: </strong> @tecnico.TecnicoId</li>
-				<li><strong>Nombre: </strong> @tecnico.Nombres</li>
-				<li><strong>Sueldo Hora: RD$ </strong> @tecnico.SueldoHora</li>
-			</ul>
-		</div>
-		<div class="card-footer text-center">
-			<button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver">Volver</button>
+	<div class="shadow-lg">
+		<div class="card">
+			<div class="card-header">
+				<h3><strong>Visualizaci&oacute;n del T&eacute;cnico actual</strong></h3>
+			</div>
+			<div class="card-body">
+				<ul>
+					<li><strong>ID: </strong> @tecnico.TecnicoId</li>
+					<li><strong>Nombre: </strong> @tecnico.Nombres</li>
+					<li><strong>Sueldo Hora: RD$ </strong> @tecnico.SueldoHora</li>
+				</ul>
+			</div>
+			<div class="card-footer text-center">
+				<button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver">Volver</button>
+			</div>
 		</div>
 	</div>
 </div>

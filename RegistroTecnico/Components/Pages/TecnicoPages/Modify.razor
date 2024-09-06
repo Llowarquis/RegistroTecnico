@@ -7,30 +7,32 @@
 <PageTitle>Modify</PageTitle>
 <EditForm Model="tecnico" OnValidSubmit="Guardar">
     <div class="container">
-        <div class="shadow">
-            @*Header*@
-            <div class="card-header text-center">
-                <h3><strong>Modificar T&eacutecnico</strong></h3>
-            </div>
-
-            @*Body*@
-            <div class="card-body">
-                <div>
-                    <label><strong>Nombre:</strong></label>
-                    <InputText class="form-control" style="width: 200px;" @bind-Value="@tecnico.Nombres"></InputText>
-                    <ValidationMessage For="(()=> tecnico.Nombres)" />
+        <div class="shadow-lg">
+            <div class="card">
+                @*Header*@
+                <div class="card-header text-center">
+                    <h3><strong>Modificar T&eacutecnico</strong></h3>
                 </div>
-                <div class="pt-2">
-                    <label><strong>Sueldo Hora:</strong></label>
-                    <InputNumber class="form-control" style="width: 200px;" @bind-Value="@tecnico.SueldoHora"></InputNumber>
-                    <ValidationMessage For="(()=> tecnico.SueldoHora)" />
-                </div>
-            </div>
 
-            @*Footer*@
-            <div class="card-footer text-center">
-                <button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver">  Volver   </button>
-                <button type="submit" class="btn btn-success  bi bi-floppy-fill" @onclick="Guardar">   Guardar   </button>
+                @*Body*@
+                <div class="card-body">
+                    <div>
+                        <label><strong>Nombre:</strong></label>
+                        <InputText class="form-control" style="width: 200px;" @bind-Value="@tecnico.Nombres"></InputText>
+                        <ValidationMessage For="(()=> tecnico.Nombres)" />
+                    </div>
+                    <div class="pt-2">
+                        <label><strong>Sueldo Hora:</strong></label>
+                        <InputNumber class="form-control" style="width: 200px;" @bind-Value="@tecnico.SueldoHora"></InputNumber>
+                        <ValidationMessage For="(()=> tecnico.SueldoHora)" />
+                    </div>
+                </div>
+
+                @*Footer*@
+                <div class="card-footer text-center">
+                    <button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver">  Volver   </button>
+                    <button type="submit" class="btn btn-success  bi bi-floppy-fill" @onclick="Guardar">   Guardar   </button>
+                </div>
             </div>
         </div>
     </div>
