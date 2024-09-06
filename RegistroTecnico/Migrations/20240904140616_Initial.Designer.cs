@@ -10,7 +10,7 @@ using RegistroTecnico.DAL;
 namespace RegistroTecnico.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20240828172743_Initial")]
+    [Migration("20240904140616_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -19,19 +19,19 @@ namespace RegistroTecnico.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
-            modelBuilder.Entity("RegistroTecnico.Models.Tecnico", b =>
+            modelBuilder.Entity("RegistroTecnico.Models.Tecnicos", b =>
                 {
-                    b.Property<int>("tecnicoId")
+                    b.Property<int>("TecnicoId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("nombre")
+                    b.Property<string>("Nombres")
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("sueldoHora")
+                    b.Property<double>("SueldoHora")
                         .HasColumnType("REAL");
 
-                    b.HasKey("tecnicoId");
+                    b.HasKey("TecnicoId");
 
                     b.ToTable("Tecnicos");
                 });
