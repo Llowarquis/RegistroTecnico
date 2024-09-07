@@ -6,13 +6,10 @@ using System.Linq.Expressions;
 
 namespace RegistroTecnico.Services;
 
-public class TecnicoServices
+public class TecnicoServices(Contexto contexto)
 {
-    private readonly Contexto _contexto;
-    public TecnicoServices(Contexto contexto)
-    {
-        _contexto = contexto;
-    }
+    // Se hace uso del primary constructor
+    private readonly Contexto _contexto = contexto;
 
     // Este metodo se utilizara en a la hora de modificar o insertar un empleado
     // ambas pantallas presentaran un boton tipo guardar
