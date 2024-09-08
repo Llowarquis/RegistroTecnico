@@ -22,6 +22,7 @@ public class Program
 
         // Inyeccion del servicio
         builder.Services.AddScoped<TecnicoServices>();
+        builder.Services.AddScoped<TipoTecnicoServices>();
 
 
 
