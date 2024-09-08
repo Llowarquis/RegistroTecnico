@@ -6,32 +6,53 @@ using RegistroTecnico.DAL;
 
 #nullable disable
 
-namespace RegistroTecnico.Migrations;
-
-[DbContext(typeof(Contexto))]
-partial class ContextoModelSnapshot : ModelSnapshot
+namespace RegistroTecnico.Migrations
 {
-    protected override void BuildModel(ModelBuilder modelBuilder)
+    [DbContext(typeof(Contexto))]
+    partial class ContextoModelSnapshot : ModelSnapshot
     {
+        protected override void BuildModel(ModelBuilder modelBuilder)
+        {
 #pragma warning disable 612, 618
-        modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
-        modelBuilder.Entity("RegistroTecnico.Models.Tecnicos", b =>
-            {
-                b.Property<int>("TecnicoId")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("INTEGER");
+            modelBuilder.Entity("RegistroTecnico.Models.Tecnicos", b =>
+                {
+                    b.Property<int>("TecnicoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                b.Property<string>("Nombres")
-                    .HasColumnType("TEXT");
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
-                b.Property<double>("SueldoHora")
-                    .HasColumnType("REAL");
+                    b.Property<string>("Nombres")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
-                b.HasKey("TecnicoId");
+                    b.Property<double>("SueldoHora")
+                        .HasColumnType("REAL");
 
-                b.ToTable("Tecnicos");
-            });
+                    b.HasKey("TecnicoId");
+
+                    b.ToTable("Tecnicos");
+                });
+
+            modelBuilder.Entity("RegistroTecnico.Models.TipoTecnicos", b =>
+                {
+                    b.Property<int>("TipoTencicoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("TipoTencicoId");
+
+                    b.ToTable("TipoTecnicos");
+                });
 #pragma warning restore 612, 618
+        }
     }
 }
