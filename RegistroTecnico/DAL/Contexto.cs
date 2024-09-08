@@ -8,4 +8,5 @@ public class Contexto : DbContext
         : base(options) { }
 
     public DbSet<Tecnicos> Tecnicos { get; set; }
+    public DbSet<TipoTecnicos> TipoTecnicos { get; set; }
 }
