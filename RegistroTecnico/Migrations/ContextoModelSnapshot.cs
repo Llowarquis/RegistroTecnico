@@ -45,7 +45,6 @@ namespace RegistroTecnico.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Descripcion")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("TipoTencicoId");
