@@ -1,47 +1,55 @@
 ﻿@page "/Tecnicos/Create"
 @inject TecnicoServices tecnicoServices
+@inject TipoTecnicoServices tipoTecnicoServices
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
 <PageTitle>Create</PageTitle>
-<EditForm Model="tecnico" OnValidSubmit="Agregar">
-    <DataAnnotationsValidator />
-    @*Formulario*@
+<EditForm Model="@tecnico" OnValidSubmit="Agregar">
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+
     <div class="container">
         <div class="shadow-lg">
             <div class="card">
-                @*Header*@
                 <div class="card-header text-center">
                     <h3><strong>Crear nuevo Tecnico</strong></h3>
                 </div>
-                @*Body*@
                 <div class="card-body">
                     <div class="row">
-                        @*Id*@
-                        <div class="col-1">
+                        <div class="col-1 ms-5">
                             <label class="form-label"><strong>ID</strong></label>
                             <InputNumber class="form-control" @bind-Value="tecnico.TecnicoId" readonly></InputNumber>
                         </div>
 
-                        @*Nombre*@
-                        <div class="col-3 ms-5">
-                            <label class="form-label"><strong>Nombre</strong></label>
+                        <div class="col-2 ms-5">
+                            <label class="form-label"><strong>Nombres</strong></label>
                             <InputText placeholder="Nombre" class="form-control" @bind-Value="tecnico.Nombres" DisplayName="Nombre"></InputText>
-                            <ValidationMessage For="(()=> tecnico.Nombres)" />
+                            <ValidationMessage For="@(() => tecnico.Nombres)" />
                         </div>
 
-                        @*Sueldo Hora*@
                         <div class="col-3 ms-5">
-                            <label class="form-label"><strong>Sueldo Hora</strong></label>
+                            <label class="form-label"><strong>Descripci&oacute;n</strong></label>
+                            <InputSelect class= "form-select" @bind-Value="tecnico.Descripcion">
+                                <option selected disabled>Selecciona una descripci&oacute;n</option>
+                                @foreach (var tipo in ListaTipoTecnicos)
+                                {
+                                    <option value="@tipo.Descripcion">@tipo.Descripcion</option>
+                                }
+                            </InputSelect>
+                            <ValidationMessage For="@(() => tecnico.Descripcion)" />
+                        </div>
+
+                        <div class="col-4 ms-5">
+                            <label class="form-label"><strong>Sueldo/Hora</strong></label>
                             <InputNumber class="form-control" @bind-Value="tecnico.SueldoHora"></InputNumber>
-                            <ValidationMessage For="(()=> tecnico.SueldoHora)" />
+                            <ValidationMessage For="@(() => tecnico.SueldoHora)" />
                         </div>
                     </div>
                 </div>
-                @*Footer*@
                 <div class="card-footer text-center">
-                    <button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver"> Volver   </button>
-                    <button type="submit" class="btn btn-success bi bi-floppy-fill" @onclick="Agregar">   Agregar    </button>
+                    <button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver">Volver</button>
+                    <button type="submit" class="btn btn-success bi bi-floppy-fill">Agregar</button>
                 </div>
             </div>
         </div>
@@ -51,13 +59,19 @@
 @code {
     [Inject]
     private IJSRuntime JSRuntime { get; set; }
+    public List<TipoTecnicos> ListaTipoTecnicos { get; set; } = new List<TipoTecnicos>();
+    public TipoTecnicos tipoTecnicos { get; set; } = new TipoTecnicos();
     public Tecnicos tecnico { get; set; } = new Tecnicos();
     public string Mensaje { get; set; } = string.Empty;
 
+    protected override async Task OnInitializedAsync()
+    {
+        ListaTipoTecnicos = await tipoTecnicoServices.Listar(b => b.TipoTencicoId > 0);
+    }
 
     public async Task Agregar()
     {
-        if(await Validar())
+        if (await Validar())
         {
             await JSRuntime.InvokeVoidAsync("alert", "Ya existe un tecnico con ese nombre...");
             return;
@@ -66,7 +80,7 @@
         var crear = await tecnicoServices.Guardar(tecnico);
 
         if (crear)
-        {  
+        {
             await JSRuntime.InvokeVoidAsync("alert", "El Tecnico se creo correctamente!");
             navigationManager.NavigateTo("/Tecnicos/Index");
         }
@@ -75,17 +89,15 @@
             await JSRuntime.InvokeVoidAsync("alert", "Ha ocurrido un error al crear el tecnico...");
             navigationManager.NavigateTo("/Tecnicos/Index");
         }
-        
-	}
+    }
 
-	private async Task<bool> Validar()
-	{
-		var existe = await tecnicoServices.ExisteNombre(tecnico?.Nombres);
-		return existe;
-	}
+    private async Task<bool> Validar()
+    {
+        return await tecnicoServices.ExisteNombre(tecnico?.Nombres);
+    }
 
-	public void Volver()
-	{
-		navigationManager.NavigateTo("/Tecnicos/Index");
-	}
+    public void Volver()
+    {
+        navigationManager.NavigateTo("/Tecnicos/Index");
+    }
 }
