@@ -19,7 +19,7 @@
                     @*Barra de busqueda con Btn de Buscar*@
                     <div class="col-2 input-group" style="width: 500px">
                         <input placeholder="Buscar" class="form-control" @bind="id" />
-                        <button @onclick="Buscar" class="btn btn-success bi bi-search border-4" type="button">  Buscar</button>
+                        <button @onclick="Buscar" class="btn btn-success bi bi-search" type="button">  Buscar</button>
                     </div>
                     @*Btn Crear*@
                     <div class="col-2">
@@ -34,6 +34,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Nombre</th>
+                            <th>Descripci&oacute;n</th>
                             <th>Sueldo Hora</th>
                             <th>Visualizar</th>
                             <th>Modificar</th>
@@ -46,6 +47,7 @@
                             <tr>
                                 <td>@tecnico.TecnicoId</td>
                                 <td>@tecnico.Nombres</td>
+                                <td>@tecnico.Descripcion</td> 
                                 <td>RD$ @tecnico.SueldoHora</td>
                                 @*Visualizacion*@
                                 <td>
@@ -97,7 +99,7 @@
         {
             await jsRuntime.InvokeVoidAsync("alert", "Este ID no existe...");
             return;
-        } 
+        }
     }
 
     public void PantallaCrear()
