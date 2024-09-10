@@ -1,0 +1,73 @@
+﻿@page "/TipoTecnicos/Index"
+@inject NavigationManager navigationManager
+@inject TipoTecnicoServices tipoTecnicoService
+@inject IJSRuntime jsRuntime
+@rendermode InteractiveServer
+
+<PageTitle>Tipo T&eacute;cnicos Index</PageTitle>
+<div class="container shadow-lg card">
+	@*Header*@
+	<div class="card-header">
+		<h3 class="text-center"><strong>Tipos de T&eacute;cnicos</strong></h3>
+		<div class="row justify-content-center">
+			<button @onclick="PantallaCrear" class="btn btn-primary bi bi-search" type="button">  Crear</button>
+		</div>
+	</div>
+	@*Body*@
+	 <div class="card-body">
+		 <table class="table table-bordered text-center">
+			 <thead>
+				 <tr>
+					 <th>ID</th>
+					 <th>Descripci&oacute;n</th>
+					 <th>Modificar</th>
+					 <th>Eliminar</th>
+				 </tr>
+			 </thead>
+			 <tbody>
+				@foreach(var TipoTecnico in ListaTiposTecnicos)
+				{
+					<tr>
+						<td>@TipoTecnico.TipoTencicoId</td>
+						<td>@TipoTecnico.Descripcion</td>
+						<td><button class="btn btn-outline-dark btn-outline-light bi bi-pencil-fill" style="background-color: #8a33ff"
+								@onclick="() => PantallaModificar(id)"></button>
+						</td>
+						<td>
+							<button class="btn btn-outline-dark btn-outline-light bi bi-trash-fill" style="background-color: #8a33ff"
+									@onclick="() => PantallaEliminar(id)"></button>
+						</td>
+					</tr>
+				}
+			</tbody>
+		 </table>
+	 </div>
+</div>
+
+@code {
+	private string? selectedOption { get; set; }
+	private Tecnicos tenico { get; set; } = new Tecnicos();
+	private TipoTecnicos tipoTecnicos { get; set; } = new TipoTecnicos();
+	private List<TipoTecnicos> ListaTiposTecnicos { get; set; } = new List<TipoTecnicos>();
+	private int id { get; set; } = 0;
+
+	protected override async Task OnInitializedAsync()
+	{
+		ListaTiposTecnicos = await tipoTecnicoService.Listar(c => c.TipoTencicoId > 0);
+	}
+
+	public void PantallaCrear()
+	{
+		navigationManager.NavigateTo("/TipoTecnicos/Create");
+	}
+
+	public void PantallaModificar(int id)
+	{
+		navigationManager.NavigateTo($"/TipoTecnicos/Modify/{id}");
+	}
+
+	public void PantallaEliminar(int id)
+	{
+		navigationManager.NavigateTo($"/TipoTecnicos/Delete/{id}");
+	}
+}
