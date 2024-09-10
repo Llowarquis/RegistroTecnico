@@ -52,12 +52,12 @@ public class TipoTecnicoServices(Contexto contexto)
             .FirstOrDefaultAsync(t => t.TipoTencicoId == id);
     }
 
-    public List<TipoTecnicos> Listar(Expression<Func<TipoTecnicos, bool>> criterio)
+    public async Task<List<TipoTecnicos>> Listar(Expression<Func<TipoTecnicos, bool>> criterio)
     {
-        return _contexto.TipoTecnicos
+        return await _contexto.TipoTecnicos
             .AsNoTracking()
             .Where(criterio)
-            .ToList();
+            .ToListAsync();
     }
 
     public async Task<bool> ValidarDescripcion(string? name)
