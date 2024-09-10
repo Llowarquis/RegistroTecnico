@@ -1,0 +1,82 @@
+﻿@page "/TipoTecnicos/Modify/{tipoTecnicoId:int}"
+@inject TipoTecnicoServices tipoTecnicoService
+@inject TecnicoServices tecnicoService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<EditForm Model="tipoTecnico" OnValidSubmit="Guardar">
+<PageTitle>Modify</PageTitle>
+<DataAnnotationsValidator />
+<div class="container">
+    <div class="shadow-lg">
+        <div class="card">
+            @*Header*@
+            <div class="card-header text-center">
+                <h3><strong>Modificar T&eacute;cnico</strong></h3>
+            </div>
+
+            @*Body*@
+            <div class="card-body">
+                <label><strong>Descripci&oacute;n:</strong></label>
+                <InputText class="form-control" style="width: 200px;" @bind-Value="@tipoTecnico.Descripcion"></InputText>
+                <ValidationMessage For="(() => tipoTecnico.Descripcion)" />
+            </div>
+
+            @*Footer*@
+            <div class="card-footer text-center">
+                <button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver"> Volver </button>
+                <button type="submit" class="btn btn-success bi bi-floppy-fill"> Guardar </button>
+            </div>
+        </div>
+    </div>
+</div>
+</EditForm>
+
+ 
+@code {
+    [Parameter]
+    public int tipoTecnicoId { get; set; }
+    [Inject]
+    private IJSRuntime JSRuntime { get; set; }
+    public TipoTecnicos tipoTecnico { get; set; } = new TipoTecnicos();
+    public List<TipoTecnicos> ListaTipoTecnicos { get; set; } = new List<TipoTecnicos>();
+    public Tecnicos tecnico { get; set; } = new Tecnicos();
+
+    protected override async Task OnInitializedAsync()
+    {
+        tecnico = await tecnicoService.Buscar(tipoTecnicoId);
+        ListaTipoTecnicos = await tipoTecnicoService.Listar(t => t.TipoTencicoId > 0);
+    }
+
+    public async Task Guardar()
+    {
+        if (await Validar())
+        {
+            await JSRuntime.InvokeVoidAsync("alert", "Ya existe un técnico con esa descripción...");
+            return;
+        }
+
+        var modificado = await tipoTecnicoService.Guardar(tipoTecnico);
+
+        if (modificado)
+        {
+            await JSRuntime.InvokeVoidAsync("alert", "El Técnico se ha modificado correctamente!");
+            navigationManager.NavigateTo("/TipoTecnicos/Index");
+        }
+        else
+        {
+            await JSRuntime.InvokeVoidAsync("alert", "Ha ocurrido un error al modificar el Técnico...");
+            navigationManager.NavigateTo("/TipoTecnicos/Index");
+        }
+    }
+
+    private async Task<bool> Validar()
+    {
+        return await tipoTecnicoService.ValidarDescripcion(tipoTecnico.Descripcion);
+    }
+
+    public void Volver()
+    {
+        navigationManager.NavigateTo("/TipoTecnicos/Index");
+    }
+}
