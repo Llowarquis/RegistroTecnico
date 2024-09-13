@@ -10,33 +10,31 @@
     <DataAnnotationsValidator />
     @*Formulario*@
     <div class="container">
-        <div class="shadow-lg">
-            <div class="card">
-                @*Header*@
-                <div class="card-header text-center">
-                    <h3><strong>Crear nuevo Tecnico</strong></h3>
+        <div class="card shadow-lg">
+            @*Header*@
+            <div class="card-header text-center">
+                <h3><strong>Crear nuevo Tipo de T&eacute;cnico</strong></h3>
+            </div>
+            @*Body*@
+            <div class="card-body">
+                @*Id*@
+                <div class="col-1 ms-5">
+                    <label class="form-label"><strong>ID</strong></label>
+                    <InputNumber class="form-control" @bind-Value="tipoTecnicos.TipoTecnicoId" readonly></InputNumber>
                 </div>
-                @*Body*@
-                <div class="card-body">
-                    @*Id*@
-                    <div class="col-1 ms-5">
-                        <label class="form-label"><strong>ID</strong></label>
-                        <InputNumber class="form-control" @bind-Value="tipoTecnicos.TipoTencicoId" readonly></InputNumber>
-                    </div>
 
-                    @*Descripcion*@
-                    <div class="col-2 ms-5">
-                        <label class="form-label"><strong>Descripci&oacute;n</strong></label>
-                        <InputText placeholder="Descricip&oacute;n" class="form-control" @bind-Value="tipoTecnicos.Descripcion"></InputText>
-                        <ValidationMessage For="(() => tipoTecnicos.Descripcion)" />
-                    </div>
+                @*Descripcion*@
+                <div class="col-2 ms-5">
+                    <label class="form-label"><strong>Descripci&oacute;n</strong></label>
+                    <InputText placeholder="Descricip&oacute;n" class="form-control" @bind-Value="tipoTecnicos.Descripcion"></InputText>
+                    <ValidationMessage For="(() => tipoTecnicos.Descripcion)" />
                 </div>
             </div>
-            @*Footer*@
-            <div class="card-footer text-center">
-                <button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver"> Volver   </button>
-                <button type="submit" class="btn btn-success bi bi-floppy-fill" @onclick="Agregar">   Agregar    </button>
-            </div>
+        </div>
+        @*Footer*@
+        <div class="card-footer text-center">
+            <button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver"> Volver   </button>
+            <button type="submit" class="btn btn-success bi bi-floppy-fill" @onclick="Agregar">   Agregar    </button>
         </div>
     </div>
 </EditForm>
@@ -48,7 +46,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        ListaTipoTecnicos = await tipoTecnicoService.Listar(t => t.TipoTencicoId > 0);
+        ListaTipoTecnicos = await tipoTecnicoService.Listar(t => t.TipoTecnicoId > 0);
     }
 
     public async Task Agregar()
