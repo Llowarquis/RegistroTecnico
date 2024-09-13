@@ -1,4 +1,6 @@
 ﻿@page "/Tecnicos/Create"
+
+@inject IJSRuntime JSRuntime
 @inject TecnicoServices tecnicoServices
 @inject TipoTecnicoServices tipoTecnicoServices
 @inject NavigationManager navigationManager
@@ -6,67 +8,67 @@
 
 <PageTitle>Create</PageTitle>
 <EditForm Model="@tecnico" OnValidSubmit="Agregar">
-    <DataAnnotationsValidator/>
-    <ValidationSummary/>
+<DataAnnotationsValidator/>
+<ValidationSummary/>
 
     <div class="container">
-        <div class="shadow-lg">
-            <div class="card">
-                <div class="card-header text-center">
-                    <h3><strong>Crear nuevo Tecnico</strong></h3>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-1 ms-5">
-                            <label class="form-label"><strong>ID</strong></label>
-                            <InputNumber class="form-control" @bind-Value="tecnico.TecnicoId" readonly></InputNumber>
-                        </div>
+        <div class="card shadow-lg">
+            @*HEADER*@
+            <div class="card-header text-center">
+                <h3><strong>Crear nuevo Tecnico</strong></h3>
+            </div>
 
-                        <div class="col-2 ms-5">
-                            <label class="form-label"><strong>Nombres</strong></label>
-                            <InputText placeholder="Nombre" class="form-control" @bind-Value="tecnico.Nombres" DisplayName="Nombre"></InputText>
-                            <ValidationMessage For="@(() => tecnico.Nombres)" />
-                        </div>
+            @*BODY*@
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-1 ms-5"> @*Se muestra el ID*@
+                        <label class="form-label"><strong>ID</strong></label>
+                        <InputNumber class="form-control" style="width: 50px" @bind-Value="tecnico.TecnicoId" readonly></InputNumber>
+                    </div>
 
-                        <div class="col-3 ms-5">
-                            <label class="form-label"><strong>Descripci&oacute;n</strong></label>
-                            <InputSelect class= "form-select" @bind-Value="tecnico.Descripcion">
-                                <option selected disabled>Selecciona una descripci&oacute;n</option>
-                                @foreach (var tipo in ListaTipoTecnicos)
-                                {
-                                    <option value="@tipo.Descripcion">@tipo.Descripcion</option>
-                                }
-                            </InputSelect>
-                            <ValidationMessage For="@(() => tecnico.Descripcion)" />
-                        </div>
+                    <div class="col-2 ms-5"> @*Aqui van los nombres*@
+                        <label class="form-label"><strong>Nombres</strong></label>
+                        <InputText placeholder="Nombres" class="form-control" @bind-Value="tecnico.Nombres" DisplayName="Nombre"></InputText>
+                        <ValidationMessage For="@(() => tecnico.Nombres)" />
+                    </div>
 
-                        <div class="col-4 ms-5">
-                            <label class="form-label"><strong>Sueldo/Hora</strong></label>
-                            <InputNumber class="form-control" @bind-Value="tecnico.SueldoHora"></InputNumber>
-                            <ValidationMessage For="@(() => tecnico.SueldoHora)" />
-                        </div>
+                    <div class="col-3 ms-5" >@*Seleccion de descripcion*@
+                        <label class="form-label"><strong>Descripci&oacute;n</strong></label>
+                        <InputSelect class= "form-select" @bind-Value="tecnico.Descripcion">
+                            <option selected disabled>Selecciona una descripci&oacute;n</option>
+                            @foreach (var tipo in ListaTipoTecnicos)
+                            {
+                                <option value="@tipo.Descripcion">@tipo.Descripcion</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => tecnico.Descripcion)" />
+                    </div>
+
+                    <div class="col-4 ms-5">@*Aqui va el sueldo/hora*@
+                        <label class="form-label"><strong>Sueldo/Hora</strong></label>
+                        <InputNumber class="form-control" style="width: 100px" @bind-Value="tecnico.SueldoHora"></InputNumber>
+                        <ValidationMessage For="@(() => tecnico.SueldoHora)" />
                     </div>
                 </div>
-                <div class="card-footer text-center">
-                    <button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver">Volver</button>
-                    <button type="submit" class="btn btn-success bi bi-floppy-fill">Agregar</button>
-                </div>
+            </div>
+
+            @*FOOTER*@
+            <div class="card-footer text-center">
+                <button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver">Volver</button>
+                <button type="submit" class="btn btn-success bi bi-floppy-fill">    Agregar</button>
             </div>
         </div>
     </div>
 </EditForm>
 
 @code {
-    [Inject]
-    private IJSRuntime JSRuntime { get; set; }
     public List<TipoTecnicos> ListaTipoTecnicos { get; set; } = new List<TipoTecnicos>();
     public TipoTecnicos tipoTecnicos { get; set; } = new TipoTecnicos();
     public Tecnicos tecnico { get; set; } = new Tecnicos();
-    public string Mensaje { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
-        ListaTipoTecnicos = await tipoTecnicoServices.Listar(b => b.TipoTencicoId > 0);
+        ListaTipoTecnicos = await tipoTecnicoServices.Listar(b => b.TipoTecnicoId > 0);
     }
 
     public async Task Agregar()
