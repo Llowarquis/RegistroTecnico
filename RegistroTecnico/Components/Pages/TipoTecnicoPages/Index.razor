@@ -1,95 +1,64 @@
 ﻿@page "/TipoTecnicos/Index"
-
 @inject NavigationManager navigationManager
 @inject TipoTecnicoServices tipoTecnicoService
-@inject IJSRuntime JSRuntime
+@inject IJSRuntime jsRuntime
 @rendermode InteractiveServer
 
-<PageTitle>Tipo T&eacute;cnicos Index</PageTitle>
-<div class="container">
-	<div class="card shadow-lg">
-		@*Header*@
-		<div class="card-header">
-			<h3 class="text-center"><strong>Tipos de T&eacute;cnicos</strong></h3>
-			<div class="row justify-content-center">
-				<label class="col-1"><strong>Buscar por ID</strong></label>
-				@*Barra de busqueda con Btn de Buscar*@
-				<div class="col-2 input-group" style="width: 500px">
-					<input placeholder="Buscar" class="form-control" @bind="TipoTecnico.TipoTecnicoId" />
-					<button @onclick="Buscar" class="btn btn-success bi bi-search" type="button">  Buscar</button>
-				</div>
-				@*Btn Crear*@
-				<div class="col-2">
-					<button type="button" class="btn btn-primary bi bi-person-plus-fill border-bottom" @onclick="PantallaCrear">   Crear</button>
-				</div>
-			</div>
-		</div>
-		@*Body*@
-		<div class="card-body">
-			<table class="table table-bordered text-center">
-				<thead>
-					<tr>
-						<th>ID</th>
-						<th>Descripci&oacute;n</th>
-						<th>Visualizar</th>
-						<th>Modificar</th>
-						<th>Eliminar</th>
-					</tr>
-				</thead>
-				<tbody>
-					@foreach (var TipoTecnico in ListaTiposTecnicos)
-					{
-						<tr>
-							<td>@TipoTecnico.TipoTecnicoId</td>
-							<td>@TipoTecnico.Descripcion</td>
-							<td>
-								<button class="btn btn-outline-dark btn-outline-light bi bi-eye-fill" style="background-color: #8a33ff"
-										@onclick="() => PantallaView(TipoTecnico.TipoTecnicoId)"></button>
-							</td>
-							<td>
-								<button class="btn btn-outline-dark btn-outline-light bi bi-pencil-fill" style="background-color: #8a33ff"
-										@onclick="() => PantallaModificar(TipoTecnico.TipoTecnicoId)"></button>
-							</td>
-							<td>
-								<button class="btn btn-outline-dark btn-outline-light bi bi-trash-fill" style="background-color: #8a33ff"
-										@onclick="() => PantallaEliminar(TipoTecnico.TipoTecnicoId)"></button>
-							</td>
-						</tr>
-					}
-				</tbody>
-			</table>
+<PageTitle>Index Tipo T&eacute;cnicos</PageTitle>
+<div class="container shadow-lg card">
+	@*Header*@
+	<div class="card-header">
+		<h3 class="text-center"><strong>Tipos de T&eacute;cnicos</strong></h3>
+		<div class="row justify-content-center">
+			<button @onclick="PantallaCrear" class="btn btn-primary bi bi-search" type="button">  Crear</button>
 		</div>
 	</div>
+	@*Body*@
+	 <div class="card-body">
+		 <table class="table table-bordered text-center">
+			 <thead>
+				 <tr>
+					 <th>ID</th>
+					 <th>Descripci&oacute;n</th>
+					 <th>Modificar</th>
+					 <th>Eliminar</th>
+				 </tr>
+			 </thead>
+			 <tbody>
+				@foreach(var TipoTecnico in ListaTiposTecnicos)
+				{
+					<tr>
+						<td>@TipoTecnico.TipoTencicoId</td>
+						<td>@TipoTecnico.Descripcion</td>
+						<td><button class="btn btn-outline-dark btn-outline-light bi bi-pencil-fill" style="background-color: #8a33ff"
+								@onclick="() => PantallaModificar(id)"></button>
+						</td>
+						<td>
+							<button class="btn btn-outline-dark btn-outline-light bi bi-trash-fill" style="background-color: #8a33ff"
+									@onclick="() => PantallaEliminar(id)"></button>
+						</td>
+					</tr>
+				}
+			</tbody>
+		 </table>
+	 </div>
 </div>
 
 @code {
-	private TipoTecnicos TipoTecnico { get; set; } = new TipoTecnicos();
+	private string? selectedOption { get; set; }
+	private Tecnicos tenico { get; set; } = new Tecnicos();
+	private TipoTecnicos tipoTecnicos { get; set; } = new TipoTecnicos();
 	private List<TipoTecnicos> ListaTiposTecnicos { get; set; } = new List<TipoTecnicos>();
+	private int id { get; set; } = 0;
 
 	protected override async Task OnInitializedAsync()
 	{
-		ListaTiposTecnicos = await tipoTecnicoService.Listar(c => c.TipoTecnicoId > 0);
-	}
-
-	public async Task Buscar()
-	{
-		if (await tipoTecnicoService.Buscar(TipoTecnico.TipoTecnicoId) != null)
-			navigationManager.NavigateTo($"/TipoTecnicos/View/{TipoTecnico.TipoTecnicoId}");
-		else
-		{
-			await JSRuntime.InvokeVoidAsync("alert", "Este ID no existe...");
-			return;
-		}
+		ListaTiposTecnicos = await tipoTecnicoService.Listar(c => c.TipoTencicoId > 0);
 	}
 
 	public void PantallaCrear()
 	{
 		navigationManager.NavigateTo("/TipoTecnicos/Create");
-	}
-
-	public void PantallaView(int id)
-	{
-		navigationManager.NavigateTo($"/TipoTecnicos/View/{id}");
 	}
 
 	public void PantallaModificar(int id)
