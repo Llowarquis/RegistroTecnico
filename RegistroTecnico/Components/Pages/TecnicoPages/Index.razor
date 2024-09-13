@@ -1,100 +1,98 @@
 ﻿@page "/Tecnicos/Index"
+
 @inject TecnicoServices tecnicoServices
+@inject IJSRuntime jsRuntime
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
 <PageTitle>Index</PageTitle>
-<div class="container">
-     <div class="shadow-lg">
-        <div class="card">
-            @*Header*@
-            <div class="card-header text-center">
-                @*Titulo*@
-                <div>
-                    <h3><strong>Consulta de T&eacute;cnicos</strong></h3>
-                </div>
+<div class="container shadow-lg">
+    <div class="card">
+        @*Header*@
+        <div class="card-header text-center">
+            @*Titulo*@
+            <div>
+                <h3><strong>Consulta de T&eacute;cnicos</strong></h3>
+            </div>
                 
-                <div class="row justify-content-center">
-                    <label class="col-1"><strong>Buscar por ID</strong></label>
-                    @*Barra de busqueda con Btn de Buscar*@
-                    <div class="col-2 input-group" style="width: 500px">
-                        <input placeholder="Buscar" class="form-control" @bind="id" />
-                        <button @onclick="Buscar" class="btn btn-success bi bi-search" type="button">  Buscar</button>
-                    </div>
-                    @*Btn Crear*@
-                    <div class="col-2">
-                        <button type="button" class="btn btn-primary bi bi-person-plus-fill border-bottom" @onclick="PantallaCrear">   Crear</button>
-                    </div>
+            <div class="row justify-content-center">
+                <label class="col-1"><strong>Buscar por ID</strong></label>
+                @*Barra de busqueda con Btn de Buscar*@
+                <div class="col-2 input-group" style="width: 500px">
+                    <input placeholder="Buscar" class="form-control" @bind="tecnico.TecnicoId" />
+                    <button @onclick="Buscar" class="btn btn-success bi bi-search" type="button">  Buscar</button>
+                </div>
+                @*Btn Crear*@
+                <div class="col-2">
+                    <button type="button" class="btn btn-primary bi bi-person-plus-fill border-bottom" @onclick="PantallaCrear">   Crear</button>
                 </div>
             </div>
-            @*Body*@
-            <div class="card-body">
-                <table class="table table-bordered text-center">
-                    <thead>
+        </div>
+        @*Body*@
+        <div class="card-body">
+            <table class="table table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Descripci&oacute;n</th>
+                        <th>Sueldo Hora</th>
+                        <th>Visualizar</th>
+                        <th>Modificar</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var tecnico in ListaTecnicos)
+                    {
                         <tr>
-                            <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Descripci&oacute;n</th>
-                            <th>Sueldo Hora</th>
-                            <th>Visualizar</th>
-                            <th>Modificar</th>
-                            <th>Eliminar</th>
+                            <td>@tecnico.TecnicoId</td>
+                            <td>@tecnico.Nombres</td>
+                            <td>@tecnico.Descripcion</td> 
+                            <td>RD$ @tecnico.SueldoHora</td>
+                            @*Visualizacion*@
+                            <td>
+                                <button type="button" class="btn btn-outline-dark btn-outline-light bi bi-eye-fill" style="background-color: #8a33ff"
+                                        @onclick="()=> PantallaVisualizar(tecnico.TecnicoId)"></button>
+                            </td>
+
+                            @*Modificar*@
+                            <td>
+                                <button type="button" class="btn btn-outline-dark btn-outline-light bi bi-pencil-fill" style="background-color: #ffc300"
+                                        @onclick="()=> PantallaModificar(tecnico.TecnicoId)"></button>
+                            </td>
+
+                            @*Eliminar*@
+                            <td>
+                                <button type="button" class="btn btn-outline-dark btn-outline-light bi bi-trash3-fill" style="background-color: #ff3333"
+                                        @onclick="()=> PantallaEliminar(tecnico.TecnicoId)"></button>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var tecnico in ListaTecnico)
-                        {
-                            <tr>
-                                <td>@tecnico.TecnicoId</td>
-                                <td>@tecnico.Nombres</td>
-                                <td>@tecnico.Descripcion</td> 
-                                <td>RD$ @tecnico.SueldoHora</td>
-                                @*Visualizacion*@
-                                <td>
-                                    <button type="button" class="btn btn-outline-dark btn-outline-light bi bi-eye-fill" style="background-color: #8a33ff"
-                                            @onclick="()=> PantallaVisualizar(tecnico.TecnicoId)"></button>
-                                </td>
-
-                                @*Modificar*@
-                                <td>
-                                    <button type="button" class="btn btn-outline-dark btn-outline-light bi bi-pencil-fill" style="background-color: #ffc300"
-                                            @onclick="()=> PantallaModificar(tecnico.TecnicoId)"></button>
-                                </td>
-
-                                @*Eliminar*@
-                                <td>
-                                    <button type="button" class="btn btn-outline-dark btn-outline-light bi bi-trash3-fill" style="background-color: #ff3333"
-                                            @onclick="()=> PantallaEliminar(tecnico.TecnicoId)"></button>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-            @*Footer*@
-            <div class="card-footer">
-                <p><strong>Cantidad total de Tecnicos: </strong>@ListaTecnico.Count()</p>
-            </div>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @*Footer*@
+        <div class="card-footer">
+            <p><strong>Cantidad total de Tecnicos: </strong>@ListaTecnicos.Count()</p>
         </div>
     </div>
 </div>
 
 @code {
-    [Inject] 
-    public IJSRuntime jsRuntime { get; set; }
     public Tecnicos tecnico { get; set; } = new Tecnicos();
-    public List<Tecnicos> ListaTecnico { get; set; } = new List<Tecnicos>();
+    public List<Tecnicos> ListaTecnicos { get; set; } = new List<Tecnicos>();
     public int id { get; set; } = 0;
 
     protected override async Task OnInitializedAsync()
     {
-        ListaTecnico = tecnicoServices.Listar(c => c.TecnicoId > 0);
+        ListaTecnicos = tecnicoServices.Listar(c => c.TecnicoId > 0);
     }
 
     public async Task Buscar()
     {
-        if (await tecnicoServices.Buscar(id) != null)
-            navigationManager.NavigateTo($"/Tecnicos/View/{id}");
+        if (await tecnicoServices.Buscar(tecnico.TecnicoId) != null)
+            navigationManager.NavigateTo($"/Tecnicos/View/{tecnico.TecnicoId}");
         else
         {
             await jsRuntime.InvokeVoidAsync("alert", "Este ID no existe...");
