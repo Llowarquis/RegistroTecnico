@@ -5,7 +5,7 @@
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
-<PageTitle>Crear Tipo T&eacute;cnico</PageTitle>
+<PageTitle>Create Tipo T&eacute;cnicos</PageTitle>
 <EditForm Model="tipoTecnicos" OnValidSubmit="Agregar">
     <DataAnnotationsValidator />
     @*Formulario*@
@@ -21,7 +21,7 @@
                     @*Id*@
                     <div class="col-1 ms-5">
                         <label class="form-label"><strong>ID</strong></label>
-                        <InputNumber class="form-control" @bind-Value="tipoTecnicos.TipoTecnicoId" readonly></InputNumber>
+                        <InputNumber class="form-control" @bind-Value="tipoTecnicos.TipoTencicoId" readonly></InputNumber>
                     </div>
 
                     @*Descripcion*@
@@ -48,7 +48,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        ListaTipoTecnicos = await tipoTecnicoService.Listar(t => t.TipoTecnicoId > 0);
+        ListaTipoTecnicos = await tipoTecnicoService.Listar(t => t.TipoTencicoId > 0);
     }
 
     public async Task Agregar()
