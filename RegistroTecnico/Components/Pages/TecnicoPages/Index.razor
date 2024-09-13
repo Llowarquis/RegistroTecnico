@@ -1,4 +1,6 @@
 ﻿@page "/Tecnicos/Index"
+
+@inject IJSRuntime JSRuntime
 @inject TecnicoServices tecnicoServices
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
@@ -80,8 +82,6 @@
 </div>
 
 @code {
-    [Inject] 
-    public IJSRuntime jsRuntime { get; set; }
     public Tecnicos tecnico { get; set; } = new Tecnicos();
     public List<Tecnicos> ListaTecnico { get; set; } = new List<Tecnicos>();
     public int id { get; set; } = 0;
@@ -97,7 +97,7 @@
             navigationManager.NavigateTo($"/Tecnicos/View/{id}");
         else
         {
-            await jsRuntime.InvokeVoidAsync("alert", "Este ID no existe...");
+            await JSRuntime.InvokeVoidAsync("alert", "Este ID no existe...");
             return;
         }
     }
