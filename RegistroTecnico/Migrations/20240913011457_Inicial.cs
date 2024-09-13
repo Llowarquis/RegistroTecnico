@@ -29,13 +29,13 @@ namespace RegistroTecnico.Migrations
                 name: "TipoTecnicos",
                 columns: table => new
                 {
-                    TipoTencicoId = table.Column<int>(type: "INTEGER", nullable: false)
+                    TipoTecnicoId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Descripcion = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TipoTecnicos", x => x.TipoTencicoId);
+                    table.PrimaryKey("PK_TipoTecnicos", x => x.TipoTecnicoId);
                 });
         }
 

@@ -1,0 +1,61 @@
+﻿@page "/TipoTecnicos/Delete/{tipoTecnicoId:int}"
+
+@inject IJSRuntime JSRuntime
+@inject TipoTecnicoServices tipoTecnicoService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Eliminar Tipo T&eacute;cnico</PageTitle>
+<div class="container">
+	<div class="card shadow-lg">
+		@*Header*@
+		<div class="card-header">
+			<h3><strong>Eliminar Tipo de T&eacute;cnico</strong></h3>
+		</div>
+
+		@*Body*@
+		<div class="card-body">
+			<h4><strong>¿Est&aacute; seguro que desea Eliminar este Tipo de T&eacute;cnico?</strong></h4>
+			<ul>
+				<li><strong>ID: </strong>@TipoTecnico.TipoTecnicoId</li>
+				<li><strong>Descripci&oacute;n: </strong>@TipoTecnico.Descripcion</li>
+			</ul>
+		</div>
+
+		@*Footer*@
+		<div class="card-footer text-center">
+			<button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver">  Volver   </button>
+			<button type="button" class="btn btn-danger bi bi-trash3-fill" @onclick="Eliminar">   Eliminar   </button>
+		</div>
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public int tipoTecnicoId { get; set; }
+	public TipoTecnicos TipoTecnico { get; set; } = new TipoTecnicos();
+	public string mensaje { get; set; } = string.Empty;
+
+	protected override async Task OnInitializedAsync()
+	{
+		TipoTecnico = await tipoTecnicoService.Buscar(tipoTecnicoId);
+	}
+
+	public async Task Eliminar()
+	{
+		var eliminado = await tipoTecnicoService.Eliminar(TipoTecnico.TipoTecnicoId);
+
+		if (eliminado)
+			await JSRuntime.InvokeVoidAsync("alert","Se ha eliminado el Tipo de T&eacute;cnico correctamente!");
+		else
+			await JSRuntime.InvokeVoidAsync("alert", "Ha ocurrido un error al eliminar el Tecnico...");
+
+		
+		navigationManager.NavigateTo("/TipoTecnicos/Index");
+	}
+
+	public void Volver()
+	{
+		navigationManager.NavigateTo("/TipoTecnicos/Index");
+	}
+}

@@ -13,7 +13,7 @@ public class TipoTecnicoServices(Contexto contexto)
     // ambas pantallas presentaran un boton tipo guardar
     public async Task<bool> Guardar(TipoTecnicos tipoTecnico)
     {
-        if (!await Existe(tipoTecnico.TipoTencicoId))
+        if (!await Existe(tipoTecnico.TipoTecnicoId))
             return await Insertar(tipoTecnico);
         else
             return await Modificar(tipoTecnico);
@@ -22,7 +22,7 @@ public class TipoTecnicoServices(Contexto contexto)
     private async Task<bool> Existe(int id)
     {
         return await _contexto.TipoTecnicos
-            .AnyAsync<TipoTecnicos>(t => t.TipoTencicoId == id);
+            .AnyAsync<TipoTecnicos>(t => t.TipoTecnicoId == id);
     }
 
     private async Task<bool> Insertar(TipoTecnicos tipoTecnico)
@@ -40,7 +40,7 @@ public class TipoTecnicoServices(Contexto contexto)
     public async Task<bool> Eliminar(int id)
     {
         return await _contexto.TipoTecnicos
-            .Where(t => t.TipoTencicoId == id)
+            .Where(t => t.TipoTecnicoId == id)
             .AsNoTracking()
             .ExecuteDeleteAsync() > 0;
     }
@@ -49,7 +49,7 @@ public class TipoTecnicoServices(Contexto contexto)
     {
         return await _contexto.TipoTecnicos
             .AsNoTracking()
-            .FirstOrDefaultAsync(t => t.TipoTencicoId == id);
+            .FirstOrDefaultAsync(t => t.TipoTecnicoId == id);
     }
 
     public async Task<List<TipoTecnicos>> Listar(Expression<Func<TipoTecnicos, bool>> criterio)

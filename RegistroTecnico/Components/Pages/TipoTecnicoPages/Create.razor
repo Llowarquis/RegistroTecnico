@@ -1,9 +1,11 @@
 ﻿@page "/TipoTecnicos/Create"
+
+@inject IJSRuntime JSRuntime
 @inject TipoTecnicoServices tipoTecnicoService
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
-<PageTitle>Create</PageTitle>
+<PageTitle>Crear Tipo T&eacute;cnico</PageTitle>
 <EditForm Model="tipoTecnicos" OnValidSubmit="Agregar">
     <DataAnnotationsValidator />
     @*Formulario*@
@@ -19,7 +21,7 @@
                     @*Id*@
                     <div class="col-1 ms-5">
                         <label class="form-label"><strong>ID</strong></label>
-                        <InputNumber class="form-control" @bind-Value="tipoTecnicos.TipoTencicoId" readonly></InputNumber>
+                        <InputNumber class="form-control" @bind-Value="tipoTecnicos.TipoTecnicoId" readonly></InputNumber>
                     </div>
 
                     @*Descripcion*@
@@ -40,15 +42,13 @@
 </EditForm>
 
 @code {
-    [Inject]
-    private IJSRuntime JSRuntime { get; set; }
     private TipoTecnicos tipoTecnicos { get; set; } = new TipoTecnicos();
     public Tecnicos tecnico { get; set; } = new Tecnicos();
     public List<TipoTecnicos> ListaTipoTecnicos { get; set; } = new List<TipoTecnicos>();
 
     protected override async Task OnInitializedAsync()
     {
-        ListaTipoTecnicos = await tipoTecnicoService.Listar(t => t.TipoTencicoId > 0);
+        ListaTipoTecnicos = await tipoTecnicoService.Listar(t => t.TipoTecnicoId > 0);
     }
 
     public async Task Agregar()
