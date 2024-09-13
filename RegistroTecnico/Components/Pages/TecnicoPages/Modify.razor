@@ -1,5 +1,7 @@
 ﻿@page "/Tecnicos/Modify/{tecnicoId:int}"
 
+@inject IJSRuntime JSRuntime
+@inject TipoTecnicoServices tipoTecnicoService
 @inject TecnicoServices tecnicoService
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
@@ -16,12 +18,25 @@
 
                 @*Body*@
                 <div class="card-body">
-                    <div>
+                    <div>@*Campo nombre*@
                         <label><strong>Nombre:</strong></label>
                         <InputText class="form-control" style="width: 200px;" @bind-Value="@tecnico.Nombres"></InputText>
                         <ValidationMessage For="(()=> tecnico.Nombres)" />
                     </div>
-                    <div class="pt-2">
+
+                    <div>@*Campo Descripcion*@
+                        <label><strong>Descripci&oacute;n:</strong></label>
+                        <InputSelect class="form-select" style="width: 200px" @bind-Value="tecnico.Descripcion">
+                            <option selected disabled>Selecciona una descripci&oacute;n</option>
+                            @foreach (var tipo in ListaTipoTecnicos)
+                            {
+                                <option value="@tipo.Descripcion">@tipo.Descripcion</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => tecnico.Descripcion)" />
+                    </div>
+
+                    <div class="pt-2">@*Campo sueldo/hora*@
                         <label><strong>Sueldo Hora:</strong></label>
                         <InputNumber class="form-control" style="width: 200px;" @bind-Value="@tecnico.SueldoHora"></InputNumber>
                         <ValidationMessage For="(()=> tecnico.SueldoHora)" />
@@ -40,14 +55,14 @@
 
 
 @code {
-    [Inject]
-    private IJSRuntime JSRuntime { get; set; }
     [Parameter]
     public int tecnicoId { get; set; }
     public Tecnicos tecnico = new Tecnicos();
+    public List<TipoTecnicos> ListaTipoTecnicos { get; set; } = new List<TipoTecnicos>();
 
     protected override async Task OnInitializedAsync()
     {
+        ListaTipoTecnicos = await tipoTecnicoService.Listar(t => true);
         tecnico = await tecnicoService.Buscar(tecnicoId);
     }
 
