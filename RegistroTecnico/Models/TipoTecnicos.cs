@@ -6,7 +6,7 @@ public class TipoTecnicos
 {
     [Key]
     [ForeignKey("TipoTecnicos")]
-    public int TipoTecnicoId { get; set; }
+    public int TipoTencicoId { get; set; }
     [Required(ErrorMessage = "Este campo es obligatorio.")]
     public string? Descripcion { get; set; }
 }
