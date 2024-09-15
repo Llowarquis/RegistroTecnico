@@ -1,0 +1,86 @@
+﻿@page "/Clientes/Modify/{ClienteID:int}"
+
+@inject IJSRuntime JSRuntime
+@inject ClientesService clientesService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Clientes Modify</PageTitle>
+<EditForm Model="Cliente" OnValidSubmit="Guardar">
+    <div class="container">
+        <div class="card shadow-lg">
+            @*Header*@
+            <div class="card-header text-center">
+                <h3><strong>Modificar Cliente</strong></h3>
+            </div>
+
+            @*Body*@
+            <div class="card-body">
+                <div class="col-2 ms-5">
+                    @*Aqui van los nombres*@
+                    <label class="form-label"><strong>Nombres</strong></label>
+                    <InputText placeholder="Nombres" class="form-control" @bind-Value="Cliente.Nombres"></InputText>
+                    <ValidationMessage For="@(() => Cliente.Nombres)" />
+                </div>
+
+                <div class="col-3 ms-5">
+                    @*Aqui va el numero de telefono*@
+                    <label class="form-label"><strong>WhatsApp</strong></label>
+                    <InputText class="form-control" placeholder="(###) - ### - ####" @bind-Value="Cliente.WhatsApp"></InputText>
+                    <ValidationMessage For="@(() => Cliente.WhatsApp)" />
+                </div>
+            </div>
+
+            @*Footer*@
+            <div class="card-footer text-center">
+                <button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver">  Volver   </button>
+                <button type="submit" class="btn btn-success  bi bi-floppy-fill" @onclick="Guardar">   Guardar   </button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public int ClienteID { get; set; }
+    public Clientes Cliente = new Clientes();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Cliente = await clientesService.Buscar(ClienteID);
+    }
+
+    public async Task Guardar()
+    {
+        if (await Validar())
+        {
+            await JSRuntime.InvokeVoidAsync("alert", "Ya existe un tecnico con ese nombre...");
+            return;
+        }
+
+        var modificado = await clientesService.Guardar(Cliente);
+
+        if (modificado)
+        {
+            await JSRuntime.InvokeVoidAsync("alert","El Tecnico se ha modificado correctamente!");
+            navigationManager.NavigateTo("/Clientes/Index");
+        }
+        else
+        {
+            await JSRuntime.InvokeVoidAsync("alert", "Ha ocurrido un error al modificar el Tecnico...");
+            navigationManager.NavigateTo("/Clientes/Index");
+        }
+
+    }
+
+    private async Task<bool> Validar()
+    {
+        return await clientesService.ExisteNombre(Cliente.ClienteId, Cliente?.Nombres);
+    }
+
+    public void Volver()
+    {
+        navigationManager.NavigateTo("/Clientes/Index");
+    }
+}
