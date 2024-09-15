@@ -54,12 +54,12 @@ public class TecnicoServices(Contexto contexto)
             .FirstOrDefaultAsync(t => t.TecnicoId == id);
     }
 
-    public List<Tecnicos> Listar(Expression<Func<Tecnicos, bool>> criterio)
+    public async Task<List<Tecnicos>> Listar(Expression<Func<Tecnicos, bool>> criterio)
     {
-        return _contexto.Tecnicos
+        return await _contexto.Tecnicos
             .AsNoTracking()
             .Where(criterio)   
-            .ToList();
+            .ToListAsync();
     }
 
     public async Task<bool> ExisteNombre(string? name)
