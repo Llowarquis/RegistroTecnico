@@ -25,7 +25,7 @@
                     </div>
                     @*Btn Crear*@
                     <div class="col-2">
-                        <button type="button" class="btn btn-primary bi bi-person-plus-fill border-bottom" @onclick="PantallaCrear">   Crear</button>
+                        <button type="button" class="btn btn-primary bi bi-person-fill-add border-bottom" @onclick="PantallaCrear">   Crear</button>
                     </div>
                 </div>
             </div>
@@ -88,7 +88,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        ListaTecnico = tecnicoServices.Listar(c => c.TecnicoId > 0);
+        ListaTecnico = await tecnicoServices.Listar(c => c.TecnicoId > 0);
     }
 
     public async Task Buscar()
