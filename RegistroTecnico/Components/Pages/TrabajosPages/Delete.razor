@@ -1,0 +1,64 @@
+﻿@page "/Trabajos/Delete/{TrabajoID:int}"
+
+@inject IJSRuntime JSRuntime
+@inject TrabajosService trabajosService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Trabajos Delete</PageTitle>
+<div class="container">
+	<div class="card shadow-lg">
+		@*Header*@
+		<div class="card-header">
+			<h3><strong>Eliminar Trabajo</strong></h3>
+		</div>
+
+		@*Body*@
+		<div class="card-body">
+			<h4><strong>¿Est&aacute; seguro que desea este Trabajo?</strong></h4>
+			<ul>
+				<li><strong>ID Trabajo: </strong> @Trabajo.TrabajosId</li>
+				<li><strong>Fecha: </strong> @Trabajo.Fecha</li>
+				<li><strong>ID Cliente: </strong> @Trabajo.ClienteId</li>
+				<li><strong>Cliente: </strong> @Trabajo.Cliente?.Nombres</li>
+				<li><strong>ID T&eacute;cnico: </strong> @Trabajo.TecnicoId</li>
+				<li><strong>T&eacute;cnico: </strong> @Trabajo.Tecnico?.Nombres</li>
+				<li><strong>Descripci&oacute;n: </strong> @Trabajo.Descripcion</li>
+				<li><strong>Monto: RD$</strong> @Trabajo.Monto</li>
+			</ul>
+		</div>
+
+		@*Footer*@
+		<div class="card-footer text-center">
+			<button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver">  Volver   </button>
+			<button type="button" class="btn btn-danger bi bi-trash3-fill" @onclick="Eliminar">   Eliminar   </button>
+		</div>
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public int TrabajoID { get; set; }
+	public Trabajos Trabajo { get; set; } = new Trabajos();
+
+	protected override async Task OnInitializedAsync()
+	{
+		Trabajo = await trabajosService.Buscar(TrabajoID);
+	}
+
+	public async Task Eliminar()
+	{
+		var eliminado = await trabajosService.Eliminar(Trabajo.ClienteId);
+
+		if (eliminado)
+			await JSRuntime.InvokeVoidAsync("alert","Se ha eliminado el Trabajo correctamente!");
+		else
+			await JSRuntime.InvokeVoidAsync("alert", "Ha ocurrido un error al eliminar el Trabajo...");		
+		navigationManager.NavigateTo("/Trabajos/Index");
+	}
+
+	public void Volver()
+	{
+		navigationManager.NavigateTo("/Trabajos/Index");
+	}
+}
