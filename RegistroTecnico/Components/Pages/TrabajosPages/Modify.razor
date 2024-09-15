@@ -1,0 +1,132 @@
+﻿@page "/Trabajos/Modify/{TrabajoID:int}"
+
+@inject IJSRuntime JSRuntime
+@inject TrabajosService trabajosService
+@inject ClientesService clientesService
+@inject TecnicoServices tecnicosService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Trabajos Modify</PageTitle>
+<EditForm Model="Trabajo" OnValidSubmit="Guardar">
+    <div class="container">
+        <div class="card shadow-lg">
+            @*Header*@
+            <div class="card-header text-center">
+                <h3><strong>Modificar Cliente</strong></h3>
+            </div>
+
+            @*Body*@
+            <div class="card-body">
+                <div class="col-1 ms-5">
+                    @*Se muestra el ID*@
+                    <label class="form-label"><strong>ID Trabajo:</strong></label>
+                    <InputNumber class="form-control" style="width: 50px" @bind-Value="Trabajo.TrabajosId" readonly></InputNumber>
+                </div>
+
+                <div class="col-2 ms-5">
+                    @*Campo Fecha*@
+                    <label class="form-label"><strong>Fecha:</strong></label>
+                    <InputDate placeholder="Nombres" class="form-control" @bind-Value="Trabajo.Fecha"></InputDate>
+                    <ValidationMessage For="@(() => Trabajo.Fecha)" />
+                </div>
+
+                <div class="col-3 ms-5">
+                    @*Campo selccion de Cliente*@
+                    <label class="form-label"><strong>Cliente:</strong></label>
+                    <InputSelect class="form-select" @bind-Value="Trabajo.ClienteId">
+                        <option selected disabled>Seleccione un cliente</option>
+                        @foreach (Clientes cliente in ListaClientes)
+                        {
+                            <option value="@cliente.ClienteId">@cliente.Nombres</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => Trabajo.Cliente)" />
+                </div>
+
+                <div class="col-3 ms-5">
+                    @*Campo selccion de Tecnico*@
+                    <label class="form-label"><strong>T&eacute;cnico:</strong></label>
+                    <InputSelect class="form-select" @bind-Value="Trabajo.TecnicoId">
+                        <option selected disabled>Seleccione un T&eacute;cnico</option>
+                        @foreach (Tecnicos tecnico in ListaTecnicos)
+                        {
+                            <option value="@tecnico.TecnicoId">@tecnico.Nombres   (@tecnico.Descripcion)</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => Trabajo.Tecnico)" />
+                </div>
+
+                <div class="col-3 ms-5">
+                    @*Campo Descripcion*@
+                    <label class="form-label"><strong>Descripci&oacute;n:</strong></label>
+                    <InputText class="form-control" @bind-Value="Trabajo.Descripcion"></InputText>
+                    <ValidationMessage For="@(() => Trabajo.Descripcion)" />
+                </div>
+
+                <div class="col-3 ms-5">
+                    @*Campo Monto*@
+                    <label class="form-label"><strong>Monto:</strong></label>
+                    <InputNumber class="form-control" @bind-Value="Trabajo.Monto"></InputNumber>
+                    <ValidationMessage For="@(() => Trabajo.Monto)" />
+                </div>
+            </div>
+
+            @*Footer*@
+            <div class="card-footer text-center">
+                <button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver">  Volver   </button>
+                <button type="submit" class="btn btn-success  bi bi-floppy-fill" @onclick="Guardar">   Guardar   </button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public int TrabajoID { get; set; }
+    public Trabajos Trabajo = new Trabajos();
+    public List<Tecnicos> ListaTecnicos { get; set; } = new List<Tecnicos>();
+    public List<Clientes> ListaClientes { get; set; } = new List<Clientes>();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaClientes = await clientesService.Listar(lc => true);
+        ListaTecnicos = await tecnicosService.Listar(lt => true);
+        Trabajo = await trabajosService.Buscar(TrabajoID);
+    }
+
+    public async Task Guardar()
+    {
+        if (await Validar())
+        {
+            await JSRuntime.InvokeVoidAsync("alert", "Ya existe un Trabajos con ese Descripcion...");
+            return;
+        }
+
+        var modificado = await trabajosService.Guardar(Trabajo);
+
+        if (modificado)
+        {
+            await JSRuntime.InvokeVoidAsync("alert", "El Trabajos se ha modificado correctamente!");
+            navigationManager.NavigateTo("/Trabajos/Index");
+        }
+        else
+        {
+            await JSRuntime.InvokeVoidAsync("alert", "Ha ocurrido un error al modificar el Trabajo...");
+            navigationManager.NavigateTo("/Trabajos/Index");
+        }
+
+    }
+
+    private async Task<bool> Validar()
+    {
+        return await trabajosService.ExisteDescripcion(Trabajo?.Descripcion);
+    }
+
+    public void Volver()
+    {
+        navigationManager.NavigateTo("/Trabajos/Index");
+    }
+}
