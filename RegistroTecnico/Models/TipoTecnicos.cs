@@ -5,7 +5,6 @@ namespace RegistroTecnico.Models;
 public class TipoTecnicos
 {
     [Key]
-    [ForeignKey("TipoTecnicos")]
     public int TipoTecnicoId { get; set; }
 
     [Required(ErrorMessage = "Este campo es obligatorio.")]
