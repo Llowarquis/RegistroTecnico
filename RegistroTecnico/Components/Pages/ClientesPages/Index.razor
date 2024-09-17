@@ -1,0 +1,119 @@
+﻿@page "/Clientes/Index"
+
+@inject IJSRuntime JSRuntime
+@inject ClientesService clientesService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Clientes Index</PageTitle>
+<div class="container">
+    <div class="card shadow-lg">
+        @*Header*@
+        <div class="card-header text-center">
+            @*Titulo*@
+            <div>
+                <h3><strong>Consulta de Clientes</strong></h3>
+            </div>
+                
+            <div class="row justify-content-center">
+                <label class="col-1"><strong>Buscar por ID</strong></label>
+                @*Barra de busqueda con Btn de Buscar*@
+                <div class="col-2 input-group" style="width: 500px">
+                    <input placeholder="Buscar" class="form-control" @bind="Cliente.ClienteId" />
+                    <button @onclick="Buscar" class="btn btn-success bi bi-search" type="button">  Buscar</button>
+                </div>
+                @*Btn Crear*@
+                <div class="col-2">
+                    <button type="button" class="btn btn-primary bi bi-person-fill-add border-bottom" @onclick="PantallaCrear">   Crear</button>
+                </div>
+            </div>
+        </div>
+        @*Body*@
+        <div class="card-body">
+            <table class="table table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>WhatsApp</th>
+                        <th>Visualizar</th>
+                        <th>Modificar</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var cliente in ListaClientes)
+                    {
+                        <tr>
+                            <td>@cliente.ClienteId</td>
+                            <td>@cliente.Nombres</td>
+                            <td>@cliente.WhatsApp</td> 
+                            @*Visualizacion*@
+                            <td>
+                                <button type="button" class="btn btn-outline-dark btn-outline-light bi bi-eye-fill" style="background-color: #8a33ff"
+                                        @onclick="()=> PantallaVisualizar(cliente.ClienteId)"></button>
+                            </td>
+
+                            @*Modificar*@
+                            <td>
+                                <button type="button" class="btn btn-outline-dark btn-outline-light bi bi-pencil-fill" style="background-color: #ffc300"
+                                        @onclick="()=> PantallaModificar(cliente.ClienteId)"></button>
+                            </td>
+
+                            @*Eliminar*@
+                            <td>
+                                <button type="button" class="btn btn-outline-dark btn-outline-light bi bi-trash3-fill" style="background-color: #ff3333"
+                                        @onclick="()=> PantallaEliminar(cliente.ClienteId)"></button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @*Footer*@
+        <div class="card-footer">
+            <p><strong>Cantidad total de Clientes: </strong>@ListaClientes.Count()</p>
+        </div>
+    </div>
+</div>
+
+@code {
+    public Clientes Cliente { get; set; } = new Clientes();
+    public List<Clientes> ListaClientes { get; set; } = new List<Clientes>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaClientes = await clientesService.Listar(c => true);
+    }
+
+    public async Task Buscar()
+    {
+        if (await clientesService.Buscar(Cliente.ClienteId) != null)
+            navigationManager.NavigateTo($"/Clientes/View/{Cliente.ClienteId}");
+        else
+        {
+            await JSRuntime.InvokeVoidAsync("alert", "Este ID no existe...");
+            return;
+        }
+    }
+
+    public void PantallaCrear()
+    {
+        navigationManager.NavigateTo("/Clientes/Create");
+    }
+
+    public void PantallaVisualizar(int id)
+    {
+        navigationManager.NavigateTo($"/Clientes/View/{id}");
+    }
+
+    public void PantallaModificar(int id)
+    {
+        navigationManager.NavigateTo($"/Clientes/Modify/{id}");
+    }
+
+    public void PantallaEliminar(int id)
+    {
+        navigationManager.NavigateTo($"/Clientes/Delete/{id}");
+    }
+}

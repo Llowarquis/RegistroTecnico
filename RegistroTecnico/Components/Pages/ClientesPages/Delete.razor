@@ -1,0 +1,59 @@
+﻿@page "/Clientes/Delete/{ClienteID:int}"
+
+@inject IJSRuntime JSRuntime
+@inject ClientesService clientesService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Cliente Delete</PageTitle>
+<div class="container">
+	<div class="card shadow-lg">
+		@*Header*@
+		<div class="card-header">
+			<h3><strong>Eliminar Cliente</strong></h3>
+		</div>
+
+		@*Body*@
+		<div class="card-body">
+			<h4><strong>¿Est&aacute; seguro que desea este Cliente?</strong></h4>
+			<ul>
+				<li><strong>ID: </strong>@Cliente.ClienteId</li>
+				<li><strong>Nombre: </strong>@Cliente.Nombres</li>
+				<li><strong>WhatsApp: </strong>@Cliente.WhatsApp</li>
+			</ul>
+		</div>
+
+		@*Footer*@
+		<div class="card-footer text-center">
+			<button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver">  Volver   </button>
+			<button type="button" class="btn btn-danger bi bi-trash3-fill" @onclick="Eliminar">   Eliminar   </button>
+		</div>
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public int ClienteID { get; set; }
+	public Clientes Cliente { get; set; } = new Clientes();
+
+	protected override async Task OnInitializedAsync()
+	{
+		Cliente = await clientesService.Buscar(ClienteID);
+	}
+
+	public async Task Eliminar()
+	{
+		var eliminado = await clientesService.Eliminar(Cliente.ClienteId);
+
+		if (eliminado)
+			await JSRuntime.InvokeVoidAsync("alert","Se ha eliminado el Tecnico correctamente!");
+		else
+			await JSRuntime.InvokeVoidAsync("alert", "Ha ocurrido un error al eliminar el Tecnico...");		
+		navigationManager.NavigateTo("/Clientes/Index");
+	}
+
+	public void Volver()
+	{
+		navigationManager.NavigateTo("/Clientes/Index");
+	}
+}

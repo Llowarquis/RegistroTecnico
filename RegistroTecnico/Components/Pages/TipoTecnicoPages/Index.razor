@@ -5,58 +5,60 @@
 @rendermode InteractiveServer
 
 <PageTitle>Index Tipo T&eacute;cnicos</PageTitle>
-<div class="container shadow-lg card">
-	@*Header*@
-	<div class="card-header">
-		<h3 class="text-center"><strong>Tipos de T&eacute;cnicos</strong></h3>
-		<div class="row justify-content-center">
-			<label class="col-1"><strong>Buscar por ID</strong></label>
-			@*Barra de busqueda con Btn de Buscar*@
-			<div class="col-2 input-group" style="width: 500px">
-				<input placeholder="Buscar" class="form-control" @bind="TipoTecnico.TipoTecnicoId" />
-				<button @onclick="Buscar" class="btn btn-success bi bi-search" type="button">  Buscar</button>
-			</div>
-			@*Btn Crear*@
-			<div class="col-2">
-				<button type="button" class="btn btn-primary bi bi-person-plus-fill border-bottom" @onclick="PantallaCrear">   Crear</button>
+<div class="container">
+	<div class="card shadow-lg">
+		@*Header*@
+		<div class="card-header">
+			<h3 class="text-center"><strong>Tipos de T&eacute;cnicos</strong></h3>
+			<div class="row justify-content-center">
+				<label class="col-1"><strong>Buscar por ID</strong></label>
+				@*Barra de busqueda con Btn de Buscar*@
+				<div class="col-2 input-group" style="width: 500px">
+					<input placeholder="Buscar" class="form-control" @bind="TipoTecnico.TipoTecnicoId" />
+					<button @onclick="Buscar" class="btn btn-success bi bi-search" type="button">  Buscar</button>
+				</div>
+				@*Btn Crear*@
+				<div class="col-2">
+					<button type="button" class="btn btn-primary bi bi-person-plus-fill border-bottom" @onclick="PantallaCrear">   Crear</button>
+				</div>
 			</div>
 		</div>
-	</div>
-	@*Body*@
-	 <div class="card-body">
-		 <table class="table table-bordered text-center">
-			 <thead>
-				 <tr>
-					 <th>ID</th>
-					 <th>Descripci&oacute;n</th>
-					 <th>Visualizar</th>
-					 <th>Modificar</th>
-					 <th>Eliminar</th>
-				 </tr>
-			 </thead>
-			 <tbody>
-				@foreach(var TipoTecnico in ListaTiposTecnicos)
-				{
+		@*Body*@
+		<div class="card-body">
+			<table class="table table-bordered text-center">
+				<thead>
 					<tr>
-						<td>@TipoTecnico.TipoTecnicoId</td>
-						<td>@TipoTecnico.Descripcion</td>
-						<td>
-							<button class="btn btn-outline-dark btn-outline-light bi bi-eye-fill" style="background-color: #8a33ff"
-									@onclick="() => PantallaView(TipoTecnico.TipoTecnicoId)"></button>
-						</td>
-						<td>
-							<button class="btn btn-outline-dark btn-outline-light bi bi-pencil-fill" style="background-color: #8a33ff"
-									@onclick="() => PantallaModificar(TipoTecnico.TipoTecnicoId)"></button>
-						</td>
-						<td>
-							<button class="btn btn-outline-dark btn-outline-light bi bi-trash-fill" style="background-color: #8a33ff"
-									@onclick="() => PantallaEliminar(TipoTecnico.TipoTecnicoId)"></button>
-						</td>
+						<th>ID</th>
+						<th>Descripci&oacute;n</th>
+						<th>Visualizar</th>
+						<th>Modificar</th>
+						<th>Eliminar</th>
 					</tr>
-				}
-			</tbody>
-		 </table>
-	 </div>
+				</thead>
+				<tbody>
+					@foreach (var TipoTecnico in ListaTiposTecnicos)
+					{
+						<tr>
+							<td>@TipoTecnico.TipoTecnicoId</td>
+							<td>@TipoTecnico.Descripcion</td>
+							<td>
+								<button class="btn btn-outline-dark btn-outline-light bi bi-eye-fill" style="background-color: #8a33ff"
+										@onclick="() => PantallaView(TipoTecnico.TipoTecnicoId)"></button>
+							</td>
+							<td>
+								<button class="btn btn-outline-dark btn-outline-light bi bi-pencil-fill" style="background-color: #8a33ff"
+										@onclick="() => PantallaModificar(TipoTecnico.TipoTecnicoId)"></button>
+							</td>
+							<td>
+								<button class="btn btn-outline-dark btn-outline-light bi bi-trash-fill" style="background-color: #8a33ff"
+										@onclick="() => PantallaEliminar(TipoTecnico.TipoTecnicoId)"></button>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>
 
 @code {

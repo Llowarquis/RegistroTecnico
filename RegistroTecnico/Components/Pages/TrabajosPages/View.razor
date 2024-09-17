@@ -1,0 +1,55 @@
+﻿@page "/Trabajos/View/{TrabajoID:int}"
+
+@inject TrabajosService trabajosService
+@inject NavigationManager navigationManager
+@inject IJSRuntime JSRuntime
+@rendermode InteractiveServer
+
+<PageTitle>View</PageTitle>
+<div class="container">
+	<div class="card shadow-lg">
+		<div class="card-header">
+			<h3><strong>Visualizaci&oacute;n del Trabajo actual</strong></h3>
+		</div>
+		<div class="card-body">
+			<ul>
+				<li><strong>ID Trabajo: </strong> @Trabajo.TrabajosId</li>
+				<li><strong>Fecha: </strong> @Trabajo.Fecha</li>
+				<li><strong>ID Cliente: </strong> @Trabajo.ClienteId</li>
+				<li><strong>Cliente: </strong> @Trabajo.Cliente?.Nombres</li>
+				<li><strong>ID T&eacute;cnico: </strong> @Trabajo.TecnicoId</li>
+				<li><strong>T&eacute;cnico: </strong> @Trabajo.Tecnico?.Nombres</li>
+				<li><strong>Descripci&oacute;n: </strong> @Trabajo.Descripcion</li>
+				<li><strong>Monto: RD$</strong> @Trabajo.Monto</li>
+			</ul>
+		</div>
+		<div class="card-footer text-center">
+			<button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver">   Volver</button>
+			<button type="button" class="btn btn-success bi bi-whatsapp" @onclick="WhatsApp">   Enviar a </button>
+		</div>
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public int TrabajoID { get; set; }
+	public Trabajos Trabajo { get; set; } = new Trabajos();
+
+	protected override async Task OnInitializedAsync()
+	{
+		Trabajo = await trabajosService.Buscar(TrabajoID);
+	}
+
+	public void Volver()
+	{
+		navigationManager.NavigateTo("/Trabajos/Index");
+	}
+
+	public async Task WhatsApp()
+	{
+		string message = $"Hola, {Trabajo.Cliente?.Nombres}! Su petición con respecto a: '{Trabajo.Descripcion}' Ha concluido exitosamente. Gracias por preferirnos!\n\n ****DETALLES DEL TRABAJO****\n\n*LE ATENDIÓ:* {Trabajo.Tecnico?.Nombres}\n*FECHA:* {Trabajo.Fecha}\n*MONTO TOTAL: RD$* {Trabajo.Monto}";
+		string codification = Uri.EscapeDataString(message);
+		var url = $"http://wa.me/{Trabajo.Cliente?.WhatsApp}?text={codification}";
+		await JSRuntime.InvokeVoidAsync("open", url, "_blank");
+	}
+}

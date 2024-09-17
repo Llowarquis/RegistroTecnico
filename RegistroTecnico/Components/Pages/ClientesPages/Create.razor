@@ -1,0 +1,86 @@
+﻿@page "/Clientes/Create"
+
+@inject IJSRuntime JSRuntime
+@inject ClientesService clientesService
+@inject TipoTecnicoServices tipoTecnicoServices
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Clientes Create</PageTitle>
+<EditForm Model="@Cliente" OnValidSubmit="Agregar">
+<DataAnnotationsValidator/>
+<ValidationSummary/>
+
+    <div class="container">
+        <div class="card shadow-lg">
+            @*HEADER*@
+            <div class="card-header text-center">
+                <h3><strong>Crear nuevo Cliente</strong></h3>
+            </div>
+
+            @*BODY*@
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-1 ms-5"> @*Se muestra el ID*@
+                        <label class="form-label"><strong>ID</strong></label>
+                        <InputNumber class="form-control" style="width: 50px" @bind-Value="Cliente.ClienteId" readonly></InputNumber>
+                    </div>
+
+                    <div class="col-2 ms-5"> @*Aqui van los nombres*@
+                        <label class="form-label"><strong>Nombres</strong></label>
+                        <InputText placeholder="Nombres" class="form-control" @bind-Value="Cliente.Nombres"></InputText>
+                        <ValidationMessage For="@(() => Cliente.Nombres)" />
+                    </div>
+
+                    <div class="col-3 ms-5" >@*Aqui va el numero de telefono*@
+                        <label class="form-label"><strong>WhatsApp</strong></label>
+                        <InputText class="form-control" placeholder="(###) - ### - ####" @bind-Value="Cliente.WhatsApp"></InputText>
+                        <ValidationMessage For="@(() => Cliente.WhatsApp)" />
+                    </div>
+                </div>
+            </div>
+
+            @*FOOTER*@
+            <div class="card-footer text-center">
+                <button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver">Volver</button>
+                <button type="submit" class="btn btn-success bi bi-floppy-fill">    Agregar</button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    public Clientes Cliente { get; set; } = new Clientes();
+
+    public async Task Agregar()
+    {
+        if (await Validar())
+        {
+            await JSRuntime.InvokeVoidAsync("alert", "Ya existe un Cliente con ese nombre...");
+            return;
+        }
+
+        var crear = await clientesService.Guardar(Cliente);
+
+        if (crear)
+        {
+            await JSRuntime.InvokeVoidAsync("alert", "El Cliente se creo correctamente!");
+            navigationManager.NavigateTo("/Clientes/Index");
+        }
+        else
+        {
+            await JSRuntime.InvokeVoidAsync("alert", "Ha ocurrido un error al crear el Cliente...");
+            navigationManager.NavigateTo("/Clientes/Index");
+        }
+    }
+
+    private async Task<bool> Validar()
+    {
+        return await clientesService.ExisteNombre(Cliente.ClienteId, Cliente?.Nombres);
+    }
+
+    public void Volver()
+    {
+        navigationManager.NavigateTo("/Clientes/Index");
+    }
+}

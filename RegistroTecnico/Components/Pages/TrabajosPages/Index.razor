@@ -1,0 +1,131 @@
+﻿@page "/Trabajos/Index"
+
+@inject IJSRuntime JSRuntime
+@inject TrabajosService trabajosService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Trabajos Index</PageTitle>
+<div class="container">
+    <div class="card shadow-lg">
+        @*Header*@
+        <div class="card-header text-center">
+            @*Titulo*@
+            <div>
+                <h3><strong>Consulta de Trabajos</strong></h3>
+            </div>
+                
+            <div class="row justify-content-center">
+                <label class="col-1"><strong>Buscar por ID</strong></label>
+                @*Barra de busqueda con Btn de Buscar*@
+                <div class="col-2 input-group" style="width: 500px">
+                    <input placeholder="Buscar" class="form-control" @bind="Trabajo.TrabajosId" />
+                    <button @onclick="Buscar" class="btn btn-success bi bi-search" type="button">  Buscar</button>
+                </div>
+                @*Btn Crear*@
+                <div class="col-2">
+                    <button type="button" class="btn btn-primary bi bi-person-fill-add border-bottom" @onclick="PantallaCrear">   Crear</button>
+                </div>
+            </div>
+        </div>
+        @*Body*@
+        <div class="card-body">
+            <table class="table table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Fecha</th>
+                        <th>ID Cliente</th>
+                        <th>Cliente</th>
+                        <th>ID T&eacute;cnico</th>
+                        <th>T&eacute;cnico</th>
+                        <th>Descripci&oacute;n</th>
+                        <th>Monto</th>
+                        <th>Ver</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var trabajo in ListaTrabajos)
+                    {
+                        <tr>
+                            <td>@trabajo.TrabajosId</td>
+                            <td>@trabajo.Fecha</td>
+                            <td>@trabajo.ClienteId</td>
+                            <td>@trabajo.Cliente.Nombres</td>
+                            <td>@trabajo.TecnicoId</td>
+                            <td>@trabajo.Tecnico.Nombres</td>
+                            <td>@trabajo.Descripcion</td>
+                            <td>@trabajo.Monto</td>
+                            @*Visualizacion*@
+                            <td>
+                                <button type="button" class="btn btn-outline-dark btn-outline-light bi bi-eye-fill" style="background-color: #8a33ff"
+                                        @onclick="()=> PantallaVisualizar(trabajo.TrabajosId)"></button>
+                            </td>
+
+                            @*Modificar*@
+                            <td>
+                                <button type="button" class="btn btn-outline-dark btn-outline-light bi bi-pencil-fill" style="background-color: #ffc300"
+                                        @onclick="()=> PantallaModificar(trabajo.TrabajosId)"></button>
+                            </td>
+
+                            @*Eliminar*@
+                            <td>
+                                <button type="button" class="btn btn-outline-dark btn-outline-light bi bi-trash3-fill" style="background-color: #ff3333"
+                                        @onclick="()=> PantallaEliminar(trabajo.TrabajosId)"></button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @*Footer*@
+        <div class="card-footer">
+            <p><strong>Cantidad total de Trabajos: </strong>@ListaTrabajos.Count()</p>
+        </div>
+    </div>
+</div>
+
+@code {
+    public Tecnicos Tecnic { get; set; } = new Tecnicos();
+    public Clientes Client { get; set; } = new Clientes();
+    public Trabajos Trabajo { get; set; } = new Trabajos();
+    public List<Trabajos> ListaTrabajos { get; set; } = new List<Trabajos>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaTrabajos = await trabajosService.Listar(c => true);
+    }
+
+    public async Task Buscar()
+    {
+        if (await trabajosService.Buscar(Trabajo.TrabajosId) != null)
+            navigationManager.NavigateTo($"/Trabajos/View/{Trabajo.TrabajosId}");
+        else
+        {
+            await JSRuntime.InvokeVoidAsync("alert", "Este ID no existe...");
+            return;
+        }
+    }
+
+    public void PantallaCrear()
+    {
+        navigationManager.NavigateTo("/Trabajos/Create");
+    }
+
+    public void PantallaVisualizar(int id)
+    {
+        navigationManager.NavigateTo($"/Trabajos/View/{id}");
+    }
+
+    public void PantallaModificar(int id)
+    {
+        navigationManager.NavigateTo($"/Trabajos/Modify/{id}");
+    }
+
+    public void PantallaEliminar(int id)
+    {
+        navigationManager.NavigateTo($"/Trabajos/Delete/{id}");
+    }
+}
