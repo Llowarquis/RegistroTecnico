@@ -1,0 +1,59 @@
+﻿@page "/Prioridades/Delete/{PrioridadID:int}"
+
+@inject IJSRuntime JSRuntime
+@inject PrioridadesService prioridadesService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Prioridades Delete</PageTitle>
+<div class="container">
+	<div class="card shadow-lg">
+		@*Header*@
+		<div class="card-header">
+			<h3><strong>Eliminar Prioridad</strong></h3>
+		</div>
+
+		@*Body*@
+		<div class="card-body">
+			<h4><strong>¿Est&aacute; seguro que desea Eliminar esta Prioridad?</strong></h4>
+			<ul>
+				<li><strong>ID: </strong>@Prioridad.PrioridadesId</li>
+				<li><strong>Descripci&oacute;n: </strong> @Prioridad.Descripcion</li>
+				<li><strong>Tiempo (Minutos): </strong> @Prioridad.Tiempo</li>
+			</ul>
+		</div>
+
+		@*Footer*@
+		<div class="card-footer text-center">
+			<button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver">  Volver   </button>
+			<button type="button" class="btn btn-danger bi bi-trash3-fill" @onclick="Eliminar">   Eliminar   </button>
+		</div>
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public int PrioridadID { get; set; }
+	public Prioridades Prioridad { get; set; } = new Prioridades();
+
+	protected override async Task OnInitializedAsync()
+	{
+		Prioridad = await prioridadesService.Buscar(PrioridadID);
+	}
+
+	public async Task Eliminar()
+	{
+		var eliminado = await prioridadesService.Eliminar(Prioridad.PrioridadesId);
+
+		if (eliminado)
+			await JSRuntime.InvokeVoidAsync("alert", "La Prioridad se ha eliminado correctamente!");
+		else
+			await JSRuntime.InvokeVoidAsync("alert", "Ha ocurrido un error al eliminar la Prioridad9");
+		navigationManager.NavigateTo("/Prioridades/Index");
+	}
+
+	public void Volver()
+	{
+		navigationManager.NavigateTo("/Prioridades/Index");
+	}
+}
