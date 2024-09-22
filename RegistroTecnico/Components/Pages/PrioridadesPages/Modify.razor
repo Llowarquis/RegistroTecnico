@@ -1,0 +1,96 @@
+﻿@page "/Prioridades/Modify/{PrioridadID:int}"
+
+@inject IJSRuntime JSRuntime
+@inject PrioridadesService prioridadesService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Prioridades Modify</PageTitle>
+<EditForm Model="Prioridad" OnValidSubmit="Guardar">
+    <div class="container">
+        <div class="shadow-lg">
+            <div class="card">
+                @*Header*@
+                <div class="card-header text-center">
+                    <h3><strong>Modificar Prioridad</strong></h3>
+                </div>
+
+                @*Body*@
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-1 ms-5">
+                            @*Se muestra el ID*@
+                            <label class="form-label"><strong>ID:</strong></label>
+                            <InputNumber class="form-control" style="width: 50px" @bind-Value="Prioridad.PrioridadesId" readonly></InputNumber>
+                        </div>
+
+                        <div class="col-2 ms-5">
+                            @*Campo Descripcion*@
+                            <label class="form-label"><strong>Descripci&oacute;n:</strong></label>
+                            <InputText placeholder="Descripci&oacute;n" class="form-control" @bind-Value="Prioridad.Descripcion" DisplayName="Descripci&oacute;n"></InputText>
+                            <ValidationMessage For="@(() => Prioridad.Descripcion)" />
+                        </div>
+
+                        <div class="col-3 ms-5">
+                            @*Campo Tiempo*@
+                            <label class="form-label"><strong>Tiempo (Minutos):</strong></label>
+                            <InputNumber class="form-control" @bind-Value="Prioridad.Tiempo"></InputNumber>
+                            <ValidationMessage For="@(() => Prioridad.Tiempo)" />
+                        </div>
+                    </div>
+                </div>
+
+                @*Footer*@
+                <div class="card-footer text-center">
+                    <button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver">  Volver   </button>
+                    <button type="submit" class="btn btn-success  bi bi-floppy-fill" @onclick="Guardar">   Guardar   </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public int PrioridadID { get; set; }
+    public Prioridades Prioridad = new Prioridades();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Prioridad = await prioridadesService.Buscar(PrioridadID);
+    }
+
+    public async Task Guardar()
+    {
+        if (await Validar())
+        {
+            await JSRuntime.InvokeVoidAsync("alert", "Ya existe una Prioridad con ese nombre...");
+            return;
+        }
+
+        if (await prioridadesService.Guardar(Prioridad))
+        {
+            await JSRuntime.InvokeVoidAsync("alert","La Prioridad se ha modificado correctamente!");
+            navigationManager.NavigateTo("/Prioridades/Index");
+            return;
+        }
+        else
+        {
+            await JSRuntime.InvokeVoidAsync("alert", "Ha ocurrido un error al modificar la Prioridad...");
+            navigationManager.NavigateTo("/Prioridades/Index");
+            return;
+        }
+
+    }
+
+    private async Task<bool> Validar()
+    {
+        return await prioridadesService.ExisteDescripcion(Prioridad.Descripcion);
+    }
+
+    public void Volver()
+    {
+        navigationManager.NavigateTo("/Prioridades/Index");
+    }
+}
