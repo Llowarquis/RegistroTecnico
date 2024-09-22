@@ -1,0 +1,99 @@
+﻿@page "/Prioridades/Index"
+
+@inject IJSRuntime JSRuntime
+@inject PrioridadesService prioridadesService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Prioridades Index</PageTitle>
+<div class="container">
+    <div class="card shadow-lg">
+        @*Header*@
+        <div class="card-header text-center">
+            @*Titulo*@
+            <div>
+                <h3><strong>Consulta de Prioridades </strong></h3>
+            </div>
+                
+            <div class="row justify-content-center">
+                <label class="col-1"><strong>Buscar por ID</strong></label>
+                @*Barra de busqueda con Btn de Buscar*@
+                <div class="col-2 input-group" style="width: 500px">
+                    <input placeholder="Buscar" class="form-control" @bind="Prioridad.PrioridadesId" />
+                    <button @onclick="Buscar" class="btn btn-success bi bi-search" type="button">  Buscar</button>
+                </div>
+                @*Btn Crear*@
+                <div class="col-2">
+                    <a type="button" class="btn btn-primary bi bi-person-fill-add border-bottom" href="/Prioridades/Create">   Crear</a>
+                </div>
+            </div>
+        </div>
+        @*Body*@
+        <div class="card-body">
+            <table class="table table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Descripci&oacute;n</th>
+                        <th>Tiempo</th>
+                        <th>Visualizar</th>
+                        <th>Modificar</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var prioridad in ListaPrioridades)
+                    {
+                        <tr>
+                            <td>@prioridad.PrioridadesId</td>
+                            <td>@prioridad.Descripcion</td>
+                            <td>@prioridad.Tiempo</td>
+                            @*Visualizacion*@
+                            <td>
+                                <a type="button" class="btn btn-outline-dark btn-outline-light bi bi-eye-fill" style="background-color: #8a33ff"
+                                        href="/Prioridades/View/@prioridad.PrioridadesId"></a>
+                            </td>
+
+                            @*Modificar*@
+                            <td>
+                                <a type="button" class="btn btn-outline-dark btn-outline-light bi bi-pencil-fill" style="background-color: #ffc300"
+                                        href="/Prioridades/Modify/@prioridad.PrioridadesId"></a>
+                            </td>
+
+                            @*Eliminar*@
+                            <td>
+                                <a type="button" class="btn btn-outline-dark btn-outline-light bi bi-trash3-fill" style="background-color: #ff3333"
+                                        href="/Prioridades/Delete/@prioridad.PrioridadesId"></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @*Footer*@
+        <div class="card-footer">
+            <p><strong>Cantidad total de Prioridades: </strong>@ListaPrioridades.Count()</p>
+        </div>
+    </div>
+</div>
+
+@code {
+    public Prioridades Prioridad { get; set; } = new Prioridades();
+    public List<Prioridades> ListaPrioridades { get; set; } = new List<Prioridades>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaPrioridades = await prioridadesService.Listar(p => p.PrioridadesId > 0);
+    }
+
+    public async Task Buscar()
+    {
+        if (await prioridadesService.Buscar(Prioridad.PrioridadesId) != null)
+            navigationManager.NavigateTo($"/Prioridades/View/{Prioridad.PrioridadesId}");
+        else
+        {
+            await JSRuntime.InvokeVoidAsync("alert", "Este ID no existe...");
+            return;
+        }
+    }
+}
