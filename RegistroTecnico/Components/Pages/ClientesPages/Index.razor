@@ -47,7 +47,7 @@
                         <tr>
                             <td>@cliente.ClienteId</td>
                             <td>@cliente.Nombres</td>
-                            <td>@cliente.WhatsApp</td> 
+                            <td>@String.Format("{0:(###)-###-####}", long.Parse(cliente.WhatsApp))</td>
                             @*Visualizacion*@
                             <td>
                                 <button type="button" class="btn btn-outline-dark btn-outline-light bi bi-eye-fill" style="background-color: #8a33ff"
