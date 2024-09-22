@@ -18,7 +18,7 @@
 			<h4><strong>¿Est&aacute; seguro que desea este Trabajo?</strong></h4>
 			<ul>
 				<li><strong>ID Trabajo: </strong> @Trabajo.TrabajosId</li>
-				<li><strong>Fecha: </strong> @Trabajo.Fecha</li>
+				<li><strong>Fecha: </strong> @Trabajo.Fecha.ToString("dd/MM/yyyy")</li>
 				<li><strong>ID Cliente: </strong> @Trabajo.ClienteId</li>
 				<li><strong>Cliente: </strong> @Trabajo.Cliente?.Nombres</li>
 				<li><strong>ID T&eacute;cnico: </strong> @Trabajo.TecnicoId</li>

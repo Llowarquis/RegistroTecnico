@@ -1,30 +1,30 @@
-﻿@page "/Trabajos/Index"
+﻿@page "/Prioridades/Index"
 
 @inject IJSRuntime JSRuntime
-@inject TrabajosService trabajosService
+@inject PrioridadesService prioridadesService
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
-<PageTitle>Trabajos Index</PageTitle>
+<PageTitle>Prioridades Index</PageTitle>
 <div class="container">
     <div class="card shadow-lg">
         @*Header*@
         <div class="card-header text-center">
             @*Titulo*@
             <div>
-                <h3><strong>Consulta de Trabajos</strong></h3>
+                <h3><strong>Consulta de Prioridades </strong></h3>
             </div>
                 
             <div class="row justify-content-center">
                 <label class="col-1"><strong>Buscar por ID</strong></label>
                 @*Barra de busqueda con Btn de Buscar*@
                 <div class="col-2 input-group" style="width: 500px">
-                    <input placeholder="Buscar" class="form-control" @bind="Trabajo.TrabajosId" />
+                    <input placeholder="Buscar" class="form-control" @bind="Prioridad.PrioridadesId" />
                     <button @onclick="Buscar" class="btn btn-success bi bi-search" type="button">  Buscar</button>
                 </div>
                 @*Btn Crear*@
                 <div class="col-2">
-                    <a type="button" class="btn btn-primary bi bi-person-fill-add border-bottom" href="/Trabajos/Create">   Crear</a>
+                    <a type="button" class="btn btn-primary bi bi-person-fill-add border-bottom" href="/Prioridades/Create">   Crear</a>
                 </div>
             </div>
         </div>
@@ -34,46 +34,36 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Fecha</th>
-                        <th>ID Cliente</th>
-                        <th>Cliente</th>
-                        <th>ID T&eacute;cnico</th>
-                        <th>T&eacute;cnico</th>
                         <th>Descripci&oacute;n</th>
-                        <th>Monto</th>
-                        <th>Ver</th>
-                        <th>Editar</th>
+                        <th>Tiempo</th>
+                        <th>Visualizar</th>
+                        <th>Modificar</th>
                         <th>Eliminar</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var trabajo in ListaTrabajos)
+                    @foreach (var prioridad in ListaPrioridades)
                     {
                         <tr>
-                            <td>@trabajo.TrabajosId</td>
-                            <td>@trabajo.Fecha.ToString("dd/MM/yyyy")</td>
-                            <td>@trabajo.ClienteId</td>
-                            <td>@trabajo.Cliente?.Nombres</td>
-                            <td>@trabajo.TecnicoId</td>
-                            <td>@trabajo.Tecnico?.Nombres</td>
-                            <td>@trabajo.Descripcion</td>
-                            <td>RD$ @trabajo.Monto</td>
+                            <td>@prioridad.PrioridadesId</td>
+                            <td>@prioridad.Descripcion</td>
+                            <td>@prioridad.Tiempo</td>
                             @*Visualizacion*@
                             <td>
                                 <a type="button" class="btn btn-outline-dark btn-outline-light bi bi-eye-fill" style="background-color: #8a33ff"
-                                        href="/Trabajos/View/@trabajo.TecnicoId"></a>
+                                        href="/Prioridades/View/@prioridad.PrioridadesId"></a>
                             </td>
 
                             @*Modificar*@
                             <td>
                                 <a type="button" class="btn btn-outline-dark btn-outline-light bi bi-pencil-fill" style="background-color: #ffc300"
-                                        href="/Trabajos/Modify/@trabajo.TecnicoId"></a>
+                                        href="/Prioridades/Modify/@prioridad.PrioridadesId"></a>
                             </td>
 
                             @*Eliminar*@
                             <td>
                                 <a type="button" class="btn btn-outline-dark btn-outline-light bi bi-trash3-fill" style="background-color: #ff3333"
-                                        href="/Trabajos/Delete/@trabajo.TecnicoId"></a>
+                                        href="/Prioridades/Delete/@prioridad.PrioridadesId"></a>
                             </td>
                         </tr>
                     }
@@ -82,24 +72,24 @@
         </div>
         @*Footer*@
         <div class="card-footer">
-            <p><strong>Cantidad total de Trabajos: </strong>@ListaTrabajos.Count()</p>
+            <p><strong>Cantidad total de Prioridades: </strong>@ListaPrioridades.Count()</p>
         </div>
     </div>
 </div>
 
 @code {
-    public Trabajos Trabajo { get; set; } = new Trabajos();
-    public List<Trabajos> ListaTrabajos { get; set; } = new List<Trabajos>();
+    public Prioridades Prioridad { get; set; } = new Prioridades();
+    public List<Prioridades> ListaPrioridades { get; set; } = new List<Prioridades>();
 
     protected override async Task OnInitializedAsync()
     {
-        ListaTrabajos = await trabajosService.Listar(c => true);
+        ListaPrioridades = await prioridadesService.Listar(p => p.PrioridadesId > 0);
     }
 
     public async Task Buscar()
     {
-        if (await trabajosService.Buscar(Trabajo.TrabajosId) != null)
-            navigationManager.NavigateTo($"/Trabajos/View/{Trabajo.TrabajosId}");
+        if (await prioridadesService.Buscar(Prioridad.PrioridadesId) != null)
+            navigationManager.NavigateTo($"/Prioridades/View/{Prioridad.PrioridadesId}");
         else
         {
             await JSRuntime.InvokeVoidAsync("alert", "Este ID no existe...");

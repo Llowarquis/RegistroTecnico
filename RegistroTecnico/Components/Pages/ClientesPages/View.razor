@@ -14,7 +14,7 @@
 			<ul>
 				<li><strong>ID: </strong> @Cliente.ClienteId</li>
 				<li><strong>Nombre: </strong> @Cliente.Nombres</li>
-				<li><strong>WhatsApp: </strong> @Cliente.WhatsApp</li>
+				<li><strong>WhatsApp: </strong> @String.Format("{0:(###)-###-####}", long.Parse(Cliente.WhatsApp))</li>
 			</ul>
 		</div>
 		<div class="card-footer text-center">
