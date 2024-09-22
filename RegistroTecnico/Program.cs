@@ -25,6 +25,7 @@ public class Program
         builder.Services.AddScoped<TipoTecnicoServices>();
         builder.Services.AddScoped<ClientesService>();
         builder.Services.AddScoped<TrabajosService>();
+        builder.Services.AddScoped<PrioridadesService>();
 
 
 
