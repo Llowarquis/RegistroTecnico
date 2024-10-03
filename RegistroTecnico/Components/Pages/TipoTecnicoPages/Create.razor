@@ -7,7 +7,7 @@
 
 <PageTitle>Create Tipo T&eacute;cnicos</PageTitle>
 <EditForm Model="tipoTecnicos" OnValidSubmit="Agregar">
-    <DataAnnotationsValidator />
+<DataAnnotationsValidator />
     @*Formulario*@
     <div class="container">
         <div class="card shadow-lg">
@@ -27,7 +27,7 @@
                 <div class="col-2 ms-5">
                     <label class="form-label"><strong>Descripci&oacute;n</strong></label>
                     <InputText placeholder="Descricip&oacute;n" class="form-control" @bind-Value="tipoTecnicos.Descripcion"></InputText>
-                    <ValidationMessage For="(() => tipoTecnicos.Descripcion)" />
+                    <ValidationMessage For="@(() =>tipoTecnicos.Descripcion)" />
                 </div>
             </div>
         </div>
@@ -75,7 +75,7 @@
 	private async Task<bool> Validar()
 	{
 		var existe = await tipoTecnicoService.ValidarDescripcion(tipoTecnicos.Descripcion);
-		return existe;
+		return !existe;
 	}
 
 	public void Volver()
