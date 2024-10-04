@@ -41,7 +41,7 @@
 
                     @*Btn Crear*@
                     <div class="col-2">
-                        <button type="button" class="btn btn-primary bi bi-person-fill-add border-bottom" @onclick="PantallaCrear">   Crear</button>
+                        <a type="button" class="btn btn-primary bi bi-person-fill-add border-bottom" href="/Tecnicos/Create">   Crear</a>
                     </div>
                 </div>
             </div>
@@ -136,25 +136,5 @@
         ListaTecnicos = await tecnicoServices.Listar(t => true);
         valorFiltro = "";
         searchBarValue = string.Empty;
-    }
-
-    public void PantallaCrear()
-    {
-        navigationManager.NavigateTo("/Tecnicos/Create");
-    }
-
-    public void PantallaVisualizar(int id)
-    {
-        navigationManager.NavigateTo($"/Tecnicos/View/{id}");
-    }
-
-    public void PantallaModificar(int id)
-    {
-        navigationManager.NavigateTo($"/Tecnicos/Modify/{id}");
-    }
-
-    public void PantallaEliminar(int id)
-    {
-        navigationManager.NavigateTo($"/Tecnicos/Delete/{id}");
     }
 }
