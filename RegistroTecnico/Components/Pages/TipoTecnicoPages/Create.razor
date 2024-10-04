@@ -33,7 +33,7 @@
         </div>
         @*Footer*@
         <div class="card-footer text-center">
-            <button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver"> Volver   </button>
+            <a type="button" class="btn btn-primary bi bi-chevron-double-left" href="/Tecnicos/Index"> Volver   </a>
             <button type="submit" class="btn btn-success bi bi-floppy-fill" @onclick="Agregar">   Agregar    </button>
         </div>
     </div>
@@ -76,10 +76,5 @@
 	{
 		var existe = await tipoTecnicoService.ValidarDescripcion(tipoTecnicos.Descripcion);
 		return existe;
-	}
-
-	public void Volver()
-	{
-		navigationManager.NavigateTo("/TipoTecnicos/Index");
 	}
 }
