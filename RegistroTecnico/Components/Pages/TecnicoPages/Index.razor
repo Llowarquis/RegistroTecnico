@@ -17,12 +17,28 @@
                 </div>
                 
                 <div class="row justify-content-center">
-                    <label class="col-1"><strong>Buscar por ID</strong></label>
+                    
+                    <label class="col-1"><strong>Filtrar:</strong></label>
+                    <div class="col-2 input-group" style="width: 250px">
+                        @*Campo Filtro*@
+                        <InputSelect class="form-select" style="width: 150px" @bind-Value="@valorFiltro">
+                            <option value="" selected disabled>Selecciona...</option>
+                            <option value="ID">ID</option>
+                            <option value="Nombre">Nombre</option>
+                            <option value="Descripcion">Descripci&oacute;n</option>
+                        </InputSelect>
+
+                        @*Btn Restablecer filtro*@
+                        <button class="col-1 btn btn-secondary bi bi-arrow-counterclockwise" style="width: 40px" @onclick="Restablecer"></button>
+                    </div>
+
+                    <label class="col-1"><strong>Buscar:</strong></label>
                     @*Barra de busqueda con Btn de Buscar*@
                     <div class="col-2 input-group" style="width: 500px">
                         <input placeholder="Buscar" class="form-control" @bind="@tecnico.TecnicoId" />
                         <button @onclick="Buscar" class="btn btn-success bi bi-search" type="button">  Buscar</button>
                     </div>
+
                     @*Btn Crear*@
                     <div class="col-2">
                         <button type="button" class="btn btn-primary bi bi-person-fill-add border-bottom" @onclick="PantallaCrear">   Crear</button>
@@ -84,6 +100,7 @@
 @code {
     public Tecnicos tecnico { get; set; } = new Tecnicos();
     public List<Tecnicos> ListaTecnico { get; set; } = new List<Tecnicos>();
+    public string valorFiltro { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -99,6 +116,12 @@
             await JSRuntime.InvokeVoidAsync("alert", "Este ID no existe...");
             return;
         }
+    }
+
+    private async Task Restablecer()
+    {
+        ListaTecnico = await tecnicoServices.Listar(t => t.TecnicoId > 0);
+        valorFiltro = string.Empty;
     }
 
     public void PantallaCrear()
