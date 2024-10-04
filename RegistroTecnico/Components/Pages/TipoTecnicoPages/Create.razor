@@ -75,7 +75,7 @@
 	private async Task<bool> Validar()
 	{
 		var existe = await tipoTecnicoService.ValidarDescripcion(tipoTecnicos.Descripcion);
-		return !existe;
+		return existe;
 	}
 
 	public void Volver()
