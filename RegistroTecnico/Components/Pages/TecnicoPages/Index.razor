@@ -35,7 +35,7 @@
                     <label class="col-1"><strong>Buscar:</strong></label>
                     @*Barra de busqueda con Btn de Buscar*@
                     <div class="col-2 input-group" style="width: 500px">
-                        <input placeholder="Buscar" class="form-control" @bind="@tecnico.TecnicoId" />
+                        <input placeholder="Buscar" class="form-control" @bind="@searchBarValue" />
                         <button @onclick="Buscar" class="btn btn-success bi bi-search" type="button">  Buscar</button>
                     </div>
 
@@ -60,7 +60,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var tecnico in ListaTecnico)
+                        @foreach (var tecnico in ListaTecnicos)
                         {
                             <tr>
                                 <td>@tecnico.TecnicoId</td>
@@ -91,37 +91,51 @@
             </div>
             @*Footer*@
             <div class="card-footer">
-                <p><strong>Cantidad total de Tecnicos: </strong>@ListaTecnico.Count()</p>
+                <p><strong>Cantidad total de T&eacute;cnicos: </strong>@ListaTecnicos.Count()</p>
             </div>
         </div>
     </div>
 </div>
 
 @code {
-    public Tecnicos tecnico { get; set; } = new Tecnicos();
-    public List<Tecnicos> ListaTecnico { get; set; } = new List<Tecnicos>();
-    public string valorFiltro { get; set; } = string.Empty;
+    public List<Tecnicos> ListaTecnicos { get; set; } = new List<Tecnicos>();
+    public string valorFiltro { get; set; } = "";
+    public string searchBarValue { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
-        ListaTecnico = await tecnicoServices.Listar(c => c.TecnicoId > 0);
+        ListaTecnicos = await tecnicoServices.Listar(c => c.TecnicoId > 0);
     }
 
     public async Task Buscar()
     {
-        if (await tecnicoServices.Buscar(tecnico.TecnicoId) != null)
-            navigationManager.NavigateTo($"/Tecnicos/View/{tecnico.TecnicoId}");
-        else
+        if (valorFiltro.Trim().ToLower() != "")
         {
-            await JSRuntime.InvokeVoidAsync("alert", "Este ID no existe...");
-            return;
+            switch (valorFiltro)
+            {
+                case "ID":
+                    if (int.TryParse(searchBarValue.Trim(), out int id))
+                        ListaTecnicos = await tecnicoServices.Listar(lt => lt.TecnicoId == id);
+                    break;
+
+                case "Nombre":
+                    ListaTecnicos = await tecnicoServices.Listar(lt => lt.Nombres.Trim().ToLower().Contains(searchBarValue.Trim().ToLower()));
+                    break;
+
+                case "Descripcion":
+                    ListaTecnicos = await tecnicoServices.Listar(lt => lt.Descripcion.Trim().ToLower().Contains(searchBarValue.Trim().ToLower()));
+                    break;
+            }
         }
+        else
+            ListaTecnicos = await tecnicoServices.Listar(lt => true);
     }
 
     private async Task Restablecer()
     {
-        ListaTecnico = await tecnicoServices.Listar(t => t.TecnicoId > 0);
-        valorFiltro = string.Empty;
+        ListaTecnicos = await tecnicoServices.Listar(t => true);
+        valorFiltro = "";
+        searchBarValue = string.Empty;
     }
 
     public void PantallaCrear()
