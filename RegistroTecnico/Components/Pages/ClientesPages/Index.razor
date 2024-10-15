@@ -32,7 +32,7 @@
                 <label class="col-1"><strong>Buscar:</strong></label>
                 @*Barra de busqueda con Btn de Buscar*@
                 <div class="col-2 input-group" style="width: 500px">
-                    <input placeholder="Buscar" class="form-control" @bind="searchBarValue" />
+                    <input @bind="@searchBarValue" @onkeypress="HandleKeyDown" placeholder="Buscar" class="form-control" />
                     <button @onclick="Buscar" class="btn btn-success bi bi-search" type="button">  Buscar</button>
                 </div>
                 @*Btn Crear*@
@@ -99,6 +99,12 @@
     protected override async Task OnInitializedAsync()
     {
         ListaClientes = await clientesService.Listar(c => true);
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+            await Buscar();
     }
 
     public async Task Buscar()

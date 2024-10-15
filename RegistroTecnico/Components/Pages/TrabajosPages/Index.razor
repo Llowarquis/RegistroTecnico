@@ -25,7 +25,6 @@
 						<option value="ID">ID</option>
 						<option value="Cliente">Cliente</option>
 						<option value="Tecnico">T&eacute;cnico</option>
-						<option value="Fecha">Fecha</option>
 					</InputSelect>
 
 					@*Btn Restablecer filtro*@
@@ -35,7 +34,7 @@
 				<label class="col-1"><strong>Buscar:</strong></label>
 				@*Barra de busqueda con Btn de Buscar*@
 				<div class="col-2 input-group" style="width: 500px">
-					<input placeholder="Buscar" class="form-control" @bind="@searchBarValue" />
+					<input @bind="@searchBarValue" @onkeypress="HandleKeyDown" placeholder="Buscar" class="form-control" />
 					<button @onclick="Buscar" class="btn btn-success bi bi-search" type="button">  Buscar</button>
 				</div>
 
@@ -115,6 +114,12 @@
 		ListaTrabajos = await trabajosService.Listar(c => true);
 	}
 
+	private async Task HandleKeyDown(KeyboardEventArgs e)
+	{
+		if(e.Key == "Enter")
+			await Buscar(); 
+	}
+
 	public async Task Buscar()
 	{
 		if (valorFiltro.Trim().ToLower() != "")
@@ -124,10 +129,6 @@
 				case "ID":
 					if (int.TryParse(searchBarValue.Trim(), out int id))
 						ListaTrabajos = await trabajosService.Listar(lt => lt.ClienteId == id);
-					break;
-
-				case "Fecha":
-					ListaTrabajos = await trabajosService.Listar(lt => lt.Fecha >= DateTime.Today);
 					break;
 
 				case "Cliente":
