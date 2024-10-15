@@ -7,103 +7,147 @@
 
 <PageTitle>Trabajos Index</PageTitle>
 <div class="container">
-    <div class="card shadow-lg">
-        @*Header*@
-        <div class="card-header text-center">
-            @*Titulo*@
-            <div>
-                <h3><strong>Consulta de Trabajos</strong></h3>
-            </div>
-                
-            <div class="row justify-content-center">
-                <label class="col-1"><strong>Buscar por ID</strong></label>
-                @*Barra de busqueda con Btn de Buscar*@
-                <div class="col-2 input-group" style="width: 500px">
-                    <input placeholder="Buscar" class="form-control" @bind="Trabajo.TrabajosId" />
-                    <button @onclick="Buscar" class="btn btn-success bi bi-search" type="button">  Buscar</button>
-                </div>
-                @*Btn Crear*@
-                <div class="col-2">
-                    <a type="button" class="btn btn-primary bi bi-person-fill-add border-bottom" href="/Trabajos/Create">   Crear</a>
-                </div>
-            </div>
-        </div>
-        @*Body*@
-        <div class="card-body">
-            <table class="table table-bordered text-center">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Fecha</th>
-                        <th>ID Cliente</th>
-                        <th>Cliente</th>
-                        <th>ID T&eacute;cnico</th>
-                        <th>T&eacute;cnico</th>
-                        <th>Descripci&oacute;n</th>
-                        <th>Monto</th>
-                        <th>Ver</th>
-                        <th>Editar</th>
-                        <th>Eliminar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var trabajo in ListaTrabajos)
-                    {
-                        <tr>
-                            <td>@trabajo.TrabajosId</td>
-                            <td>@trabajo.Fecha.ToString("dd/MM/yyyy")</td>
-                            <td>@trabajo.ClienteId</td>
-                            <td>@trabajo.Cliente?.Nombres</td>
-                            <td>@trabajo.TecnicoId</td>
-                            <td>@trabajo.Tecnico?.Nombres</td>
-                            <td>@trabajo.Descripcion</td>
-                            <td>RD$ @trabajo.Monto</td>
-                            @*Visualizacion*@
-                            <td>
-                                <a type="button" class="btn btn-outline-dark btn-outline-light bi bi-eye-fill" style="background-color: #8a33ff"
-                                        href="/Trabajos/View/@trabajo.TecnicoId"></a>
-                            </td>
+	<div class="card shadow-lg">
+		@*Header*@
+		<div class="card-header text-center">
+			@*Titulo*@
+			<div>
+				<h3><strong>Consulta de Trabajos</strong></h3>
+			</div>
 
-                            @*Modificar*@
-                            <td>
-                                <a type="button" class="btn btn-outline-dark btn-outline-light bi bi-pencil-fill" style="background-color: #ffc300"
-                                        href="/Trabajos/Modify/@trabajo.TecnicoId"></a>
-                            </td>
+			<div class="row justify-content-center">
 
-                            @*Eliminar*@
-                            <td>
-                                <a type="button" class="btn btn-outline-dark btn-outline-light bi bi-trash3-fill" style="background-color: #ff3333"
-                                        href="/Trabajos/Delete/@trabajo.TecnicoId"></a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-        @*Footer*@
-        <div class="card-footer">
-            <p><strong>Cantidad total de Trabajos: </strong>@ListaTrabajos.Count()</p>
-        </div>
-    </div>
+				<label class="col-1"><strong>Filtrar:</strong></label>
+				<div class="col-2 input-group" style="width: 250px">
+					@*Campo Filtro*@
+					<InputSelect class="form-select" style="width: 150px" @bind-Value="@valorFiltro">
+						<option value="" selected disabled>Selecciona...</option>
+						<option value="ID">ID</option>
+						<option value="Cliente">Cliente</option>
+						<option value="Tecnico">T&eacute;cnico</option>
+						<option value="Fecha">Fecha</option>
+					</InputSelect>
+
+					@*Btn Restablecer filtro*@
+					<button class="col-1 btn btn-secondary bi bi-arrow-counterclockwise" style="width: 40px" @onclick="Restablecer"></button>
+				</div>
+
+				<label class="col-1"><strong>Buscar:</strong></label>
+				@*Barra de busqueda con Btn de Buscar*@
+				<div class="col-2 input-group" style="width: 500px">
+					<input placeholder="Buscar" class="form-control" @bind="@searchBarValue" />
+					<button @onclick="Buscar" class="btn btn-success bi bi-search" type="button">  Buscar</button>
+				</div>
+
+				@*Btn Crear*@
+				<div class="col-2">
+					<a type="button" class="btn btn-primary bi bi-person-fill-add border-bottom" href="/Trabajos/Create">   Crear</a>
+				</div>
+			</div>
+		</div>
+		@*Body*@
+		<div class="card-body">
+			<table class="table table-bordered text-center">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Fecha</th>
+						<th>ID Cliente</th>
+						<th>Cliente</th>
+						<th>ID T&eacute;cnico</th>
+						<th>T&eacute;cnico</th>
+						<th>Descripci&oacute;n</th>
+						<th>Monto</th>
+						<th>Ver</th>
+						<th>Editar</th>
+						<th>Eliminar</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var trabajo in ListaTrabajos)
+					{
+						<tr>
+							<td>@trabajo.TrabajosId</td>
+							<td>@trabajo.Fecha.ToString("dd/MM/yyyy")</td>
+							<td>@trabajo.ClienteId</td>
+							<td>@trabajo.Cliente?.Nombres</td>
+							<td>@trabajo.TecnicoId</td>
+							<td>@trabajo.Tecnico?.Nombres</td>
+							<td>@trabajo.Descripcion</td>
+							<td>RD$ @trabajo.Monto</td>
+							@*Visualizacion*@
+							<td>
+								<a type="button" class="btn btn-outline-dark btn-outline-light bi bi-eye-fill" style="background-color: #8a33ff"
+								   href="/Trabajos/View/@trabajo.TecnicoId"></a>
+							</td>
+
+							@*Modificar*@
+							<td>
+								<a type="button" class="btn btn-outline-dark btn-outline-light bi bi-pencil-fill" style="background-color: #ffc300"
+								   href="/Trabajos/Modify/@trabajo.TecnicoId"></a>
+							</td>
+
+							@*Eliminar*@
+							<td>
+								<a type="button" class="btn btn-outline-dark btn-outline-light bi bi-trash3-fill" style="background-color: #ff3333"
+								   href="/Trabajos/Delete/@trabajo.TecnicoId"></a>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+		@*Footer*@
+		<div class="card-footer">
+			<p><strong>Cantidad total de Trabajos: </strong>@ListaTrabajos.Count()</p>
+		</div>
+	</div>
 </div>
 
 @code {
-    public Trabajos Trabajo { get; set; } = new Trabajos();
-    public List<Trabajos> ListaTrabajos { get; set; } = new List<Trabajos>();
+	public Trabajos Trabajo { get; set; } = new Trabajos();
+	public List<Trabajos> ListaTrabajos { get; set; } = new List<Trabajos>();
+	public string valorFiltro { get; set; } = "";
+	public string searchBarValue { get; set; } = string.Empty;
 
-    protected override async Task OnInitializedAsync()
-    {
-        ListaTrabajos = await trabajosService.Listar(c => true);
-    }
+	protected override async Task OnInitializedAsync()
+	{
+		ListaTrabajos = await trabajosService.Listar(c => true);
+	}
 
-    public async Task Buscar()
-    {
-        if (await trabajosService.Buscar(Trabajo.TrabajosId) != null)
-            navigationManager.NavigateTo($"/Trabajos/View/{Trabajo.TrabajosId}");
-        else
-        {
-            await JSRuntime.InvokeVoidAsync("alert", "Este ID no existe...");
-            return;
-        }
-    }
+	public async Task Buscar()
+	{
+		if (valorFiltro.Trim().ToLower() != "")
+		{
+			switch (valorFiltro)
+			{
+				case "ID":
+					if (int.TryParse(searchBarValue.Trim(), out int id))
+						ListaTrabajos = await trabajosService.Listar(lt => lt.ClienteId == id);
+					break;
+
+				case "Fecha":
+					ListaTrabajos = await trabajosService.Listar(lt => lt.Fecha >= DateTime.Today);
+					break;
+
+				case "Cliente":
+					ListaTrabajos = await trabajosService.Listar(lt => lt.Cliente.Nombres.Trim().ToLower().Contains(searchBarValue.Trim().ToLower()));
+					break;
+
+				case "Tecnico":
+					ListaTrabajos = await trabajosService.Listar(lt => lt.Tecnico.Nombres.Trim().ToLower().Contains(searchBarValue.Trim().ToLower()));
+					break;
+			}
+		}
+		else
+			ListaTrabajos = await trabajosService.Listar(lt => true);
+	}
+
+
+	private async Task Restablecer()
+	{
+		ListaTrabajos = await trabajosService.Listar(t => true);
+		valorFiltro = "";
+		searchBarValue = string.Empty;
+	}
 }
