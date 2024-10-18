@@ -26,12 +26,14 @@ public class Program
         builder.Services.AddScoped<ClientesService>();
         builder.Services.AddScoped<TrabajosService>();
         builder.Services.AddScoped<PrioridadesService>();
+		builder.Services.AddScoped<TrabajosDetalleService>();
+        builder.Services.AddScoped<ArticulosService>();
 
 
 
 
-        // De aqui pa'rriba
-        var app = builder.Build();
+		// De aqui pa'rriba
+		var app = builder.Build();
 
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
