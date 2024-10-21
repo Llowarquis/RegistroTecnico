@@ -18,5 +18,5 @@ public class Articulos
 
 	public double Precio { get; set; }
 
-	public bool Existencia { get; set; }
+	public int Existencia { get; set; }
 }
