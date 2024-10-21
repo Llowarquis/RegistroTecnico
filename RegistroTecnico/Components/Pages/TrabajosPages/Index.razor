@@ -51,6 +51,7 @@
 					<tr>
 						<th>ID</th>
 						<th>Fecha</th>
+						<th>Prioridad</th>
 						<th>ID Cliente</th>
 						<th>Cliente</th>
 						<th>ID T&eacute;cnico</th>
@@ -68,6 +69,7 @@
 						<tr>
 							<td>@trabajo.TrabajosId</td>
 							<td>@trabajo.Fecha.ToString("dd/MM/yyyy")</td>
+							<td>@trabajo.Prioridad?.Descripcion</td>
 							<td>@trabajo.ClienteId</td>
 							<td>@trabajo.Cliente?.Nombres</td>
 							<td>@trabajo.TecnicoId</td>
@@ -77,19 +79,19 @@
 							@*Visualizacion*@
 							<td>
 								<a type="button" class="btn btn-outline-dark btn-outline-light bi bi-eye-fill" style="background-color: #8a33ff"
-								   href="/Trabajos/View/@trabajo.TecnicoId"></a>
+								   href="/Trabajos/View/@trabajo.TrabajosId"></a>
 							</td>
 
 							@*Modificar*@
 							<td>
 								<a type="button" class="btn btn-outline-dark btn-outline-light bi bi-pencil-fill" style="background-color: #ffc300"
-								   href="/Trabajos/Modify/@trabajo.TecnicoId"></a>
+								   href="/Trabajos/Modify/@trabajo.TrabajosId"></a>
 							</td>
 
 							@*Eliminar*@
 							<td>
 								<a type="button" class="btn btn-outline-dark btn-outline-light bi bi-trash3-fill" style="background-color: #ff3333"
-								   href="/Trabajos/Delete/@trabajo.TecnicoId"></a>
+								   href="/Trabajos/Delete/@trabajo.TrabajosId"></a>
 							</td>
 						</tr>
 					}
@@ -117,7 +119,7 @@
 	private async Task HandleKeyDown(KeyboardEventArgs e)
 	{
 		if(e.Key == "Enter")
-			await Buscar(); 
+			await Buscar();
 	}
 
 	public async Task Buscar()
@@ -128,7 +130,7 @@
 			{
 				case "ID":
 					if (int.TryParse(searchBarValue.Trim(), out int id))
-						ListaTrabajos = await trabajosService.Listar(lt => lt.ClienteId == id);
+						ListaTrabajos = await trabajosService.Listar(lt => lt.TrabajosId == id);
 					break;
 
 				case "Cliente":
