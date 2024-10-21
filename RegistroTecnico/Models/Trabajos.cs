@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using RegistroTecnico.Models.Detalles;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RegistroTecnico.Models;
@@ -23,13 +24,24 @@ public class Trabajos
 	public double Monto { get; set; }
 
 
+	[Required(ErrorMessage = "Este campo es obligatorio.")]
+	[ForeignKey("Prioridades")]
+	public int PrioridadId { get; set; }
+	public Prioridades? Prioridad { get; set; }
 
+
+	[Required(ErrorMessage = "Este campo es obligatorio.")]
 	[ForeignKey("Cliente")]
 	public int ClienteId { get; set; }
 	public Clientes? Cliente { get; set; }
 
 
+	[Required(ErrorMessage = "Este campo es obligatorio.")]
 	[ForeignKey("Tecnico")]
 	public int TecnicoId { get; set; }
 	public Tecnicos? Tecnico { get; set; }
+
+
+	[ForeignKey("TrabajosId")]
+	public ICollection<TrabajosDetalle> TrabajoDetalle { get; set; } = new List<TrabajosDetalle>();
 }
