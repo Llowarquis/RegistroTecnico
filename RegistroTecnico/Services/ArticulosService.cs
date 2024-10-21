@@ -9,12 +9,20 @@ public class ArticulosService(Contexto contexto)
 {
 	private readonly Contexto _contexto = contexto;
 
+	// Buscar
+	public async Task<Articulos?> Buscar(int id)
+	{
+		return await _contexto.Articulos
+			.AsNoTracking()
+			.FirstOrDefaultAsync(a => a.ArticuloId == id);
+	}
+
 	// Listar
 	public async Task<List<Articulos>> Listar(Expression<Func<Articulos, bool>> criterio)
 	{
 		return await _contexto.Articulos
-			.AsNoTracking()
 			.Where(criterio)
+			.AsNoTracking()
 			.ToListAsync();
 	}
 }
