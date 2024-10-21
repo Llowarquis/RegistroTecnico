@@ -1,0 +1,98 @@
+﻿<div class="input-group">
+	@*Campo Articulos*@
+	<InputSelect class="form-select" @bind-Value="ArticuloId">
+		<option disabled selected>--- Selecciona un articulo ---</option>
+		@foreach (var articulo in ListaArticulos)
+		{
+			<option value="@articulo.ArticuloId">@articulo.Descripcion -- Stock: @articulo.Existencia</option>
+		}
+	</InputSelect>
+	<ValidationMessage For="@(() => Detalle.ArticuloId)"></ValidationMessage>
+
+
+	@*Campo Cantidad*@
+	<label class="col-form-label input-group-text">Cantidad:</label>
+	<InputNumber class="form-control" placeholder="Cantidad" @bind-Value="Cantidad"></InputNumber>
+	<ValidationMessage For="@(() => Detalle.Cantidad)"></ValidationMessage>
+
+
+	@*Campo Precio*@
+	<label class="col-form-label input-group-text">Precio:</label>
+	<InputNumber class="form-control" placeholder="Precio" @bind-Value="Precio" readonly>@Precio</InputNumber>
+	<ValidationMessage For="@(() => Detalle.Precio)"></ValidationMessage>
+
+
+	@*BTN Agregar*@
+	<button type="button" class="btn btn-outline-success" @onclick="SeleccionArticulo">
+		<i class="bi bi-plus"></i>Agregar
+	</button>
+</div>
+
+@*Linea gris bonita*@
+<hr style="border: 1px solid #6c757d;">
+
+@if (!string.IsNullOrEmpty(Error))
+{
+	<div class="alert alert-danger text-center" role="alert">
+		<i class="bi bi-exclamation-triangle-fill"></i>
+		@Error
+	</div>
+}
+
+
+
+@code {
+	[Parameter]
+	[EditorRequired]
+	public int ArticuloId { get; set; }
+
+	[Parameter]
+	[EditorRequired]
+	public int Cantidad { get; set; }
+
+	[Parameter]
+	[EditorRequired]
+	public double Precio { get; set; }
+
+	[Parameter]
+	[EditorRequired]
+	public EventCallback<(Articulos articulo, int Cantidad)> ArticuloSeleccionado { get; set; }
+
+	[Parameter]
+	[EditorRequired]
+	public List<Articulos> ListaArticulos { get; set; } = new List<Articulos>();
+
+	[Parameter]
+	[EditorRequired]
+	public string? Error { get; set; }
+	public TrabajosDetalle Detalle { get; set; } = new TrabajosDetalle();
+
+	private async Task SeleccionArticulo()
+	{
+		Error = string.Empty;
+		if (ArticuloId > 0)
+		{
+			if (Cantidad <= 0)
+			{
+				Error = "La cantidad debe ser mayor que 0";
+				return;
+			}
+			var Articulo = ListaArticulos.SingleOrDefault(q => q.ArticuloId == ArticuloId);
+			if (Articulo != null)
+			{
+				if (Articulo.Existencia < Cantidad)
+				{
+					Error = "La cantidad de articulos no está disponible";
+					return;
+				}
+				else
+					await ArticuloSeleccionado.InvokeAsync((Articulo, Cantidad));
+			}
+			else
+				Error = "Articulos no disponibles";
+		}
+		else
+			Error = "Debe seleccionar un articulo";
+		return;
+	}
+}
