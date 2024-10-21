@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RegistroTecnico.Models.Detalles;
 
@@ -8,12 +9,16 @@ public class TrabajosDetalle
 	public int DetalleId { get; set; }
 
 
-    [Required(ErrorMessage = "Este campo es obligatorio.")]
-    public Trabajos? TrabajoId { get; set; }
+	[Required(ErrorMessage = "Este campo es obligatorio.")]
+    [ForeignKey("Trabajos")]
+    public int TrabajosId { get; set; }
+	public Trabajos? Trabajos { get; set; }
 
 
 	[Required(ErrorMessage = "Este campo es obligatorio.")]
-	public Articulos? ArticuloId { get; set; }
+	[ForeignKey("Articulos")]
+	public int ArticuloId { get; set; }
+	public Articulos? Articulo { get; set; }
 
 
 	[Required(ErrorMessage = "Este campo es obligatorio.")]
@@ -24,5 +29,6 @@ public class TrabajosDetalle
 	public double Precio { get; set; }
 
 
-	public double Costo { get; set; } // Este campo estara oculto a la vista del usuario
+    [Required(ErrorMessage = "Este campo es obligatorio.")]
+    public double Costo { get; set; } // Este campo estara oculto a la vista del usuario
 }
