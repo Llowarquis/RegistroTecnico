@@ -1,6 +1,7 @@
 ﻿@page "/Trabajos/View/{TrabajoID:int}"
 
 @inject TrabajosService trabajosService
+@inject ArticulosService articulosService
 @inject NavigationManager navigationManager
 @inject IJSRuntime JSRuntime
 @rendermode InteractiveServer
@@ -15,6 +16,7 @@
 			<ul>
 				<li><strong>ID Trabajo: </strong> @Trabajo.TrabajosId</li>
 				<li><strong>Fecha: </strong> @Trabajo.Fecha.ToString("dd/MM/yyyy")</li>
+				<li><strong>Prioridad: </strong>@Trabajo.Prioridad?.Descripcion</li>
 				<li><strong>ID Cliente: </strong> @Trabajo.ClienteId</li>
 				<li><strong>Cliente: </strong> @Trabajo.Cliente?.Nombres</li>
 				<li><strong>ID T&eacute;cnico: </strong> @Trabajo.TecnicoId</li>
@@ -22,6 +24,19 @@
 				<li><strong>Descripci&oacute;n: </strong> @Trabajo.Descripcion</li>
 				<li><strong>Monto: RD$</strong> @Trabajo.Monto</li>
 			</ul>
+
+			<div class="border border-success p-3 mt-3">
+				@foreach (var detalle in Trabajo.TrabajoDetalle)
+				{
+					var articulo = ListaArticulos.SingleOrDefault(a => a.ArticuloId == detalle.ArticuloId);
+					<ul>
+						<li><strong>ID Articulo: </strong>@detalle.ArticuloId</li>
+						<li><strong>Descripci&oacute;n: </strong>@articulo?.Descripcion</li>
+						<li><strong>Cantidad: </strong>@detalle.Cantidad</li>
+						<li><strong>Total RD$: </strong>@(detalle.Precio * detalle.Cantidad)</li>
+					</ul>
+				}
+			</div>
 		</div>
 		<div class="card-footer text-center">
 			<button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver">   Volver</button>
@@ -34,9 +49,12 @@
 	[Parameter]
 	public int TrabajoID { get; set; }
 	public Trabajos Trabajo { get; set; } = new Trabajos();
+	public List<Articulos> ListaArticulos { get; set; } = [];
+
 
 	protected override async Task OnInitializedAsync()
 	{
+		ListaArticulos = await articulosService.Listar(l => true);
 		Trabajo = await trabajosService.Buscar(TrabajoID);
 	}
 

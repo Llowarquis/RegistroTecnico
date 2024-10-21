@@ -19,6 +19,7 @@
 			<ul>
 				<li><strong>ID Trabajo: </strong> @Trabajo.TrabajosId</li>
 				<li><strong>Fecha: </strong> @Trabajo.Fecha.ToString("dd/MM/yyyy")</li>
+				<li><strong>Prioridad: </strong>@Trabajo.Prioridad?.Descripcion</li>
 				<li><strong>ID Cliente: </strong> @Trabajo.ClienteId</li>
 				<li><strong>Cliente: </strong> @Trabajo.Cliente?.Nombres</li>
 				<li><strong>ID T&eacute;cnico: </strong> @Trabajo.TecnicoId</li>
@@ -30,15 +31,15 @@
 
 		@*Footer*@
 		<div class="card-footer text-center">
-			<button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver">  Volver   </button>
+			<a href="/Trabajos/Index" class="btn btn-primary bi bi-chevron-double-left">  Volver   </a>
 			<button type="button" class="btn btn-danger bi bi-trash3-fill" @onclick="Eliminar">   Eliminar   </button>
 		</div>
 	</div>
 </div>
 
 @code {
-	[Parameter]
-	public int TrabajoID { get; set; }
+		[Parameter]
+		public int TrabajoID { get; set; }
 	public Trabajos Trabajo { get; set; } = new Trabajos();
 
 	protected override async Task OnInitializedAsync()
@@ -49,16 +50,7 @@
 	public async Task Eliminar()
 	{
 		var eliminado = await trabajosService.Eliminar(Trabajo.ClienteId);
-
-		if (eliminado)
-			await JSRuntime.InvokeVoidAsync("alert","Se ha eliminado el Trabajo correctamente!");
-		else
-			await JSRuntime.InvokeVoidAsync("alert", "Ha ocurrido un error al eliminar el Trabajo...");		
-		navigationManager.NavigateTo("/Trabajos/Index");
-	}
-
-	public void Volver()
-	{
+		await JSRuntime.InvokeVoidAsync("alert","Se ha eliminado el Trabajo correctamente!");
 		navigationManager.NavigateTo("/Trabajos/Index");
 	}
 }
