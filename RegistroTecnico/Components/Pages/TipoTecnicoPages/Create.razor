@@ -6,7 +6,7 @@
 @rendermode InteractiveServer
 
 <PageTitle>Create Tipo T&eacute;cnicos</PageTitle>
-<EditForm Model="tipoTecnicos" OnValidSubmit="Agregar">
+<EditForm Model="tipoTecnicos" OnValidSubmit="Guardar">
 <DataAnnotationsValidator />
     @*Formulario*@
     <div class="container">
@@ -33,8 +33,8 @@
         </div>
         @*Footer*@
         <div class="card-footer text-center">
-            <a type="button" class="btn btn-primary bi bi-chevron-double-left" href="/Tecnicos/Index"> Volver   </a>
-            <button type="submit" class="btn btn-success bi bi-floppy-fill" @onclick="Agregar">   Agregar    </button>
+            <a type="button" class="btn btn-primary bi bi-chevron-double-left" href="/TipoTecnicos/Index"> Volver   </a>
+            <button type="submit" class="btn btn-success bi bi-floppy-fill" @onclick="Guardar">   Agregar    </button>
         </div>
     </div>
 </EditForm>
@@ -49,32 +49,19 @@
         ListaTipoTecnicos = await tipoTecnicoService.Listar(t => t.TipoTecnicoId > 0);
     }
 
-    public async Task Agregar()
+    public async Task Guardar()
     {
-        if(await Validar())
+        if (await tipoTecnicoService.ValidarDescripcion(tipoTecnicos.Descripcion))
         {
-            await JSRuntime.InvokeVoidAsync("alert", "Ya existe un tecnico con ese nombre...");
+            await JSRuntime.InvokeVoidAsync("alert", "Ya existe este tipo de tecnico con ese nombre...");
             return;
-        }
-
-        var crear = await tipoTecnicoService.Guardar(tipoTecnicos);
-
-        if (crear)
-        {  
-            await JSRuntime.InvokeVoidAsync("alert", "El Tecnico se creo correctamente!");
-            navigationManager.NavigateTo("/TipoTecnicos/Index");
         }
         else
         {
-            await JSRuntime.InvokeVoidAsync("alert", "Ha ocurrido un error al crear el tecnico...");
+            var crear = await tipoTecnicoService.Guardar(tipoTecnicos);
+            await JSRuntime.InvokeVoidAsync("alert", "El tipo de tecnico se creo correctamente!");
             navigationManager.NavigateTo("/TipoTecnicos/Index");
+            return;
         }
-        
-	}
-
-	private async Task<bool> Validar()
-	{
-		var existe = await tipoTecnicoService.ValidarDescripcion(tipoTecnicos.Descripcion);
-		return existe;
-	}
+    }
 }
