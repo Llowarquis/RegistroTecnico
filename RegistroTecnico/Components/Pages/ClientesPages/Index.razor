@@ -24,7 +24,7 @@
                             <option value="" selected disabled>Selecciona...</option>
                             <option value="ID">ID</option>
                             <option value="Cliente">Cliente</option>
-                            <option value="Fecha">Fecha</option>
+                            <option value="No. WhatsApp">No. WhatsApp</option>
                         </InputSelect>
 
                         @*Btn Restablecer filtro*@
@@ -125,7 +125,7 @@
                         ListaClientes = await clientesService.Listar(lt => lt.ClienteId == id);
                     break;
 
-                case "Nombre":
+                case "Cliente":
                     ListaClientes = await clientesService.Listar(lt => lt.Nombres.Trim().ToLower().Contains(searchBarValue.Trim().ToLower()));
                     break;
 
