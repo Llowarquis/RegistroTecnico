@@ -10,6 +10,7 @@
 
 <PageTitle>Cotizaci&oacute;n Modify</PageTitle>
 <EditForm Model="@Cotizacion" OnValidSubmit="Guardar">
+	<DataAnnotationsValidator/>
 	<div class="container">
 		<div class="card shadow-lg">
 			@*Header*@
@@ -150,7 +151,9 @@
 			Mensaje = "El detalle debe llevar al menos 1 articulo";
 			return;
 		}
-		var modificado = await cotizacionesService.Guardar(Cotizacion);
+		if (string.IsNullOrEmpty(Cotizacion.Observacion))
+			return;
+		await cotizacionesService.Guardar(Cotizacion);
 		navigationManager.NavigateTo("/Cotizaciones/Index");
 		if (!alreadySaved)
 		{
