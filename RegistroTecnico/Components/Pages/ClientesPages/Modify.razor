@@ -33,7 +33,7 @@
 
             @*Footer*@
             <div class="card-footer text-center">
-                <button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver">  Volver   </button>
+                <a href="/Clientes/Index" class="btn btn-primary bi bi-chevron-double-left">  Volver   </a>
                 <button type="submit" class="btn btn-success  bi bi-floppy-fill" @onclick="Guardar">   Guardar   </button>
             </div>
         </div>
@@ -45,6 +45,7 @@
     [Parameter]
     public int ClienteID { get; set; }
     public Clientes Cliente = new Clientes();
+    public bool alreadySaved { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -53,23 +54,19 @@
 
     public async Task Guardar()
     {
+        if (alreadySaved)
+            return;
         if (await Validar())
         {
-            await JSRuntime.InvokeVoidAsync("alert", "Ya existe un tecnico con ese nombre...");
+            await JSRuntime.InvokeVoidAsync("alert", "Ya existe un Cliente con ese nombre...");
             return;
         }
-
         var modificado = await clientesService.Guardar(Cliente);
-
-        if (modificado)
+        navigationManager.NavigateTo("/Clientes/Index");
+        if (!alreadySaved)
         {
-            await JSRuntime.InvokeVoidAsync("alert","El Tecnico se ha modificado correctamente!");
-            navigationManager.NavigateTo("/Clientes/Index");
-        }
-        else
-        {
-            await JSRuntime.InvokeVoidAsync("alert", "Ha ocurrido un error al modificar el Tecnico...");
-            navigationManager.NavigateTo("/Clientes/Index");
+            alreadySaved = true;
+            await JSRuntime.InvokeVoidAsync("alert", "El Cliente se ha modificado correctamente!");
         }
 
     }
@@ -77,10 +74,5 @@
     private async Task<bool> Validar()
     {
         return await clientesService.ExisteNombre(Cliente.ClienteId, Cliente?.Nombres);
-    }
-
-    public void Volver()
-    {
-        navigationManager.NavigateTo("/Clientes/Index");
     }
 }

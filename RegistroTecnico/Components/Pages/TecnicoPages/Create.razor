@@ -14,23 +14,23 @@
         <div class="card shadow-lg">
             @*HEADER*@
             <div class="card-header text-center">
-                <h3><strong>Crear nuevo Tecnico</strong></h3>
+                <h5><strong>Crear nuevo Tecnico</strong></h5>
             </div>
 
             @*BODY*@
             <div class="card-body">
-                <div class="row">
+
                     <div class="col-1 ms-5"> @*Se muestra el ID*@
                         <label class="form-label"><strong>ID</strong></label>
                         <InputNumber class="form-control" style="width: 50px" @bind-Value="tecnico.TecnicoId" readonly></InputNumber>
                     </div>
-
+                    <br/>
                     <div class="col-2 ms-5"> @*Aqui van los nombres*@
                         <label class="form-label"><strong>Nombres</strong></label>
                         <InputText placeholder="Nombres" class="form-control" @bind-Value="tecnico.Nombres" DisplayName="Nombre"></InputText>
                         <ValidationMessage For="@(() => tecnico.Nombres)" />
                     </div>
-
+                    <br/>
                     <div class="col-3 ms-5" >@*Seleccion de descripcion*@
                         <label class="form-label"><strong>Descripci&oacute;n</strong></label>
                         <InputSelect class= "form-select" @bind-Value="tecnico.Descripcion">
@@ -42,18 +42,17 @@
                         </InputSelect>
                         <ValidationMessage For="@(() => tecnico.Descripcion)" />
                     </div>
-
+                <br />
                     <div class="col-4 ms-5">@*Aqui va el sueldo/hora*@
                         <label class="form-label"><strong>Sueldo/Hora</strong></label>
                         <InputNumber class="form-control" style="width: 100px" @bind-Value="tecnico.SueldoHora"></InputNumber>
                         <ValidationMessage For="@(() => tecnico.SueldoHora)" />
                     </div>
-                </div>
             </div>
 
             @*FOOTER*@
             <div class="card-footer text-center">
-                <button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver">Volver</button>
+                <a href="/TipoTecnicos/Index" class="btn btn-primary bi bi-chevron-double-left">Volver</a>
                 <button type="submit" class="btn btn-success bi bi-floppy-fill">    Agregar</button>
             </div>
         </div>
@@ -77,28 +76,13 @@
             await JSRuntime.InvokeVoidAsync("alert", "Ya existe un tecnico con ese nombre...");
             return;
         }
-
         var crear = await tecnicoServices.Guardar(tecnico);
-
-        if (crear)
-        {
-            await JSRuntime.InvokeVoidAsync("alert", "El Tecnico se creo correctamente!");
-            navigationManager.NavigateTo("/Tecnicos/Index");
-        }
-        else
-        {
-            await JSRuntime.InvokeVoidAsync("alert", "Ha ocurrido un error al crear el tecnico...");
-            navigationManager.NavigateTo("/Tecnicos/Index");
-        }
+        await JSRuntime.InvokeVoidAsync("alert", "El Tecnico se creo correctamente!");
+        navigationManager.NavigateTo("/Tecnicos/Index");
     }
 
     private async Task<bool> Validar()
     {
         return await tecnicoServices.ExisteNombre(tecnico?.Nombres);
-    }
-
-    public void Volver()
-    {
-        navigationManager.NavigateTo("/Tecnicos/Index");
     }
 }

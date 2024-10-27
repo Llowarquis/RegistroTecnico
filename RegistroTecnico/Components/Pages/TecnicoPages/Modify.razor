@@ -13,7 +13,7 @@
             <div class="card">
                 @*Header*@
                 <div class="card-header text-center">
-                    <h3><strong>Modificar T&eacutecnico</strong></h3>
+                    <h5><strong>Modificar T&eacutecnico</strong></h5>
                 </div>
 
                 @*Body*@
@@ -23,7 +23,7 @@
                         <InputText class="form-control" style="width: 200px;" @bind-Value="@tecnico.Nombres"></InputText>
                         <ValidationMessage For="(()=> tecnico.Nombres)" />
                     </div>
-
+                    <br/>
                     <div>@*Campo Descripcion*@
                         <label><strong>Descripci&oacute;n:</strong></label>
                         <InputSelect class="form-select" style="width: 200px" @bind-Value="tecnico.Descripcion">
@@ -35,7 +35,7 @@
                         </InputSelect>
                         <ValidationMessage For="@(() => tecnico.Descripcion)" />
                     </div>
-
+                    <br />
                     <div class="pt-2">@*Campo sueldo/hora*@
                         <label><strong>Sueldo Hora:</strong></label>
                         <InputNumber class="form-control" style="width: 200px;" @bind-Value="@tecnico.SueldoHora"></InputNumber>
@@ -45,7 +45,7 @@
 
                 @*Footer*@
                 <div class="card-footer text-center">
-                    <button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver">  Volver   </button>
+                    <a href="/Tecnicos/Index" class="btn btn-primary bi bi-chevron-double-left">  Volver   </a>
                     <button type="submit" class="btn btn-success  bi bi-floppy-fill" @onclick="Guardar">   Guardar   </button>
                 </div>
             </div>
@@ -59,6 +59,7 @@
     public int tecnicoId { get; set; }
     public Tecnicos tecnico = new Tecnicos();
     public List<TipoTecnicos> ListaTipoTecnicos { get; set; } = new List<TipoTecnicos>();
+    public bool alreadySaved { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -68,34 +69,24 @@
 
     public async Task Guardar()
     {
+        if (alreadySaved)
+            return;
         if (await Validar())
         {
             await JSRuntime.InvokeVoidAsync("alert", "Ya existe un tecnico con ese nombre...");
             return;
         }
-
         var modificado = await tecnicoService.Guardar(tecnico);
-
-        if (modificado)
+        navigationManager.NavigateTo("/Tecnicos/Index");
+        if (!alreadySaved)
         {
-            await JSRuntime.InvokeVoidAsync("alert","El Tecnico se ha modificado correctamente!");
-            navigationManager.NavigateTo("/Tecnicos/Index");
+            alreadySaved = true;
+            await JSRuntime.InvokeVoidAsync("alert", "El Tecnico se ha modificado correctamente!");
         }
-        else
-        {
-            await JSRuntime.InvokeVoidAsync("alert", "Ha ocurrido un error al modificar el Tecnico...");
-            navigationManager.NavigateTo("/Tecnicos/Index");
-        }
-
     }
 
     private async Task<bool> Validar()
     {
         return await tecnicoService.ExisteNombre(tecnico?.Nombres);
-    }
-
-    public void Volver()
-    {
-        navigationManager.NavigateTo("/Tecnicos/Index");
     }
 }

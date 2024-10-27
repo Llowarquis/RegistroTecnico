@@ -11,7 +11,7 @@
         <div class="card shadow-lg">
             @*Header*@
             <div class="card-header text-center">
-                <h3><strong>Modificar Tipo de T&eacutecnico</strong></h3>
+                <h5><strong>Modificar Tipo de T&eacutecnico</strong></h5>
             </div>
 
             @*Body*@
@@ -25,7 +25,7 @@
 
             @*Footer*@
             <div class="card-footer text-center">
-                <button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver">  Volver   </button>
+                <a href="/TipoTecnicos/Index" class="btn btn-primary bi bi-chevron-double-left">  Volver   </a>
                 <button type="submit" class="btn btn-success  bi bi-floppy-fill" @onclick="Guardar">   Guardar   </button>
             </div>
         </div>
@@ -37,6 +37,7 @@
     [Parameter]
     public int tipoTecnicoId { get; set; }
     public TipoTecnicos TipoTecnico = new TipoTecnicos();
+    public bool alreadySaved { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -45,34 +46,24 @@
 
     public async Task Guardar()
     {
+        if (alreadySaved)
+            return;
         if (await Validar())
         {
-            await JSRuntime.InvokeVoidAsync("alert", "Ya existe un tecnico con ese nombre...");
+            await JSRuntime.InvokeVoidAsync("alert", "Ya existe un Tipo de Tecnico con ese nombre...");
             return;
         }
-
         var modificado = await tipoTecnicoService.Guardar(TipoTecnico);
-
-        if (modificado)
+        navigationManager.NavigateTo("/TipoTecnicos/Index");
+        if (!alreadySaved)
         {
-            await JSRuntime.InvokeVoidAsync("alert","El Tecnico se ha modificado correctamente!");
-            navigationManager.NavigateTo("/TipoTecnicos/Index");
+            alreadySaved = true;
+            await JSRuntime.InvokeVoidAsync("alert", "El Tipo de Tecnico se ha modificado correctamente!");
         }
-        else
-        {
-            await JSRuntime.InvokeVoidAsync("alert", "Ha ocurrido un error al modificar el Tecnico...");
-            navigationManager.NavigateTo("/TipoTecnicos/Index");
-        }
-
     }
 
     private async Task<bool> Validar()
     {
         return await tipoTecnicoService.ValidarDescripcion(TipoTecnico?.Descripcion);
-    }
-
-    public void Volver()
-    {
-        navigationManager.NavigateTo("/TipoTecnicos/Index");
     }
 }

@@ -13,7 +13,7 @@
         <div class="card shadow-lg">
             @*Header*@
             <div class="card-header text-center">
-                <h3><strong>Crear nuevo Tipo de T&eacute;cnico</strong></h3>
+                <h5><strong>Crear nuevo Tipo de T&eacute;cnico</strong></h5>
             </div>
             @*Body*@
             <div class="card-body">
@@ -22,7 +22,7 @@
                     <label class="form-label"><strong>ID</strong></label>
                     <InputNumber class="form-control" @bind-Value="tipoTecnicos.TipoTecnicoId" readonly></InputNumber>
                 </div>
-
+                <br/>
                 @*Descripcion*@
                 <div class="col-2 ms-5">
                     <label class="form-label"><strong>Descripci&oacute;n</strong></label>
@@ -56,12 +56,8 @@
             await JSRuntime.InvokeVoidAsync("alert", "Ya existe este tipo de tecnico con ese nombre...");
             return;
         }
-        else
-        {
-            var crear = await tipoTecnicoService.Guardar(tipoTecnicos);
-            await JSRuntime.InvokeVoidAsync("alert", "El tipo de tecnico se creo correctamente!");
-            navigationManager.NavigateTo("/TipoTecnicos/Index");
-            return;
-        }
+        var crear = await tipoTecnicoService.Guardar(tipoTecnicos);
+        await JSRuntime.InvokeVoidAsync("alert", "El tipo de tecnico se creo correctamente!");
+        navigationManager.NavigateTo("/TipoTecnicos/Index");
     }
 }
