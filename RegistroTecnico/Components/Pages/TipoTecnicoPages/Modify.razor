@@ -7,6 +7,7 @@
 
 <PageTitle>Modify</PageTitle>
 <EditForm Model="TipoTecnico" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator/>
     <div class="container">
         <div class="card shadow-lg">
             @*Header*@
@@ -48,12 +49,14 @@
     {
         if (alreadySaved)
             return;
+        if (string.IsNullOrEmpty(TipoTecnico.Descripcion))
+            return;
         if (await Validar())
         {
             await JSRuntime.InvokeVoidAsync("alert", "Ya existe un Tipo de Tecnico con ese nombre...");
             return;
         }
-        var modificado = await tipoTecnicoService.Guardar(TipoTecnico);
+        await tipoTecnicoService.Guardar(TipoTecnico);
         navigationManager.NavigateTo("/TipoTecnicos/Index");
         if (!alreadySaved)
         {
