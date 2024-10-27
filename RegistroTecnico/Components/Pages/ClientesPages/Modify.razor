@@ -7,6 +7,7 @@
 
 <PageTitle>Clientes Modify</PageTitle>
 <EditForm Model="Cliente" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator/>
     <div class="container">
         <div class="card shadow-lg">
             @*Header*@
@@ -56,12 +57,14 @@
     {
         if (alreadySaved)
             return;
+        if (string.IsNullOrEmpty(Cliente.Nombres) || string.IsNullOrEmpty(Cliente.WhatsApp?.ToString().Trim()))
+            return;
         if (await Validar())
         {
             await JSRuntime.InvokeVoidAsync("alert", "Ya existe un Cliente con ese nombre...");
             return;
         }
-        var modificado = await clientesService.Guardar(Cliente);
+        await clientesService.Guardar(Cliente);
         navigationManager.NavigateTo("/Clientes/Index");
         if (!alreadySaved)
         {
