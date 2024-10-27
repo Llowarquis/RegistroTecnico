@@ -7,6 +7,7 @@
 
 <PageTitle>Prioridades Modify</PageTitle>
 <EditForm Model="Prioridad" OnValidSubmit="Guardar">
+	<DataAnnotationsValidator/>
 	<div class="container">
 		<div class="shadow-lg">
 			<div class="card">
@@ -53,6 +54,7 @@
 	[Parameter]
 	public int PrioridadID { get; set; }
 	public Prioridades Prioridad = new Prioridades();
+	public bool alreadySaved { get; set; }
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -61,14 +63,22 @@
 
 	public async Task Guardar()
 	{
+		if (alreadySaved)
+			return;
+		if (string.IsNullOrEmpty(Prioridad.Descripcion?.Trim()))
+			return;
 		if (await Validar())
 		{
 			await JSRuntime.InvokeVoidAsync("alert", "Ya existe una Prioridad con ese nombre...");
 			return;
 		}
-		var modificado = await prioridadesService.Guardar(Prioridad);
-		await JSRuntime.InvokeVoidAsync("alert", "La Prioridad se ha modificado correctamente!");
+		await prioridadesService.Guardar(Prioridad);
 		navigationManager.NavigateTo("/Prioridades/Index");
+		if (!alreadySaved)
+		{
+			alreadySaved = true;
+			await JSRuntime.InvokeVoidAsync("alert", "La Prioridad se ha modificado correctamente!");
+		}
 	}
 
 	private async Task<bool> Validar()
