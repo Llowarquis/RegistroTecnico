@@ -28,6 +28,7 @@ public class Program
         builder.Services.AddScoped<PrioridadesService>();
 		builder.Services.AddScoped<TrabajosDetalleService>();
         builder.Services.AddScoped<ArticulosService>();
+        builder.Services.AddScoped<CotizacionesService>();
 
 
 
