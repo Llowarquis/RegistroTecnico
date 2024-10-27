@@ -181,7 +181,7 @@
 			Mensaje = "El detalle debe llevar al menos 1 articulo";
 			return;
 		}
-		if (string.IsNullOrEmpty(Trabajo.Descripcion))
+		if (string.IsNullOrEmpty(Trabajo.Descripcion?.Trim()))
 			return;
 		var modificado = await trabajosService.Guardar(Trabajo);
 		navigationManager.NavigateTo("/Trabajos/Index");
