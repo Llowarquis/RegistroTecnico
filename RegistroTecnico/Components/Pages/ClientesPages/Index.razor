@@ -23,7 +23,7 @@
                         <InputSelect class="form-select" @bind-Value="@valorFiltro">
                             <option value="" selected disabled>Selecciona...</option>
                             <option value="ID">ID</option>
-                            <option value="Cliente">Cliente</option>
+                            <option value="Nombre">Nombre</option>
                             <option value="No. WhatsApp">No. WhatsApp</option>
                         </InputSelect>
 
@@ -125,7 +125,7 @@
                         ListaClientes = await clientesService.Listar(lt => lt.ClienteId == id);
                     break;
 
-                case "Cliente":
+                case "Nombre":
                     ListaClientes = await clientesService.Listar(lt => lt.Nombres.Trim().ToLower().Contains(searchBarValue.Trim().ToLower()));
                     break;
 
