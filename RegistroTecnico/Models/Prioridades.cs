@@ -7,7 +7,8 @@ public class Prioridades
     public int PrioridadesId {  get; set; }
 
     [Required(ErrorMessage = "Este campo es obligatorio.")]
-    public string? Descripcion { get; set; }
+	[RegularExpression(@"^[a-zA-Z-ÁáÉéÍíÓóÚúÑñ\s]+$", ErrorMessage = "Este campo solo puede alojar letras/espacios.")]
+	public string? Descripcion { get; set; }
 
     [Required(ErrorMessage = "Este campo es obligatorio.")]
     public int Tiempo { get; set; }
