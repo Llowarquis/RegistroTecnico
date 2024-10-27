@@ -4,11 +4,11 @@
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
-<PageTitle>View</PageTitle>
+<PageTitle>Clientes View</PageTitle>
 <div class="container">
 	<div class="card shadow-lg">
 		<div class="card-header">
-			<h3><strong>Visualizaci&oacute;n del T&eacute;cnico actual</strong></h3>
+			<h5><strong>Visualizaci&oacute;n del T&eacute;cnico actual</strong></h5>
 		</div>
 		<div class="card-body">
 			<ul>
@@ -18,7 +18,7 @@
 			</ul>
 		</div>
 		<div class="card-footer text-center">
-			<button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver">   Volver</button>
+			<a href="/Clientes/Index" class="btn btn-primary bi bi-chevron-double-left">   Volver</a>
 		</div>
 	</div>
 </div>
@@ -31,10 +31,5 @@
 	protected override async Task OnInitializedAsync()
 	{
 		Cliente = await clientesService.Buscar(ClienteID);
-	}
-
-	public void Volver()
-	{
-		navigationManager.NavigateTo("/Clientes/Index");
 	}
 }
