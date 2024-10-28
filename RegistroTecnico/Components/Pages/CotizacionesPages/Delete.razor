@@ -1,0 +1,53 @@
+﻿@page "/Cotizaciones/Delete/{CotizacionID:int}"
+
+@inject IJSRuntime JSRuntime
+@inject CotizacionesService cotizacionesService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Cotizaciones Delete</PageTitle>
+<div class="container">
+	<div class="card shadow-lg">
+		@*Header*@
+		<div class="card-header">
+			<h5><strong>Eliminar Contizaci&oacute;n</strong></h5>
+		</div>
+
+		@*Body*@
+		<div class="card-body">
+			<h5><strong>¿Est&aacute; seguro que desea esta Contizaci&oacute;n?</strong></h5>
+			<ul>
+				<li><strong>ID Trabajo: </strong> @Cotizacion.CotizacionId</li>
+				<li><strong>Fecha: </strong> @Cotizacion.Fecha.ToString("dd/MM/yyyy")</li>
+				<li><strong>ID Cliente: </strong> @Cotizacion.ClienteId</li>
+				<li><strong>Cliente: </strong> @Cotizacion.Cliente?.Nombres</li>
+				<li><strong>Observaci&oacute;n: </strong> @Cotizacion.Observacion</li>
+				<li><strong>Monto: RD$</strong> @Cotizacion.Monto</li>
+			</ul>
+		</div>
+
+		@*Footer*@
+		<div class="card-footer text-center">
+			<a href="/Cotizaciones/Index" class="btn btn-primary bi bi-chevron-double-left">  Volver   </a>
+			<button type="button" class="btn btn-danger bi bi-trash3-fill" @onclick="Eliminar">   Eliminar   </button>
+		</div>
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public int CotizacionID { get; set; }
+	public Cotizaciones Cotizacion { get; set; } = new Cotizaciones();
+
+	protected override async Task OnInitializedAsync()
+	{
+		Cotizacion = await cotizacionesService.Buscar(CotizacionID);
+	}
+
+	public async Task Eliminar()
+	{
+		var eliminado = await cotizacionesService.Eliminar(Cotizacion.ClienteId);
+		await JSRuntime.InvokeVoidAsync("alert", "Se ha eliminado la cotizacion correctamente!");
+		navigationManager.NavigateTo("/Cotizaciones/Index");
+	}
+}
