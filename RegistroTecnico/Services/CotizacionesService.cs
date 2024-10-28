@@ -6,9 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace RegistroTecnico.Services;
 
-public class CotizacionesService(Contexto contexto)
+public class CotizacionesService(IDbContextFactory<Contexto> DbFactory)
 {
-	private readonly Contexto _contexto = contexto;
 	public async Task<bool> Guardar(Cotizaciones cotizacion)
 	{
 		if (!await Existe(cotizacion.CotizacionId))
@@ -19,12 +18,14 @@ public class CotizacionesService(Contexto contexto)
 
 	private async Task<bool> Existe(int id)
 	{
+		await using var _contexto = await DbFactory.CreateDbContextAsync();
 		return await _contexto.Cotizaciones
 			.AnyAsync<Cotizaciones>(c => c.CotizacionId == id);
 	}
 
 	private async Task<bool> Insertar(Cotizaciones cotizacion)
 	{
+		await using var _contexto = await DbFactory.CreateDbContextAsync();
 		await AfectarArticulo(cotizacion.CotizacionDetalle.ToArray(), true);
 		_contexto.Cotizaciones.Add(cotizacion);
 		return await _contexto.SaveChangesAsync() > 0;
@@ -32,6 +33,7 @@ public class CotizacionesService(Contexto contexto)
 
 	private async Task<bool> Modificar(Cotizaciones cotizacion)
 	{
+		await using var _contexto = await DbFactory.CreateDbContextAsync();
 		var trabajoOriginal = await _contexto.Cotizaciones
 								.Include(c => c.CotizacionDetalle)
 								.AsNoTracking()
@@ -46,6 +48,7 @@ public class CotizacionesService(Contexto contexto)
 
 	public async Task<bool> Eliminar(int id)
 	{
+		await using var _contexto = await DbFactory.CreateDbContextAsync();
 		var cotizacion = _contexto.Cotizaciones.Find(id);
 		await AfectarArticulo(cotizacion.CotizacionDetalle.ToArray(), false);
 
@@ -58,6 +61,7 @@ public class CotizacionesService(Contexto contexto)
 
 	public async Task<Cotizaciones?> Buscar(int id)
 	{
+		await using var _contexto = await DbFactory.CreateDbContextAsync();
 		return await _contexto.Cotizaciones
 			.Include(c => c.Cliente)
 			.Include(cd => cd.CotizacionDetalle)
@@ -66,6 +70,7 @@ public class CotizacionesService(Contexto contexto)
 
 	public async Task<List<Cotizaciones>> Listar(Expression<Func<Cotizaciones, bool>> criterio)
 	{
+		await using var _contexto = await DbFactory.CreateDbContextAsync();
 		return await _contexto.Cotizaciones
 			.Include(c => c.Cliente)
 			.Include(cd => cd.CotizacionDetalle)
@@ -76,6 +81,7 @@ public class CotizacionesService(Contexto contexto)
 
 	private async Task AfectarArticulo(CotizacionesDetalle[] detalle, bool resta = true)
 	{
+		await using var _contexto = await DbFactory.CreateDbContextAsync();
 		foreach (var item in detalle)
 		{
 			var Articulo = await _contexto.Articulos.SingleAsync(p => p.ArticuloId == item.ArticuloId);
