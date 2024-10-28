@@ -14,7 +14,7 @@
 			<ul>
 				<li><strong>ID: </strong> @Cliente.ClienteId</li>
 				<li><strong>Nombre: </strong> @Cliente.Nombres</li>
-				<li><strong>WhatsApp: </strong> @String.Format("{0:(###)-###-####}", long.Parse(Cliente.WhatsApp))</li>
+				<li><strong>WhatsApp: </strong> @(long.TryParse(Cliente.WhatsApp ?? "", out var numero) ? string.Format("{0:(###)-###-####}", numero) : "No disponible")</li>
 			</ul>
 		</div>
 		<div class="card-footer text-center">
