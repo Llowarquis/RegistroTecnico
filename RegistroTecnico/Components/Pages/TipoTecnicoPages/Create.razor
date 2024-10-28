@@ -6,58 +6,68 @@
 @rendermode InteractiveServer
 
 <PageTitle>Create Tipo T&eacute;cnicos</PageTitle>
-<EditForm Model="tipoTecnicos" OnValidSubmit="Guardar">
-<DataAnnotationsValidator />
-    @*Formulario*@
-    <div class="container">
-        <div class="card shadow-lg">
-            @*Header*@
-            <div class="card-header text-center">
-                <h5><strong>Crear nuevo Tipo de T&eacute;cnico</strong></h5>
-            </div>
-            @*Body*@
-            <div class="card-body">
-                @*Id*@
-                <div class="col-1 ms-5">
-                    <label class="form-label"><strong>ID</strong></label>
-                    <InputNumber class="form-control" @bind-Value="tipoTecnicos.TipoTecnicoId" readonly></InputNumber>
-                </div>
-                <br/>
-                @*Descripcion*@
-                <div class="col-2 ms-5">
-                    <label class="form-label"><strong>Descripci&oacute;n</strong></label>
-                    <InputText placeholder="Descricip&oacute;n" class="form-control" @bind-Value="tipoTecnicos.Descripcion"></InputText>
-                    <ValidationMessage For="@(() =>tipoTecnicos.Descripcion)" />
-                </div>
-            </div>
-        </div>
-        @*Footer*@
-        <div class="card-footer text-center">
-            <a type="button" class="btn btn-primary bi bi-chevron-double-left" href="/TipoTecnicos/Index"> Volver   </a>
-            <button type="submit" class="btn btn-success bi bi-floppy-fill" @onclick="Guardar">   Agregar    </button>
-        </div>
-    </div>
+<EditForm Model="@tipoTecnicos" OnValidSubmit="Guardar">
+	<DataAnnotationsValidator />
+	@*Formulario*@
+	<div class="container">
+		<div class="card shadow-lg">
+			@*Header*@
+			<div class="card-header text-center">
+				<h5><strong>Crear nuevo Tipo de T&eacute;cnico</strong></h5>
+			</div>
+			@*Body*@
+			<div class="card-body">
+				@*Id*@
+				<div class="col-1 ms-5">
+					<label class="form-label"><strong>ID</strong></label>
+					<InputNumber class="form-control" @bind-Value="tipoTecnicos.TipoTecnicoId" readonly></InputNumber>
+				</div>
+				<br />
+				@*Descripcion*@
+				<div class="col-2 ms-5">
+					<label class="form-label"><strong>Descripci&oacute;n</strong></label>
+					<InputText placeholder="Descricip&oacute;n" class="form-control" @bind-Value="tipoTecnicos.Descripcion"></InputText>
+					<ValidationMessage For="@(() =>tipoTecnicos.Descripcion)" />
+				</div>
+			</div>
+		</div>
+		@*Footer*@
+		<div class="card-footer text-center">
+			<a type="button" class="btn btn-primary bi bi-chevron-double-left" href="/TipoTecnicos/Index"> Volver   </a>
+			<button type="submit" class="btn btn-success bi bi-floppy-fill">   Guardar</button>
+		</div>
+	</div>
 </EditForm>
 
 @code {
-    private TipoTecnicos tipoTecnicos { get; set; } = new TipoTecnicos();
-    public Tecnicos tecnico { get; set; } = new Tecnicos();
-    public List<TipoTecnicos> ListaTipoTecnicos { get; set; } = new List<TipoTecnicos>();
+	private TipoTecnicos tipoTecnicos { get; set; } = new TipoTecnicos();
+	public Tecnicos tecnico { get; set; } = new Tecnicos();
+	public List<TipoTecnicos> ListaTipoTecnicos { get; set; } = new List<TipoTecnicos>();
+	public bool alreadySaved { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
-        ListaTipoTecnicos = await tipoTecnicoService.Listar(t => t.TipoTecnicoId > 0);
-    }
+	protected override async Task OnInitializedAsync()
+	{
+		ListaTipoTecnicos = await tipoTecnicoService.Listar(t => t.TipoTecnicoId > 0);
+	}
 
-    public async Task Guardar()
-    {
-        if (await tipoTecnicoService.ValidarDescripcion(tipoTecnicos.Descripcion))
-        {
-            await JSRuntime.InvokeVoidAsync("alert", "Ya existe este tipo de tecnico con ese nombre...");
-            return;
-        }
-        var crear = await tipoTecnicoService.Guardar(tipoTecnicos);
-        await JSRuntime.InvokeVoidAsync("alert", "El tipo de tecnico se creo correctamente!");
-        navigationManager.NavigateTo("/TipoTecnicos/Index");
-    }
+	public async Task Guardar()
+	{
+		if (alreadySaved)
+			return;
+		if (await tipoTecnicoService.ValidarDescripcion(tipoTecnicos.Descripcion))
+		{
+			await JSRuntime.InvokeVoidAsync("alert", "Ya existe este tipo de técnico con ese nombre...");
+			return;
+		}
+		bool isSaved = await tipoTecnicoService.Guardar(tipoTecnicos);
+		if (isSaved)
+		{
+			alreadySaved = true;
+			await JSRuntime.InvokeVoidAsync("alert", "El tipo de técnico se creó correctamente!");
+			navigationManager.NavigateTo("/TipoTecnicos/Index");
+		}
+		else
+			await JSRuntime.InvokeVoidAsync("alert", "Error al guardar el tipo de técnico. Inténtalo de nuevo.");
+		return;
+	}
 }
