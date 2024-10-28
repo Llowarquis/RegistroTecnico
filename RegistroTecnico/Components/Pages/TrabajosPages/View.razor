@@ -24,22 +24,9 @@
 				<li><strong>Descripci&oacute;n: </strong> @Trabajo.Descripcion</li>
 				<li><strong>Monto: RD$</strong> @Trabajo.Monto</li>
 			</ul>
-
-			<div class="border border-success p-3 mt-3">
-				@foreach (var detalle in Trabajo.TrabajoDetalle)
-				{
-					var articulo = ListaArticulos.SingleOrDefault(a => a.ArticuloId == detalle.ArticuloId);
-					<ul>
-						<li><strong>ID Articulo: </strong>@detalle.ArticuloId</li>
-						<li><strong>Descripci&oacute;n: </strong>@articulo?.Descripcion</li>
-						<li><strong>Cantidad: </strong>@detalle.Cantidad</li>
-						<li><strong>Total RD$: </strong>@(detalle.Precio * detalle.Cantidad)</li>
-					</ul>
-				}
-			</div>
 		</div>
 		<div class="card-footer text-center">
-			<button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver">   Volver</button>
+			<a href="/Trabajos/Index" class="btn btn-primary bi bi-chevron-double-left">   Volver</a>
 			<button type="button" class="btn btn-success bi bi-whatsapp" @onclick="WhatsApp">   Enviar a </button>
 		</div>
 	</div>
@@ -49,18 +36,10 @@
 	[Parameter]
 	public int TrabajoID { get; set; }
 	public Trabajos Trabajo { get; set; } = new Trabajos();
-	public List<Articulos> ListaArticulos { get; set; } = [];
-
 
 	protected override async Task OnInitializedAsync()
 	{
-		ListaArticulos = await articulosService.Listar(l => true);
 		Trabajo = await trabajosService.Buscar(TrabajoID);
-	}
-
-	public void Volver()
-	{
-		navigationManager.NavigateTo("/Trabajos/Index");
 	}
 
 	public async Task WhatsApp()
