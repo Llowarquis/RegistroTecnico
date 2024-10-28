@@ -10,12 +10,12 @@
 	<div class="card shadow-lg">
 		@*Header*@
 		<div class="card-header">
-			<h3><strong>Eliminar Prioridad</strong></h3>
+			<h5><strong>Eliminar Prioridad</strong></h5>
 		</div>
 
 		@*Body*@
 		<div class="card-body">
-			<h4><strong>¿Est&aacute; seguro que desea Eliminar esta Prioridad?</strong></h4>
+			<h5><strong>¿Est&aacute; seguro que desea Eliminar esta Prioridad?</strong></h5>
 			<ul>
 				<li><strong>ID: </strong>@Prioridad.PrioridadesId</li>
 				<li><strong>Descripci&oacute;n: </strong> @Prioridad.Descripcion</li>
@@ -25,7 +25,7 @@
 
 		@*Footer*@
 		<div class="card-footer text-center">
-			<button type="button" class="btn btn-primary bi bi-chevron-double-left" @onclick="Volver">  Volver   </button>
+			<a href="/Prioridades/Index" class="btn btn-primary bi bi-chevron-double-left">  Volver   </a>
 			<button type="button" class="btn btn-danger bi bi-trash3-fill" @onclick="Eliminar">   Eliminar   </button>
 		</div>
 	</div>
@@ -44,16 +44,10 @@
 	public async Task Eliminar()
 	{
 		var eliminado = await prioridadesService.Eliminar(Prioridad.PrioridadesId);
-
 		if (eliminado)
 			await JSRuntime.InvokeVoidAsync("alert", "La Prioridad se ha eliminado correctamente!");
 		else
 			await JSRuntime.InvokeVoidAsync("alert", "Ha ocurrido un error al eliminar la Prioridad9");
-		navigationManager.NavigateTo("/Prioridades/Index");
-	}
-
-	public void Volver()
-	{
 		navigationManager.NavigateTo("/Prioridades/Index");
 	}
 }

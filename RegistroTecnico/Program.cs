@@ -15,10 +15,10 @@ public class Program
             .AddInteractiveServerComponents();
 
         // Obtencion del connection string
-        var ConStr = builder.Configuration.GetConnectionString("ConStr");
+        var SqlConStr = builder.Configuration.GetConnectionString("SqlConStr");
 
         // Inyeccion del ConStr
-        builder.Services.AddDbContext<Contexto>(o => o.UseSqlite(ConStr));
+        builder.Services.AddDbContextFactory<Contexto>(o => o.UseSqlServer(SqlConStr));
 
         // Inyeccion del servicio
         builder.Services.AddScoped<TecnicoServices>();
@@ -28,6 +28,7 @@ public class Program
         builder.Services.AddScoped<PrioridadesService>();
 		builder.Services.AddScoped<TrabajosDetalleService>();
         builder.Services.AddScoped<ArticulosService>();
+        builder.Services.AddScoped<CotizacionesService>();
 
 
 

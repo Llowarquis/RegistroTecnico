@@ -12,32 +12,39 @@
         <div class="card-header text-center">
             @*Titulo*@
             <div>
-                <h3><strong>Consulta de Clientes</strong></h3>
+                <h5><strong>Registro de Clientes</strong></h5>
             </div>
                 
-            <div class="row justify-content-center">
-                <label class="col-1"><strong>Filtrar:</strong></label>
-                <div class="col-2 input-group" style="width: 250px">
-                    @*Campo Filtro*@
-                    <InputSelect class="form-select" style="width: 150px" @bind-Value="@valorFiltro">
-                        <option value="" selected disabled>Selecciona...</option>
-                        <option value="ID">ID</option>
-                        <option value="Nombre">Nombre</option>
-                        <option value="No. WhatsApp">No. WhatsApp</option>
-                    </InputSelect>
+            <div class="row">
+                <div class="col-4 text-start">
+                    <label><strong>Filtrar:</strong></label>
+                    <div class="input-group" style="width: 250px">
+                        @*Campo Filtro*@
+                        <InputSelect class="form-select" @bind-Value="@valorFiltro">
+                            <option value="" selected disabled>Selecciona...</option>
+                            <option value="ID">ID</option>
+                            <option value="Nombre">Nombre</option>
+                            <option value="No. WhatsApp">No. WhatsApp</option>
+                        </InputSelect>
 
-                    @*Btn Restablecer filtro*@
-                    <button class="col-1 btn btn-secondary bi bi-arrow-counterclockwise" style="width: 40px" @onclick="Restablecer"></button>
+                        @*Btn Restablecer filtro*@
+                        <button class="btn btn-secondary bi bi-arrow-counterclockwise" style="width: 40px" @onclick="Restablecer"></button>
+                    </div>
                 </div>
-                <label class="col-1"><strong>Buscar:</strong></label>
-                @*Barra de busqueda con Btn de Buscar*@
-                <div class="col-2 input-group" style="width: 500px">
-                    <input @bind="@searchBarValue" @onkeypress="HandleKeyDown" placeholder="Buscar" class="form-control" />
-                    <button @onclick="Buscar" class="btn btn-success bi bi-search" type="button">  Buscar</button>
+
+                <div class="col text-start">
+                    <label><strong>Buscar:</strong></label>
+                    <div class="input-group" style="width: 500px">
+                        <input @bind="@searchBarValue" @onkeypress="HandleKeyDown" placeholder="Buscar" class="form-control" />
+                        <button @onclick="Buscar" class="btn btn-success bi bi-search" type="button">Buscar</button>
+                    </div>
                 </div>
-                @*Btn Crear*@
-                <div class="col-2">
-                    <a type="button" class="btn btn-primary bi bi-person-fill-add border-bottom" href="/Clientes/Create">   Crear</a>
+
+                <div class="col-2 text-start">
+                    <label></label>
+                    <div>
+                        <a class="btn btn-primary bi bi-person-fill-add border-bottom" href="/Clientes/Create">Crear</a>
+                    </div>
                 </div>
             </div>
         </div>

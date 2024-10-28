@@ -1,0 +1,209 @@
+﻿@page "/Cotizaciones/Index"
+
+@inject IJSRuntime JSRuntime
+@inject CotizacionesService cotizacionesService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Cotizaciones Index</PageTitle>
+<div class="container">
+	<div class="card shadow-lg">
+		@*Header*@
+		<div class="card-header text-center">
+			@*Titulo*@
+			<div>
+				<h3><strong>Registro de Cotizaciones</strong></h3>
+			</div>
+
+			@*Campo fecha*@
+			<div class="row justify-content-center">
+				<div class="col text-start mb-3">
+					<!-- Agrega margen inferior -->
+					<label class="form-label"><strong>Desde:</strong></label>
+					<InputDate class="form-control" @bind-Value="FechaDesde"></InputDate>
+				</div>
+				<div class="col text-start mb-3">
+					<!-- Agrega margen inferior -->
+					<label class="form-label"><strong>Hasta:</strong></label>
+					<InputDate class="form-control" @bind-Value="FechaHasta"></InputDate>
+				</div>
+			</div>
+
+			@if (!string.IsNullOrEmpty(ErrorMessage))
+			{
+				<div class="alert alert-danger text-center" role="alert">
+					<i class="bi bi-exclamation-triangle-fill"></i>
+					@ErrorMessage
+				</div>
+			}
+
+			@if (!string.IsNullOrEmpty(InfoMessage) && (FechaDesde != null || FechaHasta != null))
+			{
+				<div class="alert alert-primary text-center" role="alert">
+					<i class="bi bi-info-circle-fill"></i>
+					@InfoMessage
+				</div>
+			}
+
+			@*Filtrar, Buscar, Crear*@
+			<div class="row">
+				<div class="col-4 text-start">
+					<label><strong>Filtrar:</strong></label>
+					<div class="input-group" style="width: 250px">
+						@*Campo Filtro*@
+						<InputSelect class="form-select" @bind-Value="@valorFiltro">
+							<option value="" selected disabled>Selecciona...</option>
+							<option value="ID">ID</option>
+							<option value="Cliente">Cliente</option>
+							<option value="Fecha">Fecha</option>
+						</InputSelect>
+
+						@*Btn Restablecer filtro*@
+						<button class="btn btn-secondary bi bi-arrow-counterclockwise" style="width: 40px" @onclick="Restablecer"></button>
+					</div>
+				</div>
+
+				<div class="col text-start">
+					<label><strong>Buscar:</strong></label>
+					<div class="input-group" style="width: 500px">
+						<input @bind="@searchBarValue" @onkeypress="HandleKeyDown" placeholder="Buscar" class="form-control" />
+						<button @onclick="Buscar" class="btn btn-success bi bi-search" type="button">Buscar</button>
+					</div>
+				</div>
+
+				<div class="col-2 text-start">
+					<label></label>
+					<div>
+						<a type="button" class="btn btn-primary bi bi-person-fill-add border-bottom" href="/Cotizaciones/Create">Crear</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		@*Body*@
+		<div class="card-body">
+			<table class="table table-bordered text-center table-hover">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Fecha</th>
+						<th>Cliente</th>
+						<th>Observaci&oacute;n</th>
+						<th>Monto</th>
+						<th>Editar</th>
+						<th>Eliminar</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var cotizacion in ListaCotizaciones)
+					{
+						<tr>
+							<td>@cotizacion.CotizacionId</td>
+							<td>@cotizacion.Fecha.ToString("dd/MM/yyyy")</td>
+							<td>@cotizacion.Cliente?.Nombres</td>
+							<td>@cotizacion.Observacion</td>
+							<td>RD$ @cotizacion.Monto</td>
+
+							@*Modificar*@
+							<td>
+								<a type="button" class="btn btn-outline-dark btn-outline-light bi bi-pencil-fill" style="background-color: #ffc300"
+								   href="/Cotizaciones/Modify/@cotizacion.CotizacionId"></a>
+							</td>
+
+							@*Eliminar*@
+							<td>
+								<a type="button" class="btn btn-outline-dark btn-outline-light bi bi-trash3-fill" style="background-color: #ff3333"
+								   href="/Cotizaciones/Delete/@cotizacion.CotizacionId"></a>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+		@*Footer*@
+		<div class="card-footer">
+			<p><strong>Cantidad total de Cotizaciones: </strong>@ListaCotizaciones.Count()</p>
+		</div>
+	</div>
+</div>
+
+@code {
+	public DateTime? FechaDesde { get; set; } = null;
+	public DateTime? FechaHasta { get; set; } = null;
+	public Cotizaciones Cotizacion { get; set; } = new Cotizaciones();
+	public List<Cotizaciones> ListaCotizaciones { get; set; } = new List<Cotizaciones>();
+	public string valorFiltro { get; set; } = "";
+	public string searchBarValue { get; set; } = string.Empty;
+	public string ErrorMessage { get; set; } = string.Empty;
+	public string InfoMessage { get; set; } = string.Empty;
+
+	protected override async Task OnInitializedAsync()
+	{
+		ListaCotizaciones = await cotizacionesService.Listar(c => true);
+	}
+
+	private async Task HandleKeyDown(KeyboardEventArgs e)
+	{
+		if (e.Key == "Enter")
+			await Buscar();
+	}
+
+	public async Task Buscar()
+	{
+		if (valorFiltro.Trim().ToLower() != "")
+		{
+			switch (valorFiltro)
+			{
+				case "ID":
+					if (int.TryParse(searchBarValue.Trim(), out int id))
+						ListaCotizaciones = await cotizacionesService.Listar(lt => lt.CotizacionId == id);
+					break;
+
+				case "Cliente":
+					ListaCotizaciones = await cotizacionesService.Listar(lt => lt.Cliente.Nombres.Trim().ToLower().Contains(searchBarValue.Trim().ToLower()));
+					break;
+
+				case "Fecha":
+					ErrorMessage = string.Empty;
+					InfoMessage = string.Empty;
+					if(FechaDesde != null && FechaHasta != null)
+					{
+						if (FechaDesde > FechaHasta)
+						{
+							ErrorMessage = "Por favor, Seleccione 2 fechas validas.";
+							return;
+						}
+						if(FechaDesde == FechaHasta)
+						{
+							ListaCotizaciones = await cotizacionesService.Listar(lc => lc.Fecha == FechaDesde && lc.Fecha == FechaHasta);
+							return;
+						}
+						ListaCotizaciones = await cotizacionesService.Listar(lc => lc.Fecha >= FechaDesde && lc.Fecha <= FechaHasta);
+					}
+					else
+					{
+						ErrorMessage = "Debe seleccionar una fecha en ambos campos";
+						return;
+					}
+					break;
+			}
+		}
+		else
+		{
+			InfoMessage = "Por favor, Seleccione la opcion Fecha en el filtro";
+			ListaCotizaciones = await cotizacionesService.Listar(lt => true);
+		}
+
+	}
+
+
+	private async Task Restablecer()
+	{
+		ListaCotizaciones = await cotizacionesService.Listar(t => true);
+		valorFiltro = string.Empty;
+		searchBarValue = string.Empty;
+		ErrorMessage = string.Empty;
+		InfoMessage = string.Empty;
+		FechaDesde = null;
+		FechaHasta = null;
+	}
+}

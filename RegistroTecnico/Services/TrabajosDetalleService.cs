@@ -6,13 +6,13 @@ using System.Linq.Expressions;
 
 namespace RegistroTecnico.Services;
 
-public class TrabajosDetalleService(Contexto contexto)
+public class TrabajosDetalleService(IDbContextFactory<Contexto> DbFactory)
 {
-	private readonly Contexto _contexto = contexto;
 
 	// Listar
 	public async Task<List<TrabajosDetalle>> Listar(Expression<Func<TrabajosDetalle, bool>> criterio)
 	{
+		await using var _contexto = await DbFactory.CreateDbContextAsync();
 		return await _contexto.TrabajosDetalles
 			.AsNoTracking()
 			.Where(criterio)

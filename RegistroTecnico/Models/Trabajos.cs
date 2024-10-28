@@ -15,7 +15,6 @@ public class Trabajos
 
 	//Esta Descripcion es el problema en detalla que tiene el cliente
 	[Required(ErrorMessage = "Este campo es obligatorio.")]
-	[RegularExpression(@"^[a-zA-Z-ÁáÉéÍíÓóÚúÑñ\s]+$", ErrorMessage = "Este campo solo puede alojar letras/espacios.")]
 	public string? Descripcion { get; set; }
 
 

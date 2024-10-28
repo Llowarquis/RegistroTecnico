@@ -9,7 +9,7 @@
 	<div class="card shadow-lg">
 		@*Header*@
 		<div class="card-header">
-			<h3 class="text-center"><strong>Tipos de T&eacute;cnicos</strong></h3>
+			<h5 class="text-center"><strong>Registro de Tipos de T&eacute;cnicos</strong></h5>
 			<div class="row justify-content-center">
 				<label class="col-1"><strong>Buscar por ID</strong></label>
 				@*Barra de busqueda con Btn de Buscar*@
@@ -19,7 +19,7 @@
 				</div>
 				@*Btn Crear*@
 				<div class="col-2">
-					<button type="button" class="btn btn-primary bi bi-person-plus-fill border-bottom" @onclick="PantallaCrear">   Crear</button>
+					<a href="/TipoTecnicos/Create" class="btn btn-primary bi bi-person-plus-fill border-bottom">   Crear</a>
 				</div>
 			</div>
 		</div>
@@ -36,22 +36,28 @@
 					</tr>
 				</thead>
 				<tbody>
-					@foreach (var TipoTecnico in ListaTiposTecnicos)
+					@foreach (var tipoTecnico in ListaTiposTecnicos)
 					{
 						<tr>
-							<td>@TipoTecnico.TipoTecnicoId</td>
-							<td>@TipoTecnico.Descripcion</td>
+							<td>@tipoTecnico.TipoTecnicoId</td>
+							<td>@tipoTecnico.Descripcion</td>
 							<td>
-								<button class="btn btn-outline-dark btn-outline-light bi bi-eye-fill" style="background-color: #8a33ff"
-										@onclick="() => PantallaView(TipoTecnico.TipoTecnicoId)"></button>
+								<a href="/TipoTecnicos/View/@tipoTecnico.TipoTecnicoId" 
+									class="btn btn-outline-dark btn-outline-light bi bi-eye-fill" 
+									style="background-color: #8a33ff">
+								</a>
 							</td>
 							<td>
-								<button class="btn btn-outline-dark btn-outline-light bi bi-pencil-fill" style="background-color: #8a33ff"
-										@onclick="() => PantallaModificar(TipoTecnico.TipoTecnicoId)"></button>
+								<a href="/TipoTecnicos/Modify/@tipoTecnico.TipoTecnicoId" 
+									class="btn btn-outline-dark btn-outline-light bi bi-pencil-fill" 
+									style="background-color: #8a33ff">
+								</a>
 							</td>
 							<td>
-								<button class="btn btn-outline-dark btn-outline-light bi bi-trash-fill" style="background-color: #8a33ff"
-										@onclick="() => PantallaEliminar(TipoTecnico.TipoTecnicoId)"></button>
+								<a href="/TipoTecnicos/Delete/@tipoTecnico.TipoTecnicoId" 
+								class="btn btn-outline-dark btn-outline-light bi bi-trash-fill" 
+								style="background-color: #8a33ff">
+							</a>
 							</td>
 						</tr>
 					}
@@ -80,25 +86,5 @@
 			await JSRuntime.InvokeVoidAsync("alert", "Este ID no existe...");
 			return;
 		}
-	}
-
-	public void PantallaCrear()
-	{
-		navigationManager.NavigateTo("/TipoTecnicos/Create");
-	}
-
-	public void PantallaView(int id)
-	{
-		navigationManager.NavigateTo($"/TipoTecnicos/View/{id}");
-	}
-
-	public void PantallaModificar(int id)
-	{
-		navigationManager.NavigateTo($"/TipoTecnicos/Modify/{id}");
-	}
-
-	public void PantallaEliminar(int id)
-	{
-		navigationManager.NavigateTo($"/TipoTecnicos/Delete/{id}");
 	}
 }

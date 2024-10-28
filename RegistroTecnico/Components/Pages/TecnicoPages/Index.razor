@@ -7,140 +7,142 @@
 
 <PageTitle>Index</PageTitle>
 <div class="container">
-     <div class="shadow-lg">
-        <div class="card">
-            @*Header*@
-            <div class="card-header text-center">
-                @*Titulo*@
-                <div>
-                    <h3><strong>Consulta de T&eacute;cnicos</strong></h3>
-                </div>
-                
-                <div class="row justify-content-center">
-                    
-                    <label class="col-1"><strong>Filtrar:</strong></label>
-                    <div class="col-2 input-group" style="width: 250px">
-                        @*Campo Filtro*@
-                        <InputSelect class="form-select" style="width: 150px" @bind-Value="@valorFiltro">
-                            <option value="" selected disabled>Selecciona...</option>
-                            <option value="ID">ID</option>
-                            <option value="Nombre">Nombre</option>
-                            <option value="Descripcion">Descripci&oacute;n</option>
-                        </InputSelect>
+	<div class="card shadow-lg">
+		@*Header*@
+		<div class="card-header text-center">
+			@*Titulo*@
+			<div>
+				<h5><strong>Registro de T&eacute;cnicos</strong></h5>
+			</div>
 
-                        @*Btn Restablecer filtro*@
-                        <button class="col-1 btn btn-secondary bi bi-arrow-counterclockwise" style="width: 40px" @onclick="Restablecer"></button>
-                    </div>
+			<div class="row">
+				<div class="col-4 text-start">
+					<label><strong>Filtrar:</strong></label>
+					<div class="input-group" style="width: 250px">
+						@*Campo Filtro*@
+						<InputSelect class="form-select" @bind-Value="@valorFiltro">
+							<option value="" selected disabled>Selecciona...</option>
+							<option value="ID">ID</option>
+							<option value="Nombre">Nombre</option>
+							<option value="Descripcion">Descripci&oacute;n</option>
+						</InputSelect>
 
-                    <label class="col-1"><strong>Buscar:</strong></label>
-                    @*Barra de busqueda con Btn de Buscar*@
-                    <div class="col-2 input-group" style="width: 500px">
-                        <input @bind="@searchBarValue" @onkeypress="HandleKeyDown" placeholder="Buscar" class="form-control" />
-                        <button @onclick="Buscar" class="btn btn-success bi bi-search" type="button">  Buscar</button>
-                    </div>
+						@*Btn Restablecer filtro*@
+						<button class="btn btn-secondary bi bi-arrow-counterclockwise" style="width: 40px" @onclick="Restablecer"></button>
+					</div>
+				</div>
 
-                    @*Btn Crear*@
-                    <div class="col-2">
-                        <a type="button" class="btn btn-primary bi bi-person-fill-add border-bottom" href="/Tecnicos/Create">   Crear</a>
-                    </div>
-                </div>
-            </div>
-            @*Body*@
-            <div class="card-body">
-                <table class="table table-bordered text-center table-hover">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Descripci&oacute;n</th>
-                            <th>Sueldo Hora</th>
-                            <th>Visualizar</th>
-                            <th>Modificar</th>
-                            <th>Eliminar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var tecnico in ListaTecnicos)
-                        {
-                            <tr>
-                                <td>@tecnico.TecnicoId</td>
-                                <td>@tecnico.Nombres</td>
-                                <td>@tecnico.Descripcion</td> 
-                                <td>RD$ @tecnico.SueldoHora</td>
-                                @*Visualizacion*@
-                                <td>
-                                    <a type="button" class="btn btn-outline-dark btn-outline-light bi bi-eye-fill" style="background-color: #8a33ff"
-                                            href="/Tecnicos/View/@tecnico.TecnicoId"></a>
-                                </td>
+				<div class="col text-start">
+					<label><strong>Buscar:</strong></label>
+					<div class="input-group" style="width: 500px">
+						<input @bind="@searchBarValue" @onkeypress="HandleKeyDown" placeholder="Buscar" class="form-control" />
+						<button @onclick="Buscar" class="btn btn-success bi bi-search" type="button">Buscar</button>
+					</div>
+				</div>
 
-                                @*Modificar*@
-                                <td>
-                                    <a type="button" class="btn btn-outline-dark btn-outline-light bi bi-pencil-fill" style="background-color: #ffc300"
-                                            href="/Tecnicos/Modify/@tecnico.TecnicoId"></a>
-                                </td>
+				<div class="col-2 text-start">
+					<label></label>
+					<div>
+						<a type="button" class="btn btn-primary bi bi-person-fill-add border-bottom" href="/Tecnicos/Create">Crear</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		@*Body*@
+		<div class="card-body">
+			<table class="table table-bordered text-center table-hover">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Nombre</th>
+						<th>Descripci&oacute;n</th>
+						<th>Sueldo Hora</th>
+						<th>Visualizar</th>
+						<th>Modificar</th>
+						<th>Eliminar</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var tecnico in ListaTecnicos)
+					{
+						<tr>
+							<td>@tecnico.TecnicoId</td>
+							<td>@tecnico.Nombres</td>
+							<td>@tecnico.Descripcion</td>
+							<td>RD$ @tecnico.SueldoHora</td>
+							@*Visualizacion*@
+							<td>
+								<a class="btn btn-outline-dark btn-outline-light bi bi-eye-fill" style="background-color: #8a33ff"
+								   href="/Tecnicos/View/@tecnico.TecnicoId"></a>
+							</td>
 
-                                @*Eliminar*@
-                                <td>
-                                    <a type="button" class="btn btn-outline-dark btn-outline-light bi bi-trash3-fill" style="background-color: #ff3333"
-                                            href="/Tecnicos/Delete/@tecnico.TecnicoId"></a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-            @*Footer*@
-            <div class="card-footer">
-                <p><strong>Cantidad total de T&eacute;cnicos: </strong>@ListaTecnicos.Count()</p>
-            </div>
-        </div>
-    </div>
+							@*Modificar*@
+							<td>
+								<a class="btn btn-outline-dark btn-outline-light bi bi-pencil-fill" style="background-color: #ffc300"
+								   href="/Tecnicos/Modify/@tecnico.TecnicoId"></a>
+							</td>
+
+							@*Eliminar*@
+							<td>
+								<a class="btn btn-outline-dark btn-outline-light bi bi-trash3-fill" style="background-color: #ff3333"
+								   href="/Tecnicos/Delete/@tecnico.TecnicoId"></a>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+		@*Footer*@
+		<div class="card-footer">
+			<p><strong>Cantidad total de T&eacute;cnicos: </strong>@ListaTecnicos.Count()</p>
+		</div>
+	</div>
 </div>
 
 @code {
-    public List<Tecnicos> ListaTecnicos { get; set; } = new List<Tecnicos>();
-    public string valorFiltro { get; set; } = "";
-    public string searchBarValue { get; set; } = string.Empty;
+	public List<Tecnicos> ListaTecnicos { get; set; } = new List<Tecnicos>();
+	public string valorFiltro { get; set; } = "";
+	public string searchBarValue { get; set; } = string.Empty;
 
-    protected override async Task OnInitializedAsync()
-    {
-        ListaTecnicos = await tecnicoServices.Listar(c => c.TecnicoId > 0);
-    }
+	protected override async Task OnInitializedAsync()
+	{
+		ListaTecnicos = await tecnicoServices.Listar(c => c.TecnicoId > 0);
+	}
 
-    private async Task HandleKeyDown(KeyboardEventArgs e)
-    {
-        if (e.Key == "Enter")
-            await Buscar();
-    }
+	private async Task HandleKeyDown(KeyboardEventArgs e)
+	{
+		if (e.Key == "Enter")
+			await Buscar();
+	}
 
-    public async Task Buscar()
-    {
-        if (valorFiltro.Trim().ToLower() != "")
-        {
-            switch (valorFiltro)
-            {
-                case "ID":
-                    if (int.TryParse(searchBarValue.Trim(), out int id))
-                        ListaTecnicos = await tecnicoServices.Listar(lt => lt.TecnicoId == id);
-                    break;
+	public async Task Buscar()
+	{
+		if (valorFiltro.Trim().ToLower() != "")
+		{
+			switch (valorFiltro)
+			{
+				case "ID":
+					if (int.TryParse(searchBarValue.Trim(), out int id))
+						ListaTecnicos = await tecnicoServices.Listar(lt => lt.TecnicoId == id);
+					break;
 
-                case "Nombre":
-                    ListaTecnicos = await tecnicoServices.Listar(lt => lt.Nombres.Trim().ToLower().Contains(searchBarValue.Trim().ToLower()));
-                    break;
+				case "Nombre":
+					ListaTecnicos = await tecnicoServices.Listar(lt => lt.Nombres.Trim().ToLower().Contains(searchBarValue.Trim().ToLower()));
+					break;
 
-                case "Descripcion":
-                    ListaTecnicos = await tecnicoServices.Listar(lt => lt.Descripcion.Trim().ToLower().Contains(searchBarValue.Trim().ToLower()));
-                    break;
-            }
-        }
-        else
-            ListaTecnicos = await tecnicoServices.Listar(lt => true);
-    }
+				case "Descripcion":
+					ListaTecnicos = await tecnicoServices.Listar(lt => lt.Descripcion.Trim().ToLower().Contains(searchBarValue.Trim().ToLower()));
+					break;
+			}
+		}
+		else
+			ListaTecnicos = await tecnicoServices.Listar(lt => true);
+	}
 
-    private async Task Restablecer()
-    {
-        ListaTecnicos = await tecnicoServices.Listar(t => true);
-        valorFiltro = "";
-        searchBarValue = string.Empty;
-    }
+	private async Task Restablecer()
+	{
+		ListaTecnicos = await tecnicoServices.Listar(t => true);
+		valorFiltro = "";
+		searchBarValue = string.Empty;
+	}
 }
