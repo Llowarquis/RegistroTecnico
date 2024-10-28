@@ -33,7 +33,7 @@
 					@*Campo seleccion de Prioridades*@
 					<label class="form-label"><strong>Prioridad:</strong></label>
 					<InputSelect class="form-select" @bind-Value="Trabajo.PrioridadId">
-						<option selected disabled>--- Seleccione una prioridad ---</option>
+						<option  value="" selected disabled>--- Seleccione una prioridad ---</option>
 						@foreach (var prioridad in ListaPrioridades)
 						{
 							<option value="@prioridad.PrioridadesId">@prioridad.Descripcion</option>
@@ -45,7 +45,7 @@
 					@*Campo selccion de Cliente*@
 					<label class="form-label"><strong>Cliente:</strong></label>
 					<InputSelect class="form-select" @bind-Value="Trabajo.ClienteId">
-						<option selected disabled value="">--- Seleccione un cliente ---</option>
+						<option value="" selected disabled >--- Seleccione un cliente ---</option>
 						@foreach (var cliente in ListaClientes)
 						{
 							<option value="@cliente.ClienteId">@cliente.Nombres</option>
@@ -58,7 +58,7 @@
 					@*Campo selccion de Tecnico*@
 					<label class="form-label"><strong>T&eacute;cnico:</strong></label>
 					<InputSelect class="form-select" @bind-Value="Trabajo.TecnicoId">
-						<option selected disabled>--- Seleccione un T&eacute;cnico ---</option>
+						<option value="" selected disabled>--- Seleccione un T&eacute;cnico ---</option>
 						@foreach (var tecnico in ListaTecnicos)
 						{
 							<option value="@tecnico.TecnicoId">@tecnico.Nombres --- (@tecnico.Descripcion)</option>
