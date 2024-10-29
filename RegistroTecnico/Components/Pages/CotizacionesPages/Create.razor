@@ -31,7 +31,7 @@
 					@*Campo selccion de Cliente*@
 					<label class="form-label"><strong>Cliente:</strong></label>
 					<InputSelect class="form-select" @bind-Value="Cotizacion.ClienteId">
-						<option selected disabled value="">--- Seleccione un cliente ---</option>
+						<option selected disabled value="0">--- Seleccione un cliente ---</option>
 						@foreach (var cliente in ListaClientes)
 						{
 							<option value="@cliente.ClienteId">@cliente.Nombres</option>
