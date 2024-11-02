@@ -1,4 +1,10 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Tecnicos.Data.Context;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<Context>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("RegistroTecnicoApiContext")
+	?? throw new InvalidOperationException("Connection string 'RegistroTecnicoApiContext' not found.")));
 
 // Add services to the container.
 
