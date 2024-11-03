@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Tecnicos.Data.Context;
 var builder = WebApplication.CreateBuilder(args);
@@ -15,12 +16,15 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Redirigir la raiz a la ruta de Swagger
+app.MapGet("/", () => Results.Redirect("/swagger/index.html"));
+
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+/*if (app.Environment.IsDevelopment())
+{*/
 	app.UseSwagger();
 	app.UseSwaggerUI();
-}
+//}
 
 app.UseHttpsRedirection();
 
