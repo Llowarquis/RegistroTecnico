@@ -1,7 +1,7 @@
 ﻿<div class="input-group">
 	@*Campo Articulos*@
 	<InputSelect class="form-select" @bind-Value="ArticuloId">
-		<option disabled selected>--- Selecciona un articulo ---</option>
+		<option value="0" disabled selected>--- Selecciona un articulo ---</option>
 		@foreach (var articulo in ListaArticulos)
 		{
 			<option value="@articulo.ArticuloId">@articulo.Descripcion -- Stock: @articulo.Existencia</option>
