@@ -3,6 +3,9 @@
     "mssql1": {
       "type": "mssql",
       "connectionId": "ConnectionStrings:RegistroTecnicoApiContext"
+    },
+    "apis1": {
+      "type": "apis"
     }
   }
 }
